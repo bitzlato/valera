@@ -31,30 +31,31 @@ class Botya
 
   def create_order!(side, volume, price)
     price=price.round(PRECISION)
-    logger.info "Perform #{side} order for #{market}, #{volume} for #{price}"
+    logger.debug "Perform #{side} order for #{market}, #{volume} for #{price}"
     existen_order = nil
     orders_to_cancel = []
     client.orders(market: market, type: side, state: :wait).each do |order|
       if price_outdated?(order['price'].to_d, price)
-        logger.info "Mark for cancel order ##{order['id']} as outdated price #{order['price']} <> #{price}"
+        logger.debug "Mark for cancel order ##{order['id']} as outdated price #{order['price']} <> #{price}"
         orders_to_cancel << order
       elsif order['remaining_volume'].to_d != volume.to_d
-        logger.info "Mark for cancel order ##{order['id']} as outdated volume #{order['remaining_volume']} <> #{volume}"
+        logger.debug "Mark for cancel order ##{order['id']} as outdated volume #{order['remaining_volume']} <> #{volume}"
         orders_to_cancel << order
       elsif existen_order.present?
-        logger.info "Mark for cancel order ##{order['id']} as duplicate"
+        logger.debug "Mark for cancel order ##{order['id']} as duplicate"
         orders_to_cancel << order
       else
         existen_order = order
       end
     end
     if existen_order.present?
-      logger.info "Existen #{side} order for #{market}, #{volume} for #{price}, don't need to create"
+      logger.debug "Existen #{side} order for #{market}, #{volume} for #{price}, don't need to create"
     else
       begin
         logger.info "Create #{side} order for #{market}, #{volume} for #{price}"
-        client
+        order = client
           .create_order(market: market, ord_type: :limit, side: side, volume: volume, price: price)
+        logger.debug "Created order ##{order['id']}"
       rescue => err
         logger.error err
         logger.warn "Order doesn't created!"
@@ -67,7 +68,7 @@ class Botya
       logger.error err
       logger.warn "Order doesn't canceled!"
     end
-    logger.info "Successful performed"
+    logger.debug "Successful performed"
   rescue => err
     logger.error err
   end

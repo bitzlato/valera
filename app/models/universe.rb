@@ -6,9 +6,12 @@ class Universe
   # mcr - это rub
 
   DEAFULT_RATES = {
-    ethbtc: 0.001,
-    ethusdt: 0.001,
-    btcusdt: 0.001
+    ethbtc: 0.0001,
+    ethusdt: 0.0001,
+    btcusdt: 0.0001,
+    btcmcr: 0.0001,
+    ethmcr: 0.0001,
+    usdtmcr: 1,
   }
 
   def loop
@@ -27,13 +30,18 @@ class Universe
       botya.cancel_orders!
     else
       logger.info "Perform market #{market}"
-      botya.create_orders! DEAFULT_RATES[market], rate || raise("No default rate for #{market}")
+      botya.create_orders! DEAFULT_RATES[market] || raise("No default volume for #{market}"), rate
     end
   end
 
   def perform
-    markets.each do |market|
-      perform_for_market market
+    rates = KassaRates.new.rates
+    peatio_markets.each do |market|
+      if rates.has_key? market
+        perform_for_market market
+      else
+        logger.warn "No rates for market #{market}"
+      end
     end
   end
 
@@ -44,7 +52,7 @@ class Universe
 
   def rates
     Rails.cache.fetch self.class.name + '_rates', expires_in: EXPIRES_IN do
-      KassaRates.new.rates.select { |k| peatio_markets.include? k }
+      KassaRates.new.rates
     end
   end
 
