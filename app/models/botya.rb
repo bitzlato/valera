@@ -7,7 +7,7 @@ class Botya
   include AutoLogger
   # Наценка от базового курса
   BUY_MULT = 0.98
-  SALE_MULT = 1.02
+  SALE_MULT = 1.025
 
   # Процент разницы цены между текущей заявкой, на который зарзрешается сотавить заявку и не создавать новую
   #
@@ -73,17 +73,13 @@ class Botya
     logger.error err
   end
 
-  def price_outdated?(price1, price2)
-    price1 != price2
-  end
-
-  def perform
-    atioClient.new.orders market: :btcusdt
-  end
-
   private
 
   attr_reader :market
+
+  def price_outdated?(price1, price2)
+    price1 != price2
+  end
 
   def client
     @client ||= PeatioClient.new
