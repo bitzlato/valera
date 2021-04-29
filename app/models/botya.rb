@@ -17,23 +17,25 @@ class Botya
 
   # @bit_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
   # @ ask_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
-  def initialize(client: , market:, bit_place_threshold: 0.01, ask_place_threshold: 0.01)
+  def initialize(client: , market:)
     @market = market
     @client = client || PeatioClient.new
-    @bit_place_threshold = bit_place_threshold
-    @ask_place_threshold = ask_place_threshold
   end
 
-  def cancel_orders!
-    logger.info "Cancel orders for #{market}"
-    client.cancel_orders market: market
+  # @param side Enum[:buy, :sell]
+  def cancel_orders!(side = nil)
+    if side.present?
+      logger.info "Cancel orders for #{market} with side #{side}"
+      client.cancel_orders market: market, side: side
+    else
+      logger.info "Cancel orders for #{market}"
+      client.cancel_orders market: market
+    end
   end
 
-  def create_orders!(volume, price)
-    create_order! :buy, volume, price * @bit_place_threshold
-    create_order! :sell, volume, price * @ask_place_threshold
-  end
-
+  # @param side Enum[:buy, :sell]
+  # @param volume Float
+  # @param price Float
   def create_order!(side, volume, price)
     price=price.round(PRECISION)
     logger.debug "Perform #{side} order for #{market}, #{volume} for #{price}"

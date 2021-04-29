@@ -74,6 +74,8 @@ class PeatioClient
         'X-Auth-Nonce' => nonce,
         'X-Auth-Signature' => OpenSSL::HMAC.hexdigest("SHA256", secret_key, nonce + access_key)
       }
+      c.adapter Faraday.default_adapter
+      c.response :logger if ENV.true? 'FARADAY_LOGGER'
       if ENV.true? 'CURL_LOGGER'
         c.use Faraday::Response::Logger
         c.request :curl, logger, :warn
