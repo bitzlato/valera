@@ -1,14 +1,24 @@
 class God
-  EXPIRES_IN = 10.seconds
   SLEEP = 1
 
   include AutoLogger
-  extend AutoLogger
 
-  def self.perform_for_all(do_loop = true)
+  def self.reset_settings!
+    Settings.bots.each_pair do |key, options|
+      Settings.markets.each do |market|
+        bm = BotMarketSettings.new(key, market)
+        options['all_markets'].each_pair do |attr, value|
+          bm.send attr + '=', value
+        end
+      end
+    end
+  end
+
+  def perform(do_loop = true)
     while true do
-      Rails.application.credentials.bots.keys.each do |key|
-        initialize_for(key).perform
+      universes.each do |universe|
+        logger.info "Perform universe #{universe}"
+        universe.perform
       end
       if do_loop
         logger.info "Sleep for " + SLEEP.to_s
@@ -18,30 +28,13 @@ class God
     end
   end
 
-  def self.initialize_for(key)
-    data = Rails.application.credentials.bots.fetch key
-    new(peatio_client: PeatioClient.new(data[:peatio]), options: data[:options])
-  end
+  private
 
-  def initialize(peatio_client: PeatioClient.new, options: {})
-    @peatio_client = peatio_client
-    @options = options
-  end
+  #def peatio_markets
+    #@peatio_markets ||= peatio_client.markets.map { |i| i['id'].to_s.upcase }
+  #end
 
-  def perform
-    peatio_markets.each do |market|
-      logger.info "Perform for market #{market}"
-      Universe
-        .new(god: self, market: market, options: @options)
-        .perform
-    rescue => err
-      logger.error err
-    end
+  def universes
+    @universes ||= Rails.application.credentials.bots.keys.map { |key| Settings.markets.map { |market| Universe.new(key, market) }}.flatten
   end
-
-  def peatio_markets
-    @peatio_markets ||= peatio_client.markets.map { |i| i['id'].to_s.upcase }
-  end
-
-  attr_reader :peatio_client
 end

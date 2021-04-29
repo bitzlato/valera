@@ -28,6 +28,9 @@ gem 'jbuilder', '~> 2.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'env-tweaks', '~> 1.0.0'
+gem 'connection_pool'
+gem 'redis-objects'
+gem 'settingslogic'
 
 group :development, :test do
   gem 'pry'

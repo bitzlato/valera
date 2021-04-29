@@ -10,8 +10,8 @@ class Processor
     usdtmcr:      1,
   }
 
-  def initialize(universe: , market: , input_data:, options:)
-    @universe   = universe
+  def initialize(botya: , market: , input_data:, options:)
+    @botya   = botya
     @market     = market
     @input_data = input_data
     @options    = options
@@ -20,19 +20,19 @@ class Processor
   def perform
     if input_data.kline.empty?
       logger.info "No kline data for market #{market} cancel orders"
-      universe.botya.cancel_orders!
+      botya.cancel_orders!
     else
       logger.info "Perform market #{market} with kline #{input_data.kline}"
-      bit_price = input_data.kline.low.to_d - input_data.kline.low.to_d * options[:bit_place_threshold]
-      ask_price = input_data.kline.high.to_d + input_data.kline.high.to_d * options[:ask_place_threshold]
-      universe.botya.create_order! :buy, calculate_volume(:buy), bit_price
-      universe.botya.create_order! :sell, calculate_volume(:sell), ask_price
+      bit_price = input_data.kline.low.to_d - input_data.kline.low.to_d * options.bit_place_threshold.to_d
+      ask_price = input_data.kline.high.to_d + input_data.kline.high.to_d * options.ask_place_threshold.to_d
+      botya.create_order! :buy, calculate_volume(:buy), bit_price
+      botya.create_order! :sell, calculate_volume(:sell), ask_price
     end
   end
 
   private
 
-  attr_reader :universe, :input_data, :market, :options
+  attr_reader :botya, :input_data, :market, :options
 
   # Объём заявки
   #
