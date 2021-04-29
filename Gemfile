@@ -27,7 +27,6 @@ gem 'jbuilder', '~> 2.7'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
-gem 'faraday_curl'
 gem 'env-tweaks', '~> 1.0.0'
 
 group :development, :test do
@@ -63,3 +62,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "nokogiri", "~> 1.11"
 
 gem "auto_logger", "~> 0.1.7"
+
+gem "binance", "~> 1.2"

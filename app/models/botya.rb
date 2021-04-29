@@ -15,8 +15,13 @@ class Botya
 
   PRECISION = 4 # Gets from peatio config. Specific for every currency
 
-  def initialize(market)
+  # @bit_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
+  # @ ask_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
+  def initialize(client: , market:, bit_place_threshold: 0.01, ask_place_threshold: 0.01)
     @market = market
+    @client = client || PeatioClient.new
+    @bit_place_threshold = bit_place_threshold
+    @ask_place_threshold = ask_place_threshold
   end
 
   def cancel_orders!
@@ -25,8 +30,8 @@ class Botya
   end
 
   def create_orders!(volume, price)
-    create_order! :buy, volume, price * BUY_MULT
-    create_order! :sell, volume, price * SALE_MULT
+    create_order! :buy, volume, price * @bit_place_threshold
+    create_order! :sell, volume, price * @ask_place_threshold
   end
 
   def create_order!(side, volume, price)
@@ -75,13 +80,9 @@ class Botya
 
   private
 
-  attr_reader :market
+  attr_reader :market, :client
 
   def price_outdated?(price1, price2)
     price1 != price2
-  end
-
-  def client
-    @client ||= PeatioClient.new
   end
 end

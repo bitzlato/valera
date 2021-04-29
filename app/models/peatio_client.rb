@@ -3,11 +3,11 @@ class PeatioClient
   class Error < StandardError; end
   WrongResponse = Class.new Error
 
-  def initialize
-    @access_key = ENV['PEATIO_API_ACCESS_KEY']
-    @secret_key = ENV['PEATIO_API_SECRET_KEY']
-    @endpoint = 'https://dapi.bitzlato.bz'
-    @prefix = '/api/v2/peatio'
+  def initialize(access_key: ENV['PEATIO_API_ACCESS_KEY'], secret_key: ENV['PEATIO_API_SECRET_KEY'], endpoint: ENV['PEATIO_ENDPOINT'], prefix: '/api/v2/peatio')
+    @access_key = access_key
+    @secret_key = secret_key
+    @endpoint = endpoint
+    @prefix = prefix
   end
   # puts PeatioAPI::Client.new(endpoint: ENTPOINT).get_public('/api/v2/peatio/public/markets/tickers')
   # puts client.get '/api/v2/peatio/orders', market: 'ethbtc'
@@ -82,7 +82,7 @@ class PeatioClient
   end
 
   def parse_response(response)
-    raise WrongResponse, "Wrong response status (#{response.status}) with body #{response.body}" unless response.success?
+    raise WrongResponse, "Wrong response status (#{response.status}) with body '#{response.body}'" unless response.success?
     return nil if response.body.empty?
     raise WrongResponse, "Wrong content type (#{response['content-type']})" if response['content-type'] != 'application/json'
     JSON.parse response.body
