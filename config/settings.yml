@@ -1,11 +1,13 @@
 defaults: &defaults
   markets: ["BTCUSDT", "BTCMCR", "ETHBTC", "ETHUSDT", "ETHMCR", "USDTMCR"]
   bots:
-    danil@orionet.ru:
+    danil_orionet_ru:
+      description: maker (danil@orionet.ru)
       all_markets:
         bit_place_threshold: 0.001
         ask_place_threshold: 0.001
-    danil@onelec.ru:
+    danil_onelec_ru:
+      description: taker (danil@onelec.ru)
       all_markets:
         bit_place_threshold: 0.002
         ask_place_threshold: 0.002

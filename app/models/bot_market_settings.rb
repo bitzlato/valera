@@ -9,6 +9,13 @@ class BotMarketSettings
     @market = market.to_s.downcase
   end
 
+  def as_json(_args = {})
+    {
+      bit_place_threshold: bit_place_threshold.value,
+      ask_place_threshold: ask_place_threshold.value
+    }
+  end
+
   def id
     [@bot, @market].join(':')
   end

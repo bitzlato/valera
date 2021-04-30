@@ -4,13 +4,24 @@ class Universe
 
   include AutoLogger
 
-  attr_reader :peatio_client, :market, :bot_key
+  attr_reader :peatio_client, :market, :bot_key, :options
 
-  def initialize(bot_key, market)
+  def initialize(bot_key, market, options = {})
     @bot_key = bot_key
     @market = market
-    @peatio_client = PeatioClient.new Rails.application.credentials.bots.fetch bot_key
+    @options = options
+    @peatio_client = PeatioClient.new Rails.application.credentials.bots.fetch bot_key.to_sym
     @botya = Botya.new(market: market.downcase, client: peatio_client)
+  end
+
+  def description
+    options.fetch('description', id)
+  end
+
+  def perform_loop
+    loop do
+      perform
+    end
   end
 
   def perform
@@ -24,15 +35,21 @@ class Universe
     Processor
       .new(botya: @botya, market: market, input_data: input_data, options: bot_market_settings)
       .perform
-  #rescue => err
-    #logger.error "#{to_s} #{err}"
+  rescue => err
+    logger.error "#{to_s} #{err}"
   end
 
   def to_s
-    [bot_key, market].join(':')
+    description
   end
 
-  private
+  def to_param
+    id
+  end
+
+  def id
+    [bot_key, market].join(':')
+  end
 
   def bot_market_settings
     @bot_market_settings ||= BotMarketSettings.new(bot_key, market)
@@ -40,5 +57,11 @@ class Universe
 
   def binance_symbol(market)
     market.gsub('MCR', 'RUB')
+  end
+
+  def reset_settings!
+    options['all_markets'].each_pair do |attr, value|
+      bot_market_settings.send attr + '=', value
+    end
   end
 end

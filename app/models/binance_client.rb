@@ -15,6 +15,9 @@ class BinanceClient
                      :ignore)
 
   class KLine
+    def to_s
+      [high, low].join('->')
+    end
     def empty?
       low.to_f == 0
     end

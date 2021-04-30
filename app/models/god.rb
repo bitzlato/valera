@@ -1,40 +1,42 @@
 class God
-  SLEEP = 1
-
   include AutoLogger
 
-  def self.reset_settings!
-    Settings.bots.each_pair do |key, options|
-      Settings.markets.each do |market|
-        bm = BotMarketSettings.new(key, market)
-        options['all_markets'].each_pair do |attr, value|
-          bm.send attr + '=', value
-        end
-      end
-    end
+  attr_reader :universes
+
+  def initialize
+    @universes = build_universes
   end
 
-  def perform(do_loop = true)
-    while true do
-      universes.each do |universe|
+  def reset_settings!
+    universes.each &:reset_settings!
+  end
+
+  def perform
+    threads = universes.map do |universe|
+      Thread.new do
         logger.info "Perform universe #{universe}"
-        universe.perform
-      end
-      if do_loop
-        logger.info "Sleep for " + SLEEP.to_s
-      else
-        break
+        universe.perform_loop
       end
     end
+    threads.each { |thr| thr.join }
   end
-
-  private
 
   #def peatio_markets
     #@peatio_markets ||= peatio_client.markets.map { |i| i['id'].to_s.upcase }
   #end
 
-  def universes
-    @universes ||= Rails.application.credentials.bots.keys.map { |key| Settings.markets.map { |market| Universe.new(key, market) }}.flatten
+  private
+
+  def build_universes
+    universes = []
+    Settings
+      .bots
+      .each_pair do |key, options|
+      Settings.markets.map do |market|
+        universes << Universe.new(key, market, options)
+      end
+    end
+    universes
   end
+
 end

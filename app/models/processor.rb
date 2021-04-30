@@ -23,8 +23,8 @@ class Processor
       botya.cancel_orders!
     else
       logger.info "Perform market #{market} with kline #{input_data.kline}"
-      bit_price = input_data.kline.low.to_d - input_data.kline.low.to_d * options.bit_place_threshold.to_d
-      ask_price = input_data.kline.high.to_d + input_data.kline.high.to_d * options.ask_place_threshold.to_d
+      bit_price = input_data.kline.low.to_d - input_data.kline.low.to_d * options.bit_place_threshold.value.to_d
+      ask_price = input_data.kline.high.to_d + input_data.kline.high.to_d * options.ask_place_threshold.value.to_d
       botya.create_order! :buy, calculate_volume(:buy), bit_price
       botya.create_order! :sell, calculate_volume(:sell), ask_price
     end
