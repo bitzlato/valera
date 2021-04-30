@@ -33,7 +33,7 @@ class Universe
     input_data = OpenStruct.new(kline: klines.first)
 
     Processor
-      .new(botya: @botya, market: market, input_data: input_data, options: bot_market_settings)
+      .new(botya: @botya, market: market, input_data: input_data, last_data: last_data, options: bot_market_settings)
       .perform
   rescue => err
     logger.error "#{to_s} #{err}"
@@ -49,6 +49,10 @@ class Universe
 
   def id
     [bot_key, market].join(':')
+  end
+
+  def last_data
+    @last_data ||= UniverseLastData.new(bot_key, market)
   end
 
   def bot_market_settings

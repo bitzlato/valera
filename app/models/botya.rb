@@ -78,6 +78,7 @@ class Botya
     logger.debug "Successful performed"
   rescue => err
     logger.error err
+    :error
   end
 
   private

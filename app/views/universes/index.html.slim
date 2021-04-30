@@ -2,11 +2,16 @@ h2= t '.universes'
 table.table
   thead
     tr
-      th bot and market
+      th bot description
+      th market
       th bot/market settings
+      th last data
   tbody
     - universes.each do |universe|
       tr
         th= link_to universe.description, universe_path(universe)
+        td= universe.market
         td
           code= universe.bot_market_settings.to_json
+        td
+          code= universe.last_data.to_json

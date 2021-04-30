@@ -10,11 +10,12 @@ class Processor
     usdtmcr:      1,
   }
 
-  def initialize(botya: , market: , input_data:, options:)
+  def initialize(botya: , market: , input_data:, options:, last_data:)
     @botya   = botya
     @market     = market
     @input_data = input_data
     @options    = options
+    @last_data = last_data
   end
 
   def perform
@@ -25,14 +26,21 @@ class Processor
       logger.info "Perform market #{market} with kline #{input_data.kline}"
       bit_price = input_data.kline.low.to_d - input_data.kline.low.to_d * options.bit_place_threshold.value.to_d
       ask_price = input_data.kline.high.to_d + input_data.kline.high.to_d * options.ask_place_threshold.value.to_d
-      botya.create_order! :buy, calculate_volume(:buy), bit_price
-      botya.create_order! :sell, calculate_volume(:sell), ask_price
+
+      create_order :buy, bit_price
+      create_order :sell, ask_price
     end
   end
 
   private
 
-  attr_reader :botya, :input_data, :market, :options
+  attr_reader :botya, :input_data, :market, :options, :last_data
+
+  def create_order(side, price)
+    volume = calculate_volume side
+    botya.create_order! side, volume, price
+    last_data.send "last_#{side}_order=", { volume: volume, price: price }.to_json
+  end
 
   # Объём заявки
   #
