@@ -15,11 +15,14 @@ class Botya
 
   PRECISION = 4 # Gets from peatio config. Specific for every currency
 
+  attr_reader :name
+
   # @bid_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
   # @ ask_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
-  def initialize(peatio_client: , market:)
+  def initialize(peatio_client: , market:, name: )
     @market = market
     @peatio_client = peatio_client || PeatioClient.new
+    @name = name
   end
 
   # @param side Enum[:buy, :sell]

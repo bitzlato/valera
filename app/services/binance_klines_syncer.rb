@@ -1,3 +1,4 @@
+require 'valera/influxdb'
 class BinanceKlinesSyncer
   include AutoLogger
   INTERVAL = '1m'
@@ -12,13 +13,13 @@ class BinanceKlinesSyncer
   def perform
     logger.info "perform for #{market_symbol}"
     BinanceClient.instance.klines(symbol: market_symbol, interval: INTERVAL, limit: 1).each do |kline|
-      InfluxWriter.perform_async(
-        INFLUX_TABLE,
-        {
-          values: kline.as_json.merge(created_at: kline.closetime/1000),
-          tags: { market: market_symbol }
-        }
-      )
+      data = {
+        values: kline.to_influx_data,
+        tags: { market: market_symbol }
+      }
+      Valera::InfluxDB
+        .client
+        .write_point(INFLUX_TABLE, data, "ns")
     end
   end
 end

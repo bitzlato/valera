@@ -16,8 +16,8 @@ class Universe
     @bot_key = bot_key
     @market = market
     @options = options
-    @peatio_client = PeatioClient.new Rails.application.credentials.bots.fetch bot_key.to_sym
-    @botya = Botya.new(market: market, peatio_client: peatio_client)
+    @peatio_client = PeatioClient.new Rails.application.credentials.bots.fetch(bot_key.to_sym).merge(name: bot_key)
+    @botya = Botya.new(market: market, peatio_client: peatio_client, name: bot_key)
   end
 
   def description

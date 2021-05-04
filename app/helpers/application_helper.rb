@@ -11,6 +11,10 @@ module ApplicationHelper
     false
   end
 
+  def grafana_iframe_src(universe)
+    "https://grafana.brandymint.ru/d-solo/ayEuw39Mz/valera?orgId=1&var-market=#{universe.market}&var-bot=#{universe.peatio_client.name}&panelId=2"
+  end
+
   def present_latest_order(last_order, key, market)
     return middot if last_order.value.blank?
     data = JSON.parse(last_order)

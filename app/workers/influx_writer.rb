@@ -1,6 +1,7 @@
 require 'valera/influxdb'
 class InfluxWriter
   include Sidekiq::Worker
+  include AutoLogger
 
   #def influx_data
     #{ values:     { id:         id,
@@ -12,9 +13,13 @@ class InfluxWriter
       #tags:       { market: market.symbol } }
   #end
 
-  def perform(table, data)
+  def perform(table, values, tags)
+    logger.info "Write to #{table} -> #{values} tags: #{tags}"
+    values = values
+      .symbolize_keys
+      .each_with_object({}) { |p, a| a[p.first] = p.last.to_d.to_s == p.last ? p.last.to_d : p.last } # Numerify values
     Valera::InfluxDB
       .client
-      .write_point(table, data, "ns")
+      .write_point(table, {values: values, tags: tags}.symbolize_keys, "ns")
   end
 end

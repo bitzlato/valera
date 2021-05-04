@@ -21,6 +21,10 @@ class BinanceClient
     def empty?
       low.to_f == 0
     end
+
+    def to_influx_data
+      to_h.symbolize_keys.merge(created_at: closetime/1000)
+    end
   end
 
   def self.build
@@ -34,7 +38,9 @@ class BinanceClient
   end
 
   def klines(*args)
-    client.klines(*args).map { |r| KLine.new(*r) }
+    data = client.klines(*args)
+    # TODO check for errors
+    data.map { |r| KLine.new(*r.map(&:to_d)) }
   end
 
   def method_missing(method, *args)

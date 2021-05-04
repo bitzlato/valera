@@ -1,17 +1,24 @@
 require 'openssl'
+# puts PeatioAPI::Client.new(endpoint: ENTPOINT).get_public('/api/v2/peatio/public/markets/tickers')
+# puts client.get '/api/v2/peatio/orders', market: 'ethbtc'
+
 class PeatioClient
   class Error < StandardError; end
   WrongResponse = Class.new Error
 
-  def initialize(access_key: ENV['PEATIO_API_ACCESS_KEY'], secret_key: ENV['PEATIO_API_SECRET_KEY'], endpoint: ENV['PEATIO_ENDPOINT'], prefix: '/api/v2/peatio')
+  attr_reader :name
+
+  def initialize(name: nil, access_key: ENV['PEATIO_API_ACCESS_KEY'], secret_key: ENV['PEATIO_API_SECRET_KEY'], endpoint: ENV['PEATIO_ENDPOINT'], prefix: '/api/v2/peatio')
     @access_key = access_key
     @secret_key = secret_key
     @endpoint = endpoint
     @prefix = prefix
+    @name = name
   end
-  # puts PeatioAPI::Client.new(endpoint: ENTPOINT).get_public('/api/v2/peatio/public/markets/tickers')
-  # puts client.get '/api/v2/peatio/orders', market: 'ethbtc'
 
+  def to_s
+    name
+  end
   def account_balances(currency = nil)
     if currency.present?
       get('/account/balances/' + currency.to_s)

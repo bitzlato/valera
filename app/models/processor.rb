@@ -31,6 +31,14 @@ class Processor
       create_order :sell, ask_price
       last_data.kline_low = input_data.kline.low.to_d
       last_data.kline_high = input_data.kline.high.to_d
+
+      InfluxWriter.perform_async :processor, {
+        bid_place_threshold:  options.bid_place_threshold.value.to_d,
+        ask_place_threshold: options.ask_place_threshold.value.to_d,
+        low: input_data.kline.low.to_d,
+        high: input_data.kline.high.to_d,
+        bid: bid_price,
+        ask: ask_price }, { market: market.binance_symbol, bot: botya.name }
     end
     update_balances_info
   end
