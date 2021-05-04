@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
-
   def god
-    @god ||= God.new
+    @god ||= God.instance
   end
 end

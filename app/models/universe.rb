@@ -6,6 +6,10 @@ class Universe
 
   attr_reader :peatio_client, :market, :bot_key, :options
 
+  def self.find(id)
+    God.instance.universes.find { |u| u.id == id }
+  end
+
   # @param bot_key [String] key of bot from Rails credentials
   # @param market [Market]
   def initialize(bot_key, market, options = {})

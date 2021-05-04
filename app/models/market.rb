@@ -7,6 +7,18 @@ class Market
     end
   end
 
+  def self.find(id)
+    all.find { |m| m.id == id }
+  end
+
+  def universes
+    God.instance.universes.select { |u| u.market == self }
+  end
+
+  def ==(other)
+    other.id == id
+  end
+
   def initialize(base , quote )
     @base = base
     @quote = quote

@@ -1,0 +1,38 @@
+table.table.table-condensed.table-bordered
+  thead.thead-dark
+    tr
+      th rowspan=2 Bot description
+      th rowspan=2 Market
+      th.text-right rowspan=2 Side
+      th.text-right rowspan=2 Peatio balance
+      th.text-right rowspan=2 Binance kline
+      th.text-right rowspan=2 Threshold
+      th.text-center colspan=2 Last order
+    tr 
+      th.text-right Volume
+      th.text-right Price
+
+  tbody
+    - universes.each do |universe|
+      tr
+        th rowspan=2
+          = link_to universe.description, universe_path(universe)
+        td rowspan=2
+          = link_to universe.market, market_path(universe.market.id)
+
+        td.text-right ASK
+        td.text-right
+          = format_money universe.last_data.peatio_base_balance.value, universe.market.base
+        td.text-right= format_money universe.last_data.kline_high.value, universe.market.quote
+        td.text-right= format_percent universe.bot_market_settings.ask_place_threshold
+        td.text-right= present_latest_order universe.last_data.last_sell_order, :volume, universe.market
+        td.text-right= present_latest_order universe.last_data.last_sell_order, :price, universe.market
+
+      tr
+        td.text-right BID
+        td.text-right
+          = format_money universe.last_data.peatio_quote_balance.value, universe.market.quote
+        td.text-right= format_money universe.last_data.kline_low.value, universe.market.quote
+        td.text-right= format_percent -universe.bot_market_settings.bid_place_threshold.value.to_d
+        td.text-right= present_latest_order universe.last_data.last_buy_order, :volume, universe.market
+        td.text-right= present_latest_order universe.last_data.last_buy_order, :price, universe.market

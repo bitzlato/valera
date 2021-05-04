@@ -4,7 +4,7 @@ class UniversesController < ApplicationController
   end
 
   def show
-    universe = god.universes.find { |u| u.id == params[:id] }
+    universe = Universe.find params[:id]
     render locals: { universe: universe }
   end
 end

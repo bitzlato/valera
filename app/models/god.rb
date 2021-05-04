@@ -1,5 +1,6 @@
 class God
   include AutoLogger
+  include Singleton
 
   attr_reader :universes
 
@@ -36,5 +37,4 @@ class God
     end
     universes
   end
-
 end

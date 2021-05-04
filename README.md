@@ -4,7 +4,7 @@ Automated crypto currency trading software for peatio
 
 # Configure
 
-> rails runner God.new.reset_settings!
+> rails runner God.instance.reset_settings!
 
 # Seed
 
@@ -18,7 +18,7 @@ Start web server
 
 Run all bots with threads
 
-> rails runner God.new.perform &
+> rails runner God.instance.perform &
 
 
 # Development
