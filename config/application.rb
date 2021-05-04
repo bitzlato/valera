@@ -15,6 +15,10 @@ module Exbot
       g.template_engine :slim
     end
 
+    config.autoload_paths += Dir[
+      "#{Rails.root}/app/services",
+    ]
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

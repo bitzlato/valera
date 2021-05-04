@@ -1,0 +1,24 @@
+- if scope.empty?
+  p.text-muted= t '.empty_table'
+- else
+  - if scope.respond_to?(:decorate)
+    - scope = scope.decorate unless scope.respond_to?(:decorated?) && scope.decorated?
+  - decorator ||= scope.first.is_a?(ApplicationDecorator) ? scope.first.class : scope.first.decorator_class
+  - columns = decorator.table_columns unless defined?(columns) && columns.present?
+  table.table.table-striped.table-hover.table-narrow data-sticky=true
+    thead.thead-dark
+      tr
+        - columns.each do |column|
+          th class=(decorator.present? ? decorator.table_th_class(column) : '') title=column
+            - title = decorator.object_class.respond_to?(:human_attribute_name) ? decorator.object_class.human_attribute_name(column) : column
+            = decorator.present? && respond_to?(:sort_column) ? sort_column(column, title) : column
+    - if block_given?
+      thead
+        = yield
+    tbody
+      - scope.each do |item|
+        - item_decorated = item.respond_to?(:decorated?) && item.decorated? ? item : decorator.decorate(item)
+        tr is='dapi-tr' data-href=url_for(item.id) class=item_decorated.class.table_tr_class(item)
+          - columns.each do |column|
+            td class=item_decorated.class.table_td_class(column)
+              = item_decorated.send column

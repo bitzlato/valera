@@ -1,0 +1,3 @@
+BinanceSyncer:
+  cron: '*/5 * * * * *'
+  class: BinanceSyncer

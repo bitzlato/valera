@@ -1,17 +1,28 @@
 class Market
-  attr_accessor :quote, :base, :symbol
+  attr_reader :quote, :base, :symbol, :binance_syncer
 
   def self.all
     Settings.markets.map do |name|
-      Market.new.tap do |m|
-        m.base, m.quote = name.split(':')
-        m.symbol = (m.base + m.quote)
-      end.freeze
+      Market.new(*name.split(':'))
     end
   end
 
+  def initialize(base , quote )
+    @base = base
+    @quote = quote
+    @binance_syncer = BinanceKlinesSyncer.new binance_symbol
+  end
+
+  def id
+    symbol
+  end
+
+  def symbol
+    base + quote
+  end
+
   def to_s
-    symbol.to_s
+    id.to_s
   end
 
   def peatio_symbol

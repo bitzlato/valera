@@ -18,4 +18,8 @@ html
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
   body
+    = render 'navbar' do
+      = active_link_to t('.universes'), universes_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
+      = active_link_to t('.markets'), markets_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
+
     = yield

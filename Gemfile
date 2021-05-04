@@ -32,8 +32,14 @@ gem 'env-tweaks', '~> 1.0.0'
 gem 'connection_pool'
 gem 'redis-objects'
 gem 'settingslogic'
+gem 'sidekiq'
+gem 'semver2'
+gem 'safe_yaml', '~> 1.0.5', require: 'safe_yaml/load'
+gem 'active_link_to'
+gem 'draper'
 
 group :development, :test do
+  gem 'foreman'
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -70,3 +76,5 @@ gem "auto_logger", "~> 0.1.7"
 gem "binance", "~> 1.2", github: 'andyklimczak/binance', branch: 'immutable-strings-ruby-27'
 
 gem "money", "~> 6.14"
+
+gem "influxdb", "~> 0.8.1"

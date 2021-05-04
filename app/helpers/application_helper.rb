@@ -3,6 +3,14 @@ module ApplicationHelper
     content_tag :div, '&middot;'.html_safe, class: 'text-muted'
   end
 
+  def app_title
+    'VALERA'
+  end
+
+  def logged_in?
+    false
+  end
+
   def present_latest_order(last_order, key, market)
     return middot if last_order.value.blank?
     data = JSON.parse(last_order)

@@ -6,6 +6,10 @@ Automated crypto currency trading software for peatio
 
 > rails runner God.new.reset_settings!
 
+# Seed
+
+> echo "create database valera_development;" | influx
+
 # Start 
 
 Start web server
