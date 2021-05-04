@@ -4,7 +4,8 @@ table.table.table-condensed
     tr
       th rowspan=2 bot description
       th rowspan=2 market
-      th rowspan=2 bot/market settings
+      th.text-right rowspan=2 ASK threashold
+      th.text-right rowspan=2 BID threashold
       th.text-center colspan=2 Last ASK
       th.text-center colspan=2 Last BID
       th.text-right rowspan=2 peatio balance
@@ -19,8 +20,8 @@ table.table.table-condensed
       tr
         th= link_to universe.description, universe_path(universe)
         td= universe.market
-        td
-          code= universe.bot_market_settings.to_json
+        td.text-right= format_percent universe.bot_market_settings.ask_place_threshold
+        td.text-right= format_percent universe.bot_market_settings.bid_place_threshold
         td.text-right= present_latest_order universe.last_data.last_sell_order, :volume, universe.market
         td.text-right= present_latest_order universe.last_data.last_sell_order, :price, universe.market
         td.text-right= present_latest_order universe.last_data.last_buy_order, :volume, universe.market

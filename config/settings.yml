@@ -4,12 +4,12 @@ defaults: &defaults
     danil_orionet_ru:
       description: maker (danil@orionet.ru)
       all_markets:
-        bit_place_threshold: 0.001
+        bid_place_threshold: 0.001
         ask_place_threshold: 0.001
     danil_onelec_ru:
       description: taker (danil@onelec.ru)
       all_markets:
-        bit_place_threshold: 0.002
+        bid_place_threshold: 0.002
         ask_place_threshold: 0.002
 
 development:

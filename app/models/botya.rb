@@ -15,7 +15,7 @@ class Botya
 
   PRECISION = 4 # Gets from peatio config. Specific for every currency
 
-  # @bit_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
+  # @bid_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
   # @ ask_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
   def initialize(peatio_client: , market:)
     @market = market
