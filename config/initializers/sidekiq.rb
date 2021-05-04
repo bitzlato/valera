@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Redis#exists(key)` will return an Integer in redis-rb 4.3. `exists?` returns a boolean, you should use it instead. To opt-in to the new behavior now you can set Redis.exists_returns_integer =  true. To disable this message and keep the current (boolean) behaviour of 'exists' you can set `Redis.exists_returns_integer = false`, but this option will be removed in 5.0. (/home/danil/.rbenv/versions/2.7.2/lib/ruby/gems/2.7.0/gems/sidekiq-cron-1.2.0/lib/sidekiq/cron/job.rb:464:in `block in save
+Redis.exists_returns_integer = true
 require 'sidekiq'
 Sidekiq.default_worker_options = { 'backtrace' => true }
 
@@ -30,9 +32,9 @@ else
 end
 
 
-#CRONTAB_FILE = "./config/sidekiq_crontab.yml"
+CRONTAB_FILE = "./config/sidekiq_crontab.yml"
 
-#if Rails.env.staging? || Rails.env.production? || ENV.true?('LOAD_SIDEKIQ_CRONTAB')
-  #Sidekiq::Cron::Job.destroy_all!
-  #Sidekiq::Cron::Job.load_from_hash YAML.load_file(CRONTAB_FILE)
-#end
+if Rails.env.staging? || Rails.env.production? || ENV.true?('LOAD_SIDEKIQ_CRONTAB')
+  Sidekiq::Cron::Job.destroy_all!
+  Sidekiq::Cron::Job.load_from_hash YAML.load_file(CRONTAB_FILE)
+end

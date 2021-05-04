@@ -2,24 +2,19 @@
 
 Automated crypto currency trading software for peatio 
 
-# Configure
+# Install
 
-> rails runner God.instance.reset_settings!
+> nvm install; yarn install
+> rvm install; bundle
 
-# Seed
+# Configure and seeding
 
 > echo "create database valera_development;" | influx
+> rake db:create db:migrate db:seed
 
-# Start 
+# Start web server, sidekiq, god and webpacker
 
-Start web server
-
-> rails s
-
-Run all bots with threads
-
-> rails runner God.instance.perform &
-
+> bundle exec foreman start
 
 # Development
 

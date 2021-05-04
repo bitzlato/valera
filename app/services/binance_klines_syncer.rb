@@ -1,4 +1,5 @@
 class BinanceKlinesSyncer
+  include AutoLogger
   INTERVAL = '1m'
   INFLUX_TABLE = 'binance_klines'
 
@@ -9,6 +10,7 @@ class BinanceKlinesSyncer
   end
 
   def perform
+    logger.info "perform for #{market_symbol}"
     BinanceClient.instance.klines(symbol: market_symbol, interval: INTERVAL, limit: 1).each do |kline|
       InfluxWriter.perform_async(
         INFLUX_TABLE,
