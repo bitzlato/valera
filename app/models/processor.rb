@@ -29,6 +29,8 @@ class Processor
 
       create_order :buy, bid_price
       create_order :sell, ask_price
+      last_data.kline_low = input_data.kline.low.to_d
+      last_data.kline_high = input_data.kline.high.to_d
     end
     update_balances_info
   end
@@ -39,6 +41,7 @@ class Processor
 
   def update_balances_info
     last_data.peatio_quote_balance = botya.quote_balance
+    last_data.peatio_base_balance = botya.base_balance
   end
 
   def create_order(side, price)

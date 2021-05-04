@@ -81,6 +81,10 @@ class Botya
     :error
   end
 
+  def base_balance
+    peatio_client.account_balances(market.base.downcase)['balance'].to_d
+  end
+
   def quote_balance
     peatio_client.account_balances(market.quote.downcase)['balance'].to_d
   end
