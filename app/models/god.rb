@@ -29,10 +29,8 @@ class God
 
   def build_universes
     universes = []
-    Settings
-      .bots
-      .each_pair do |key, options|
-      Settings.markets.map do |market|
+    Settings.bots.each_pair do |key, options|
+      Market.all.map do |market|
         universes << Universe.new(key, market, options)
       end
     end

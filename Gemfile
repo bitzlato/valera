@@ -67,4 +67,6 @@ gem "nokogiri", "~> 1.11"
 
 gem "auto_logger", "~> 0.1.7"
 
-gem "binance", "~> 1.2"
+gem "binance", "~> 1.2", github: 'andyklimczak/binance', branch: 'immutable-strings-ruby-27'
+
+gem "money", "~> 6.14"

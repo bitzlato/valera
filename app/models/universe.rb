@@ -6,12 +6,14 @@ class Universe
 
   attr_reader :peatio_client, :market, :bot_key, :options
 
+  # @param bot_key [String] key of bot from Rails credentials
+  # @param market [Market]
   def initialize(bot_key, market, options = {})
     @bot_key = bot_key
     @market = market
     @options = options
     @peatio_client = PeatioClient.new Rails.application.credentials.bots.fetch bot_key.to_sym
-    @botya = Botya.new(market: market.downcase, client: peatio_client)
+    @botya = Botya.new(market: market, peatio_client: peatio_client)
   end
 
   def description
@@ -26,8 +28,7 @@ class Universe
 
   def perform
     logger.info "Perform #{to_s}"
-    symbol = binance_symbol(market)
-    klines = BinanceClient.instance.klines(symbol: symbol, interval: INTERVAL, limit: 1)
+    klines = BinanceClient.instance.klines(symbol: market.binance_symbol, interval: INTERVAL, limit: 1)
 
     # TODO Create value object
     input_data = OpenStruct.new(kline: klines.first)
@@ -57,10 +58,6 @@ class Universe
 
   def bot_market_settings
     @bot_market_settings ||= BotMarketSettings.new(bot_key, market)
-  end
-
-  def binance_symbol(market)
-    market.gsub('MCR', 'RUB')
   end
 
   def reset_settings!

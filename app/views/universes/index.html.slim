@@ -1,11 +1,19 @@
 h2= t '.universes'
-table.table
-  thead
+table.table.table-condensed
+  thead.thead-dark
     tr
-      th bot description
-      th market
-      th bot/market settings
-      th last data
+      th rowspan=2 bot description
+      th rowspan=2 market
+      th rowspan=2 bot/market settings
+      th.text-center colspan=2 Last ASK
+      th.text-center colspan=2 Last BID
+      th.text-right rowspan=2 peatio balance
+    tr 
+      th.text-right Volume
+      th.text-right Price
+      th.text-right Volume
+      th.text-right Price
+
   tbody
     - universes.each do |universe|
       tr
@@ -13,5 +21,9 @@ table.table
         td= universe.market
         td
           code= universe.bot_market_settings.to_json
-        td
-          code= universe.last_data.to_json
+        td.text-right= present_latest_order universe.last_data.last_sell_order, :volume, universe.market
+        td.text-right= present_latest_order universe.last_data.last_sell_order, :price, universe.market
+        td.text-right= present_latest_order universe.last_data.last_buy_order, :volume, universe.market
+        td.text-right= present_latest_order universe.last_data.last_buy_order, :price, universe.market
+        td.text-right
+          = format_money universe.last_data.peatio_quote_balance.value, universe.market.quote

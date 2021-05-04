@@ -30,11 +30,16 @@ class Processor
       create_order :buy, bit_price
       create_order :sell, ask_price
     end
+    update_balances_info
   end
 
   private
 
   attr_reader :botya, :input_data, :market, :options, :last_data
+
+  def update_balances_info
+    last_data.peatio_quote_balance = botya.quote_balance
+  end
 
   def create_order(side, price)
     volume = calculate_volume side
@@ -46,6 +51,6 @@ class Processor
   #
   def calculate_volume(side)
     # TODO Высчитывать на основе чего-то там
-    DEFAULT_VOLUMES[market.downcase.to_sym]
+    DEFAULT_VOLUMES[market.symbol.downcase.to_sym]
   end
 end

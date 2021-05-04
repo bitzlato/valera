@@ -1,5 +1,5 @@
 defaults: &defaults
-  markets: ["BTCUSDT", "BTCMCR", "ETHBTC", "ETHUSDT", "ETHMCR", "USDTMCR"]
+  markets: ["BTC:USDT", "BTC:MCR", "ETH:BTC", "ETH:USDT", "ETH:MCR", "USDT:MCR"]
   bots:
     danil_orionet_ru:
       description: maker (danil@orionet.ru)

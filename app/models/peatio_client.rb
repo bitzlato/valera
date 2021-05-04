@@ -12,8 +12,12 @@ class PeatioClient
   # puts PeatioAPI::Client.new(endpoint: ENTPOINT).get_public('/api/v2/peatio/public/markets/tickers')
   # puts client.get '/api/v2/peatio/orders', market: 'ethbtc'
 
-  def account_balances
-    get('/account/balances')
+  def account_balances(currency = nil)
+    if currency.present?
+      get('/account/balances/' + currency.to_s)
+    else
+      get('/account/balances')
+    end
   end
 
   def markets

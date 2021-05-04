@@ -36,4 +36,8 @@ class BinanceClient
   def klines(*args)
     client.klines(*args).map { |r| KLine.new(*r) }
   end
+
+  def method_missing(method, *args)
+    client.send method, *args
+  end
 end
