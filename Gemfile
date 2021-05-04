@@ -79,3 +79,5 @@ gem "binance", "~> 1.2", github: 'andyklimczak/binance', branch: 'immutable-stri
 gem "money", "~> 6.14"
 
 gem "influxdb", "~> 0.8.1"
+
+gem "bugsnag", "~> 6.20"

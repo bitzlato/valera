@@ -22,7 +22,6 @@ class Market
   def initialize(base , quote )
     @base = base
     @quote = quote
-    @binance_syncer = BinanceKlinesSyncer.new binance_symbol
   end
 
   def id

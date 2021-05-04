@@ -73,6 +73,8 @@ Rails.application.configure do
 
   config.hosts << "3008.brandymint.ru"
 
+  config.web_console.whiny_requests = false
+
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 end
