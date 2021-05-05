@@ -1,5 +1,6 @@
 class Processor
   include AutoLogger
+  INFLUX_TABLE = 'processor'
 
   DEFAULT_VOLUMES = {
     ethbtc:       0.0001,
@@ -10,52 +11,43 @@ class Processor
     usdtmcr:      1,
   }
 
-  def initialize(botya: , market: , input_data:, options:, last_data:)
+  def initialize(botya: , market: , options:)
     @botya   = botya
     @market     = market
-    @input_data = input_data
     @options    = options
-    @last_data = last_data
+    @bid_place_threshold = options.bid_place_threshold.value.to_d
+    @ask_place_threshold = options.ask_place_threshold.value.to_d
   end
 
-  def perform
-    if input_data.kline.empty?
-      logger.info "No kline data for market #{market} cancel orders"
-      botya.cancel_orders!
-    else
-      logger.info "Perform market #{market} with kline #{input_data.kline}"
-      bid_price = input_data.kline.low.to_d - input_data.kline.low.to_d * options.bid_place_threshold.value.to_d
-      ask_price = input_data.kline.high.to_d + input_data.kline.high.to_d * options.ask_place_threshold.value.to_d
+  # @param input_data [InputData]
+  def perform(input_data)
+    bid_price = input_data.bidPrice - input_data.bidPrice * @bid_place_threshold
+    ask_price = input_data.askPrice + input_data.askPrice * @ask_place_threshold
 
-      create_order :buy, bid_price
-      create_order :sell, ask_price
-      last_data.kline_low = input_data.kline.low.to_d
-      last_data.kline_high = input_data.kline.high.to_d
+    create_order :buy, bid_price
+    create_order :sell, ask_price
+    logger.info "(#{botya.name}) Perform market #{market} with input_data #{input_data} -> #{bid_price} #{ask_price}"
 
-      InfluxWriter.perform_async :processor, {
-        bid_place_threshold:  options.bid_place_threshold.value.to_d,
-        ask_place_threshold: options.ask_place_threshold.value.to_d,
-        low: input_data.kline.low.to_d,
-        high: input_data.kline.high.to_d,
-        bid: bid_price,
-        ask: ask_price }, { market: market.binance_symbol, bot: botya.name }
-    end
-    update_balances_info
+    write_to_influx ask_price, bid_price
   end
 
   private
 
-  attr_reader :botya, :input_data, :market, :options, :last_data
+  attr_reader :botya, :market, :options
 
-  def update_balances_info
-    last_data.peatio_quote_balance = botya.quote_balance
-    last_data.peatio_base_balance = botya.base_balance
+  def write_to_influx(ask_price, bid_price)
+    Valera::InfluxDB.client
+      .write_point(
+        INFLUX_TABLE,
+        values: { botAsk: ask_price, botBid: bid_price, bid_place_threshold: @bid_place_threshold, ask_place_threshold: @ask_place_threshold },
+        tags: { market: market.id, bot: botya.name }
+    )
   end
 
   def create_order(side, price)
     volume = calculate_volume side
     botya.create_order! side, volume, price
-    last_data.send "last_#{side}_order=", { volume: volume, price: price }.to_json
+    # last_data.send "last_#{side}_order=", { volume: volume, price: price }.to_json
   end
 
   # Объём заявки

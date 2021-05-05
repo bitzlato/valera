@@ -4,7 +4,7 @@ class Universe
 
   include AutoLogger
 
-  attr_reader :peatio_client, :market, :bot_key, :options
+  attr_reader :peatio_client, :market, :bot_key, :options, :state
 
   def self.find(id)
     God.instance.universes.find { |u| u.id == id }
@@ -18,38 +18,27 @@ class Universe
     @options = options
     @peatio_client = PeatioClient.new Rails.application.credentials.bots.fetch(bot_key.to_sym).merge(name: bot_key)
     @botya = Botya.new(market: market, peatio_client: peatio_client, name: bot_key)
+    @state = InputData.new
   end
 
   def description
     options.fetch('description', id)
   end
 
-  def perform_loop
-    loop do
-      perform
-    end
-  end
+  alias_method :to_s, :description
+  alias_method :id, :to_param
 
-  def perform
-    logger.info "Perform #{to_s}"
-    klines = BinanceClient.instance.klines(symbol: market.binance_symbol, interval: INTERVAL, limit: 1)
-
-    # TODO Create value object
-    input_data = OpenStruct.new(kline: klines.first)
+  # Change state
+  def bump!(changes)
+    state.assign_attributes changes
+    logger.info "Perform #{to_s} with #{state}"
 
     Processor
-      .new(botya: @botya, market: market, input_data: input_data, last_data: last_data, options: bot_market_settings)
-      .perform
+      .new(botya: @botya, market: market, options: bot_market_settings)
+      .perform state
   rescue => err
+    Bugsnag.notify err
     logger.error "#{to_s} #{err}"
-  end
-
-  def to_s
-    description
-  end
-
-  def to_param
-    id
   end
 
   def id

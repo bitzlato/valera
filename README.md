@@ -15,6 +15,7 @@ Automated crypto currency trading software for peatio
 # Start grafana
 
 > docker run -d -p 7000:3000 --name=grafana -e GF_SECURITY_ALLOW_EMBEDDING=true grafana/grafana
+> docker exec -it grafana "grafana-cli --pluginUrl https://github.com/BrandyMint/ilgizar-candlestick-panel/archive/refs/tags/v1.2.zip plugins install ilgizar-candlestick-panel"
 
 # Start web server, sidekiq, god and webpacker
 
@@ -28,4 +29,5 @@ Run first bot only
 
 # TODO
 
-Manage trade values
+* [ ] Manage trade values
+* [ ] Cancel all orders on stop

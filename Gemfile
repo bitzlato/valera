@@ -72,12 +72,16 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "nokogiri", "~> 1.11"
 
-gem "auto_logger", "~> 0.1.7"
+gem "auto_logger", path: 'vendor/auto_logger'
 
 gem "binance", "~> 1.2", github: 'andyklimczak/binance', branch: 'immutable-strings-ruby-27'
+
+gem 'eventmachine'
 
 gem "money", "~> 6.14"
 
 gem "influxdb", "~> 0.8.1"
 
 gem "bugsnag", "~> 6.20"
+
+gem "technical-analysis", "~> 0.2.4"

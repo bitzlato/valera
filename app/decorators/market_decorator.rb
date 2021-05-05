@@ -1,6 +1,6 @@
 class MarketDecorator < ApplicationDecorator
   delegate_all
   def self.table_columns
-    %i[symbol base quote]
+    %i[id peatio_symbol binance_symbol base quote]
   end
 end

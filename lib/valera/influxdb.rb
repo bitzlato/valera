@@ -14,7 +14,7 @@ module Valera
         return {} unless yaml.exist?
 
         erb = ::ERB.new(yaml.read)
-        ::SafeYAML.load(erb.result)[ENV.fetch('RAILS_ENV', 'development')].symbolize_keys || {}
+        ::SafeYAML.load(erb.result)[ENV.fetch('RAILS_ENV', 'development')].deep_symbolize_keys || {}
       end
 
       def clients
@@ -23,6 +23,7 @@ module Valera
 
       def parse(configs)
         hosts = configs[:host]
+        return configs if hosts.nil?
         configs[:host] = hosts[Zlib::crc32(configs[:keyshard].to_s) % hosts.count]
         configs
       end

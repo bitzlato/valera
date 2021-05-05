@@ -8,6 +8,13 @@ GIT
       faraday_middleware (~> 0.12)
       faye-websocket (~> 0.10)
 
+PATH
+  remote: vendor/auto_logger
+  specs:
+    auto_logger (0.1.7)
+      activesupport
+      beautiful-log
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -79,9 +86,6 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    auto_logger (0.1.7)
-      activesupport
-      beautiful-log
     awesome_print (1.8.0)
     beautiful-log (0.2.2)
       awesome_print (~> 1.8.0)
@@ -256,6 +260,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    technical-analysis (0.2.4)
     temple (0.8.1)
     thor (1.1.0)
     tilt (2.0.10)
@@ -290,7 +295,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_link_to
-  auto_logger (~> 0.1.7)
+  auto_logger!
   binance (~> 1.2)!
   bootsnap (>= 1.4.4)
   bugsnag (~> 6.20)
@@ -299,6 +304,7 @@ DEPENDENCIES
   connection_pool
   draper
   env-tweaks (~> 1.0.0)
+  eventmachine
   foreman
   influxdb (~> 0.8.1)
   jbuilder (~> 2.7)
@@ -322,6 +328,7 @@ DEPENDENCIES
   sidekiq-cron
   slim-rails
   spring
+  technical-analysis (~> 0.2.4)
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 4.1.0)

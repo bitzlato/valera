@@ -25,7 +25,7 @@ class Market
   end
 
   def id
-    symbol
+    [base,quote].join('_')
   end
 
   def symbol

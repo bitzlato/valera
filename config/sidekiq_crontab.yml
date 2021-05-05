@@ -1,3 +1,1 @@
-BinanceSyncer:
-  cron: '*/30 * * * * *'
-  class: BinanceSyncer
+--- []

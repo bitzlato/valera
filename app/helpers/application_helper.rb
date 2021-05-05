@@ -1,4 +1,6 @@
 module ApplicationHelper
+  GRAFANA_URL = "https://grafana.brandymint.ru/d-solo/ayEuw39Mz/valera?orgId=1"
+  GRAFANA_DEFAULT_PANEL_ID = 8
   def middot
     content_tag :div, '&middot;'.html_safe, class: 'text-muted'
   end
@@ -11,8 +13,14 @@ module ApplicationHelper
     false
   end
 
-  def grafana_iframe_src(universe)
-    "https://grafana.brandymint.ru/d-solo/ayEuw39Mz/valera?orgId=1&var-market=#{universe.market}&var-bot=#{universe.peatio_client.name}&panelId=2"
+  def grafana_iframe_src(resource, panel_id = GRAFANA_DEFAULT_PANEL_ID)
+    if resource.is_a? Universe
+      GRAFANA_URL + "&var-market=#{resource.market.id}&var-bot=#{resource.peatio_client.name}&panelId=#{panel_id}"
+    elsif resource.is_a? Market
+      GRAFANA_URL + "&var-market=#{resource.id}&panelId=#{panel_id}"
+    else
+      raise "Inknown resource #{resource}"
+    end
   end
 
   def present_latest_order(last_order, key, market)
