@@ -11,9 +11,10 @@ module RedisModel
     alias_method :to_s, :id
     alias_method :to_param, :id
 
-    def self.find_or_build(id)
+    def self.find_or_build(id, default_settings = {})
       record = new(id: id)
       record.restore!
+      record.assign_attributes default_settings if record.blank?
       record
     end
   end

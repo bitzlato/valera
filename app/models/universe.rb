@@ -4,7 +4,7 @@ class Universe
 
   include AutoLogger
 
-  attr_reader :peatio_client, :market, :name, :options, :state, :description, :settings
+  attr_reader :peatio_client, :market, :name, :state, :description, :settings
 
   def self.find(id)
     God.instance.universes.find { |u| u.id == id }
@@ -12,18 +12,16 @@ class Universe
 
   # @param name [String] key of bot from Rails credentials
   # @param market [Market]
-  def initialize(name, market, options = {})
+  def initialize(name:, market:, peatio_client:, default_settings: {}, description: nil)
     @name = name
     @market = market
-    @options = options
-    @peatio_client = PeatioClient.new Rails.application.credentials.bots.fetch(options['credentials'].to_sym).merge(name: name)
+    @default_settings = default_settings
+    @peatio_client = peatio_client
     @botya = Botya.new(market: market, peatio_client: peatio_client, name: name)
-    @settings = UniverseSettings.new id: id
-    @settings.restore!
+    @settings = UniverseSettings.find_or_build id, default_settings
     reset_settings! if @settings.blank?
-    @state = UniverseState.new id: id
-    @state.restore!
-    @description = options.fetch('description', '')
+    @state = UniverseState.find_or_build id
+    @description = description
   end
 
   alias_method :to_s, :name
@@ -36,7 +34,7 @@ class Universe
     logger.info "Perform #{to_s} with #{state}"
 
     orders = Processor
-      .new(botya: @botya, market: market, options: settings)
+      .new(botya: @botya, market: market, settings: settings)
       .perform state
 
     state.assign_attributes last_orders: orders
@@ -52,7 +50,7 @@ class Universe
   alias_method :to_param, :id
 
   def reset_settings!
-    settings.update_attributes options['global_settings']
+    settings.update_attributes @default_settings
   end
 
   private

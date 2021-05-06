@@ -46,6 +46,9 @@ class BinanceDrainer
   end
 
   def close(e=nil)
+    # When ctrl-c
+    # e.code == 1006
+    # e.reason == ''
     binding.pry
     dump_headers e
     logger.warn "closed with code #{e.code}"

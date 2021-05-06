@@ -11,12 +11,12 @@ class Processor
     usdtmcr:      1,
   }
 
-  def initialize(botya: , market: , options:)
+  def initialize(botya: , market: , settings:)
     @botya   = botya
     @market     = market
-    @options    = options
-    @bid_place_threshold = options.bid_place_threshold
-    @ask_place_threshold = options.ask_place_threshold
+    @settings    = settings
+    @bid_place_threshold = settings.bid_place_threshold
+    @ask_place_threshold = settings.ask_place_threshold
   end
 
   # @param state [UniverseState]
@@ -33,7 +33,7 @@ class Processor
 
   private
 
-  attr_reader :botya, :market, :options
+  attr_reader :botya, :market, :settings
 
   def write_to_influx(side, volume, price)
     Valera::InfluxDB.client
