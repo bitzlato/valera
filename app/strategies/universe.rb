@@ -8,6 +8,8 @@ class Universe
 
   attr_reader :peatio_client, :market, :name, :state, :description, :settings, :botya
 
+  delegate :settings_class, :state_class, to: :class
+
   # @param name [String] key of bot from Rails credentials
   # @param market [Market]
   def initialize(name:, market:, peatio_client:, default_settings: {}, description: nil)
@@ -16,10 +18,18 @@ class Universe
     @default_settings = default_settings
     @peatio_client = peatio_client
     @botya = Botya.new(market: market, peatio_client: peatio_client, name: name)
-    @settings = UniverseSettings.find_or_build id, default_settings
+    @settings = settings_class.find_or_build id, default_settings
     reset_settings! if @settings.blank?
-    @state = UniverseState.find_or_build id
+    @state = state_class.find_or_build id
     @description = description
+  end
+
+  def self.settings_class
+    UniverseSettings
+  end
+
+  def self.state_class
+    UniverseState
   end
 
   def title
