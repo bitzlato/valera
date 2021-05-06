@@ -26,9 +26,9 @@ table.table.table-condensed.table-bordered
           = format_money universe.state.peatio_base_balance, universe.market.base
         td.text-right= format_money universe.state.askPrice, universe.market.quote
         td.text-right rowspan=2
-          = render 'universe_settings_form', settings: universe.settings, scope: :base
+          = render 'universe_settings_form', universe: universe, scope: :base
         td.text-right
-          = render 'universe_settings_form', settings: universe.settings, scope: :ask
+          = render 'universe_settings_form', universe: universe, scope: :ask
 
         td.text-right= present_latest_order universe.state.last_orders, 'ask', :volume, universe.market.base
         td.text-right= present_latest_order universe.state.last_orders, 'ask', :price, universe.market.quote
@@ -38,6 +38,6 @@ table.table.table-condensed.table-bordered
         td.text-right= format_money universe.state.peatio_quote_balance, universe.market.quote
         td.text-right= format_money universe.state.bidPrice, universe.market.quote
         td.text-right
-          = render 'universe_settings_form', settings: universe.settings, scope: :bid
+          = render 'universe_settings_form', universe: universe, scope: :bid
         td.text-right= present_latest_order universe.state.last_orders, 'bid', :volume, universe.market.base
         td.text-right= present_latest_order universe.state.last_orders, 'bid', :price, universe.market.quote

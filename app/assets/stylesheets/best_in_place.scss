@@ -1,6 +1,8 @@
 .best_in_place {
-  border-bottom: 1px gray dashed;
-  padding: 2px 4px;
+  &:not(.form-control){ 
+    border-bottom: 1px gray dashed;
+    padding: 2px 4px;
+  }
   background: #eefffaed;
   input {
     text-align: right;

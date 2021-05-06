@@ -14,8 +14,8 @@ jQuery(document).on('best_in_place:error', function (event, request, error) {
 
 document.addEventListener("turbolinks:load", function() {
   $(".best_in_place").best_in_place();
-  $('.best_in_place').bind("ajax:success", function () {$(this).closest('td').effect('highlight'); });
-  $('.best_in_place').bind("ajax:error", function () {$(this).closest('td').effect('bounce'); });
+  $('.best_in_place').bind("ajax:success", function () {$(this).closest('td,.form-group').effect('highlight'); });
+  $('.best_in_place').bind("ajax:error", function () {$(this).closest('td,.form-group').effect('bounce', 'fast'); });
   $('.best_in_place[data-reload-on-success]').bind("ajax:success", function () {NProgress.start(); location.reload();});
 });
 
