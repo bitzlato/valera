@@ -1,14 +1,12 @@
 # Bot universe for specific market
 class Universe
-  INTERVAL = '1m'
+  INFLUX_TABLE = 'processor'
 
   include AutoLogger
+  include UpdatePeatioBalance
+  extend UniverseFinders
 
-  attr_reader :peatio_client, :market, :name, :state, :description, :settings
-
-  def self.find(id)
-    God.instance.universes.find { |u| u.id == id }
-  end
+  attr_reader :peatio_client, :market, :name, :state, :description, :settings, :botya
 
   # @param name [String] key of bot from Rails credentials
   # @param market [Market]
@@ -33,9 +31,7 @@ class Universe
     update_peatio_balances!
     logger.info "Perform #{to_s} with #{state}"
 
-    orders = Processor
-      .new(botya: @botya, market: market, settings: settings)
-      .perform state
+    orders = perform
 
     state.assign_attributes last_orders: orders
     state.save!
@@ -55,16 +51,41 @@ class Universe
 
   private
 
-  def find_balance(balances, currency)
-    data = balances.find { |b| b['currency'] == currency }
-    return data['balance'].to_d if data.has_key? 'balance'
+  def perform
+    bid_price = state.bidPrice + state.bidPrice * settings.bid_place_threshold
+    ask_price = state.askPrice + state.askPrice * settings.ask_place_threshold
+
+    logger.info "(#{botya.name}) Perform market #{market} with state #{state} -> #{bid_price} #{ask_price}"
+    orders = []
+    orders << create_order(:buy, bid_price)
+    orders << create_order(:sell, ask_price)
+    orders.compact
   end
 
-  def update_peatio_balances!
-    balances = peatio_client.account_balances
-    state.assign_attributes(
-      peatio_base_balance: find_balance(balances, market.base.downcase),
-      peatio_quote_balance: find_balance(balances, market.quote.downcase)
+  def create_order(side, price)
+    volume = calculate_volume side
+    botya.create_order! side, volume, price
+    write_to_influx side, volume, price
+    { side: side, price: price, volume: volume }
+  rescue => err
+    report_exception err
+    logger.error err
+    nil
+  end
+
+  # Объём заявки
+  #
+  def calculate_volume(side)
+    # TODO Высчитывать на основе чего-то там
+    settings.volume
+  end
+
+  def write_to_influx(side, volume, price)
+    Valera::InfluxDB.client
+      .write_point(
+        INFLUX_TABLE,
+        values: { "volume_#{side}": volume, "price_#{side}": price },
+        tags: { market: market.id, bot: botya.name }
     )
   end
 end
