@@ -23,11 +23,10 @@ module ApplicationHelper
     end
   end
 
-  def present_latest_order(last_order, key, market)
-    return middot if last_order.value.blank?
-    data = JSON.parse(last_order)
-    currency = key == :volume ? market.base : market.quote
-    format_money(data[key.to_s], currency)
+  def present_latest_order(last_orders, side, key, currency)
+    order = last_orders.find { |order| order['side'] == side }
+    return middot if order.nil?
+    format_money(order[key.to_s], currency)
   end
 
   def format_percent(value)

@@ -19,27 +19,27 @@ class Processor
     @ask_place_threshold = options.ask_place_threshold.value.to_d
   end
 
-  # @param input_data [InputData]
-  def perform(input_data)
-    bid_price = input_data.bidPrice - input_data.bidPrice * @bid_place_threshold
-    ask_price = input_data.askPrice + input_data.askPrice * @ask_place_threshold
+  # @param state [UniverseState]
+  def perform(state)
+    bid_price = state.bidPrice - state.bidPrice * @bid_place_threshold
+    ask_price = state.askPrice + state.askPrice * @ask_place_threshold
 
-    create_order :buy, bid_price
-    create_order :sell, ask_price
-    logger.info "(#{botya.name}) Perform market #{market} with input_data #{input_data} -> #{bid_price} #{ask_price}"
-
-    write_to_influx ask_price, bid_price
+    logger.info "(#{botya.name}) Perform market #{market} with state #{state} -> #{bid_price} #{ask_price}"
+    orders = []
+    orders << create_order(:buy, bid_price)
+    orders << create_order(:sell, ask_price)
+    orders.compact
   end
 
   private
 
   attr_reader :botya, :market, :options
 
-  def write_to_influx(ask_price, bid_price)
+  def write_to_influx(side, volume, price)
     Valera::InfluxDB.client
       .write_point(
         INFLUX_TABLE,
-        values: { botAsk: ask_price, botBid: bid_price, bid_place_threshold: @bid_place_threshold, ask_place_threshold: @ask_place_threshold },
+        values: { "volume_#{side}": volume, "price_#{side}": price },
         tags: { market: market.id, bot: botya.name }
     )
   end
@@ -47,7 +47,11 @@ class Processor
   def create_order(side, price)
     volume = calculate_volume side
     botya.create_order! side, volume, price
-    # last_data.send "last_#{side}_order=", { volume: volume, price: price }.to_json
+    write_to_influx side, volume, price
+    { side: side, price: price, volume: volume }
+  rescue => err
+    logger.error err
+    nil
   end
 
   # Объём заявки

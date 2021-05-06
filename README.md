@@ -27,8 +27,13 @@ Run first bot only
 
 > rails runner God.instance.universes.first.perform_loop
 
+# Other
+
+>  TechnicalAnalysis::Rsi.calculate(DataFetcher.fetch(market: 'BTC_USDT'), period: 5, price_key: :close)
+
 # TODO
 
 * [ ] Manage trade values
 * [ ] Cancel all orders on stop
 * [ ] Reconnect or cancel all orders if socket is closed
+* [ ] Контроллировать чтобы заявки от тейкера/мейкера не пересекались
