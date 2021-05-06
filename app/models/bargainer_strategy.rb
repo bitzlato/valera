@@ -1,0 +1,2 @@
+class BargainerStrategy < Universe
+end

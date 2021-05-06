@@ -1,0 +1,2 @@
+class StoneStrategy < Universe
+end

@@ -1,8 +1,9 @@
 defaults: &defaults
   # markets: ["BTC:USDT", "BTC:MCR", "ETH:BTC", "ETH:USDT", "ETH:MCR", "USDT:MCR"]
   markets: ["BTC:USDT"]
-  bots:
+  universes:
     stoner:
+      class: StoneStrategy
       description: Камни (danil@orionet.ru)
       credentials: danil_orionet_ru
       settings:
@@ -23,6 +24,7 @@ defaults: &defaults
           USD_TMCR:      
             volume: 1
     bargainer:
+      class: BargainerStrategy
       description: Проторговщик, торгует на малые объёмы но постоянно и сам с собой (danil@onelec.ru)
       credentials: danil_onelec_ru
       settings:
@@ -42,7 +44,6 @@ defaults: &defaults
             volume: 0.0001
           USD_TMCR:      
             volume: 1
-
 development:
   <<: *defaults
 staging:

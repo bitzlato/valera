@@ -22,7 +22,10 @@ class Universe
     @description = description
   end
 
-  alias_method :to_s, :name
+  def title
+    "#{self.class.name}[#{name}]"
+  end
+  alias_method :to_s, :title
 
   # Change state
   # @param changes [Hash]

@@ -1,7 +1,7 @@
 table.table.table-condensed.table-bordered
   thead.thead-dark
     tr
-      th rowspan=2 Bot description
+      th rowspan=2 Strategy
       th rowspan=2 Market
       th.text-right rowspan=2 Side
       th.text-right rowspan=2 Peatio balance
@@ -16,7 +16,7 @@ table.table.table-condensed.table-bordered
     - universes.each do |universe|
       tr
         th rowspan=2
-          = link_to universe.name, universe_path(universe)
+          = link_to universe.title, universe_path(universe)
           .text-small.text-muted= universe.description
         td rowspan=2
           = link_to universe.market, market_path(universe.market.id)
