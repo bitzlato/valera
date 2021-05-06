@@ -15,7 +15,7 @@ module ApplicationHelper
 
   def grafana_iframe_src(resource, panel_id = GRAFANA_DEFAULT_PANEL_ID)
     if resource.is_a? Universe
-      GRAFANA_URL + "&var-market=#{resource.market.id}&var-bot=#{resource.peatio_client.name}&panelId=#{panel_id}"
+      GRAFANA_URL + "&var-market=#{resource.market.id}&var-bot=#{resource.name}&panelId=#{panel_id}&refresg=5"
     elsif resource.is_a? Market
       GRAFANA_URL + "&var-market=#{resource.id}&panelId=#{panel_id}"
     else
@@ -33,7 +33,7 @@ module ApplicationHelper
   def format_percent(value)
     return middot if value.nil?
     content_tag :span, class: 'text-monospace' do
-      (value * 100).to_s + '%'
+      value.to_s + '%'
     end
   end
 end

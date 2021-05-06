@@ -8,8 +8,8 @@ defaults: &defaults
       credentials: danil_orionet_ru
       settings:
         global:
-          ask_place_threshold: 0.05
-          bid_place_threshold: -0.05
+          ask_place_threshold: 5
+          bid_place_threshold: -5
         markets:
           ETH_BTC:       
             volume: 0.0001
@@ -29,8 +29,8 @@ defaults: &defaults
       credentials: danil_onelec_ru
       settings:
         global:
-          ask_place_threshold: 0.001
-          bid_place_threshold: -0.001
+          ask_place_threshold: 1
+          bid_place_threshold: -1
         markets:
           ETH_BTC:       
             volume: 0.0001

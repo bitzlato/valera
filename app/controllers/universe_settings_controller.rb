@@ -1,6 +1,7 @@
 class UniverseSettingsController < ApplicationController
   def update
     universe = Universe.find params[:id]
+    universe.settings.restore!
 
     respond_to do |format|
       if universe.settings.update_attributes params.require(:universe_settings).permit!

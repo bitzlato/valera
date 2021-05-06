@@ -1,6 +1,6 @@
 
 jQuery(document).on('best_in_place:error', function (event, request, error) {
-  var is_json = false
+  var is_json = request.getResponseHeader('content-type').includes('json');
   if (is_json) {
     // Display all error messages from server side validation
     jQuery.each(jQuery.parseJSON(request.responseText), function (index, value) {

@@ -14,7 +14,10 @@ module RedisModel
     def self.find_or_build(id, default_settings = {})
       record = new(id: id)
       record.restore!
-      record.assign_attributes default_settings if record.blank?
+      if record.blank?
+        record.assign_attributes default_settings
+        raise "Invalid default settings #{default_settings} for #{self}" unless valid?
+      end
       record
     end
   end

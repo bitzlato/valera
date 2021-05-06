@@ -23,7 +23,7 @@ class Universe
   end
 
   def title
-    "#{self.class.name}[#{name}]"
+    "#{name}[#{self.class.name}]"
   end
   alias_method :to_s, :title
 
@@ -55,8 +55,8 @@ class Universe
   private
 
   def perform
-    bid_price = state.bidPrice + state.bidPrice * settings.bid_place_threshold
-    ask_price = state.askPrice + state.askPrice * settings.ask_place_threshold
+    bid_price = state.bidPrice + state.bidPrice * settings.bid_place_threshold/100
+    ask_price = state.askPrice + state.askPrice * settings.ask_place_threshold/100
 
     logger.info "(#{botya.name}) Perform market #{market} with state #{state} -> #{bid_price} #{ask_price}"
     orders = []
@@ -88,7 +88,7 @@ class Universe
       .write_point(
         INFLUX_TABLE,
         values: { "volume_#{side}": volume, "price_#{side}": price },
-        tags: { market: market.id, bot: botya.name }
+        tags: { market: market.id, bot: name }
     )
   end
 end
