@@ -1,7 +1,7 @@
 .container
   = link_to t('.back'), universes_path
   h1 Universe #{universe.id}
-  code= universe.bot_market_settings.as_json
+  code= universe.settings.as_json
   hr
   = render 'universes', universes: [universe]
 

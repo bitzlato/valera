@@ -5,15 +5,15 @@ defaults: &defaults
     stoner:
       description: Камни (danil@orionet.ru)
       credentials: danil_orionet_ru
-      all_markets:
-        bid_place_threshold: 0.05
+      global_settings:
         ask_place_threshold: 0.05
+        bid_place_threshold: -0.05
     bargainer:
       description: Проторговщик, торгует на малые объёмы но постоянно и сам с собой (danil@onelec.ru)
       credentials: danil_onelec_ru
-      all_markets:
-        bid_place_threshold: 0.001
+      global_settings:
         ask_place_threshold: 0.001
+        bid_place_threshold: -0.001
 
 development:
   <<: *defaults

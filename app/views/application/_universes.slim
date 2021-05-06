@@ -25,15 +25,17 @@ table.table.table-condensed.table-bordered
         td.text-right
           = format_money universe.state.peatio_base_balance, universe.market.base
         td.text-right= format_money universe.state.askPrice, universe.market.quote
-        td.text-right= format_percent universe.bot_market_settings.ask_place_threshold
+        td.text-right
+          = best_in_place universe.settings, :ask_place_threshold, as: :input, display_with: -> (value) { format_percent value }
+
         td.text-right= present_latest_order universe.state.last_orders, 'sell', :volume, universe.market.base
         td.text-right= present_latest_order universe.state.last_orders, 'sell', :price, universe.market.quote
 
       tr
         td.text-right BID
-        td.text-right
-          = format_money universe.state.peatio_quote_balance, universe.market.quote
+        td.text-right= format_money universe.state.peatio_quote_balance, universe.market.quote
         td.text-right= format_money universe.state.bidPrice, universe.market.quote
-        td.text-right= format_percent -universe.bot_market_settings.bid_place_threshold.value.to_d
+        td.text-right
+          = best_in_place universe.settings, :bid_place_threshold, as: :input, display_with: -> (value) { format_percent value }
         td.text-right= present_latest_order universe.state.last_orders, 'buy', :volume, universe.market.base
         td.text-right= present_latest_order universe.state.last_orders, 'buy', :price, universe.market.quote

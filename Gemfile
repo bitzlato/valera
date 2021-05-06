@@ -40,6 +40,7 @@ gem 'active_link_to'
 gem 'draper'
 
 group :development, :test do
+  gem 'scss-lint'
   gem 'foreman'
   gem 'pry'
   gem 'pry-byebug'
@@ -85,3 +86,5 @@ gem "influxdb", "~> 0.8.1"
 gem "bugsnag", "~> 6.20"
 
 gem "technical-analysis", "~> 0.2.4"
+
+gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'

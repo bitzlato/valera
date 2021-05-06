@@ -8,6 +8,14 @@ GIT
       faraday_middleware (~> 0.12)
       faye-websocket (~> 0.10)
 
+GIT
+  remote: https://github.com/mmotherwell/best_in_place
+  revision: 88eb3052623a9a6cd346864d2aca05021c2f80d0
+  specs:
+    best_in_place (3.1.1)
+      actionpack (>= 3.2)
+      railties (>= 3.2)
+
 PATH
   remote: vendor/auto_logger
   specs:
@@ -210,6 +218,8 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (~> 1.0)
+    rainbow (2.2.2)
+      rake
     rake (13.0.3)
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
@@ -222,6 +232,7 @@ GEM
       rack (>= 1.4)
     rubyzip (2.3.0)
     safe_yaml (1.0.5)
+    sass (3.4.25)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -232,6 +243,9 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    scss-lint (0.38.0)
+      rainbow (~> 2.0)
+      sass (~> 3.4.1)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -296,6 +310,7 @@ PLATFORMS
 DEPENDENCIES
   active_link_to
   auto_logger!
+  best_in_place!
   binance (~> 1.2)!
   bootsnap (>= 1.4.4)
   bugsnag (~> 6.20)
@@ -321,6 +336,7 @@ DEPENDENCIES
   redis-objects
   safe_yaml (~> 1.0.5)
   sass-rails (>= 6)
+  scss-lint
   selenium-webdriver
   semver2
   settingslogic

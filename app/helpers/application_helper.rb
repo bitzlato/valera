@@ -24,6 +24,7 @@ module ApplicationHelper
   end
 
   def present_latest_order(last_orders, side, key, currency)
+    return middot if last_orders.nil?
     order = last_orders.find { |order| order['side'] == side }
     return middot if order.nil?
     format_money(order[key.to_s], currency)
@@ -31,7 +32,6 @@ module ApplicationHelper
 
   def format_percent(value)
     return middot if value.nil?
-    value = value.value.to_d if value.is_a? Redis::Value
     content_tag :span, class: 'text-monospace' do
       (value * 100).to_s + '%'
     end

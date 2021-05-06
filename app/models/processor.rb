@@ -15,13 +15,13 @@ class Processor
     @botya   = botya
     @market     = market
     @options    = options
-    @bid_place_threshold = options.bid_place_threshold.value.to_d
-    @ask_place_threshold = options.ask_place_threshold.value.to_d
+    @bid_place_threshold = options.bid_place_threshold
+    @ask_place_threshold = options.ask_place_threshold
   end
 
   # @param state [UniverseState]
   def perform(state)
-    bid_price = state.bidPrice - state.bidPrice * @bid_place_threshold
+    bid_price = state.bidPrice + state.bidPrice * @bid_place_threshold
     ask_price = state.askPrice + state.askPrice * @ask_place_threshold
 
     logger.info "(#{botya.name}) Perform market #{market} with state #{state} -> #{bid_price} #{ask_price}"
@@ -50,6 +50,7 @@ class Processor
     write_to_influx side, volume, price
     { side: side, price: price, volume: volume }
   rescue => err
+    report_exception err
     logger.error err
     nil
   end

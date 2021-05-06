@@ -34,19 +34,25 @@ class BinanceDrainer
     @logger = ActiveSupport::TaggedLogging.new _build_auto_logger
   end
 
-  def open(_e)
+  def open(e)
+    dump_headers e
     logger.info "connected"
   end
 
   def error(e)
+    binding.pry
+    dump_headers e
     logger.error e
   end
 
-  def close(_e=nil)
-    logger.info 'closed'
+  def close(e=nil)
+    binding.pry
+    dump_headers e
+    logger.warn "closed with code #{e.code}"
   end
 
   def message(e)
+    dump_headers e
     data = JSON.parse(e.data)
     logger.info data
     stream = data['stream'].split('@').last.split('_').first
@@ -88,6 +94,10 @@ class BinanceDrainer
   def write_to_influx(data)
     Valera::InfluxDB.client
       .write_point( INFLUX_TABLE, values: data, tags: { market: market.id, upstream: :binance })
+  end
+
+  def dump_headers(e)
+    logger.debug e.target.headers.inspect
   end
 
   def logger
