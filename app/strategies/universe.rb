@@ -18,8 +18,6 @@ class Universe
     @default_settings = default_settings
     @peatio_client = peatio_client
     @botya = Botya.new(market: market, peatio_client: peatio_client, name: name)
-    @settings = settings_class.find_or_build id, default_settings
-    reset_settings! if @settings.blank?
     @state = state_class.find_or_build id
     @description = description
   end
@@ -31,6 +29,13 @@ class Universe
   def self.state_class
     UniverseState
   end
+
+  def reload
+    settings.restore!
+    state.restore!
+    self
+  end
+
 
   def title
     "#{name}[#{self.class.name}]"
@@ -59,25 +64,33 @@ class Universe
   alias_method :to_param, :id
 
   def reset_settings!
-    settings.update_attributes @default_settings
+    settings_class.new(id: id).update_attributes @default_settings
+    remove_instance_variable :@settings if instance_variable_defined? :@settings
+  end
+
+  def settings
+    return @settings if instance_variable_defined? :@settings
+    @settings = settings_class.find_or_build id, @default_settings
   end
 
   private
 
   def perform
-    bid_price = state.bidPrice + state.bidPrice * settings.bid_place_threshold/100
     ask_price = state.askPrice + state.askPrice * settings.ask_place_threshold/100
+    bid_price = state.bidPrice + state.bidPrice * settings.bid_place_threshold/100
 
     logger.info "(#{botya.name}) Perform market #{market} with state #{state} -> #{bid_price} #{ask_price}"
     orders = []
-    orders << create_order(:buy, bid_price)
-    orders << create_order(:sell, ask_price)
+    orders << create_order(:ask, ask_price)
+    orders << create_order(:bid, bid_price)
     orders.compact
   end
 
+  EX_SIDES = { bid: :buy, ask: :sell }
+
   def create_order(side, price)
     volume = calculate_volume side
-    botya.create_order! side, volume, price
+    botya.create_order! EX_SIDES.fetch(side), volume, price
     write_to_influx side, volume, price
     { side: side, price: price, volume: volume }
   rescue => err
@@ -90,14 +103,14 @@ class Universe
   #
   def calculate_volume(side)
     # TODO Высчитывать на основе чего-то там
-    settings.volume
+    settings.send side.to_s+'_volume'
   end
 
   def write_to_influx(side, volume, price)
     Valera::InfluxDB.client
       .write_point(
         INFLUX_TABLE,
-        values: { "volume_#{side}": volume, "price_#{side}": price },
+        values: { "#{side}_volume": volume, "#{side}_price": price },
         tags: { market: market.id, bot: name }
     )
   end

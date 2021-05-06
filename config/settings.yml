@@ -10,19 +10,25 @@ defaults: &defaults
         global:
           ask_place_threshold: 5
           bid_place_threshold: -5
-        markets:
+        markets: &markets
           ETH_BTC:       
-            volume: 0.0001
+            ask_volume: 0.0001
+            bid_volume: 0.0001
           ETH_USDT:      
-            volume: 0.0001
+            ask_volume: 0.0001
+            bid_volume: 0.0001
           BTC_USDT:      
-            volume: 0.0001
+            ask_volume: 0.0001
+            bid_volume: 0.0001
           BTC_MCR:       
-            volume: 0.0001
+            ask_volume: 0.0001
+            bid_volume: 0.0001
           ETH_MCR:       
-            volume: 0.0001
+            ask_volume: 0.0001
+            bid_volume: 0.0001
           USD_TMCR:      
-            volume: 1
+            ask_volume: 1
+            bid_volume: 1
     bargainer:
       class: BargainerStrategy
       description: Проторговщик, торгует на малые объёмы но постоянно и сам с собой (danil@onelec.ru)
@@ -32,18 +38,7 @@ defaults: &defaults
           ask_place_threshold: 1
           bid_place_threshold: -1
         markets:
-          ETH_BTC:       
-            volume: 0.0001
-          ETH_USDT:      
-            volume: 0.0001
-          BTC_USDT:      
-            volume: 0.0001
-          BTC_MCR:       
-            volume: 0.0001
-          ETH_MCR:       
-            volume: 0.0001
-          USD_TMCR:      
-            volume: 1
+          <<: *markets
 development:
   <<: *defaults
 staging:

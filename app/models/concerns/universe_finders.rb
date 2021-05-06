@@ -4,6 +4,6 @@ module UniverseFinders
   end
 
   def find(id)
-    all.find { |u| u.id == id }
+    all.find { |u| u.id == id }.reload
   end
 end

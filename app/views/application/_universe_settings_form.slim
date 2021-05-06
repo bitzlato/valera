@@ -1,0 +1,4 @@
+- settings.class.scope_attributes(scope).each do |attribute|
+  .card.mb-2
+    .text-small= t(attribute, default: attribute.to_s)
+    = universe_settings_attribute_input settings, attribute
