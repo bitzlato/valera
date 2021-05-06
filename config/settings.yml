@@ -1,16 +1,17 @@
 defaults: &defaults
-  markets: ["BTC:USDT", "BTC:MCR", "ETH:BTC", "ETH:USDT", "ETH:MCR", "USDT:MCR"]
+  # markets: ["BTC:USDT", "BTC:MCR", "ETH:BTC", "ETH:USDT", "ETH:MCR", "USDT:MCR"]
+  markets: ["BTC:USDT"]
   bots:
     maker:
       description: maker (danil@orionet.ru)
       all_markets:
-        bid_place_threshold: 0.001
-        ask_place_threshold: 0.001
+        bid_place_threshold: 0.01
+        ask_place_threshold: 0.01
     taker:
       description: taker (danil@onelec.ru)
       all_markets:
-        bid_place_threshold: 0.002
-        ask_place_threshold: 0.002
+        bid_place_threshold: 0.02
+        ask_place_threshold: 0.02
 
 development:
   <<: *defaults

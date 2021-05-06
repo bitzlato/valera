@@ -8,7 +8,7 @@ God.instance
 EM.run do
   # Pass a symbol and event handler Hash to connect and process events
   Market.all.each do |market|
-    BinanceBookTicker
+    BinanceDrainer
       .new(market)
       .attach(client)
   end
