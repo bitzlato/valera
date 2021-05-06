@@ -1,6 +1,6 @@
 class UniverseSettings
-  include ActiveModel::Model
   include RedisModel
 
-  attr_accessor :bid_place_threshold, :ask_place_threshold
+  attribute :bid_place_threshold, BigDecimal
+  attribute :ask_place_threshold, BigDecimal
 end

@@ -1,9 +1,26 @@
 module RedisModel
   extend ActiveSupport::Concern
   included do
-    attr_accessor :id
+    include Virtus.model
+    include ActiveModel::AttributeAssignment
+    include ActiveModel::Validations
+    include ActiveModel::Conversion
+
+    attribute :id, String
+
     alias_method :to_s, :id
     alias_method :to_param, :id
+
+    def self.find_or_build(id)
+      record = new(id: id)
+      record.restore!
+      record
+    end
+  end
+
+  def update_attributes(attributes)
+    assign_attributes attributes
+    save! if valid?
   end
 
   def persisted?
@@ -11,7 +28,7 @@ module RedisModel
   end
 
   def save!
-    redis_value.value = as_json(except: 'id').to_json
+    redis_value.value = attributes.except(:id).to_json
   end
 
   def restore!
@@ -25,13 +42,17 @@ module RedisModel
   end
 
   def blank?
-    as_json(except: 'id').blank?
+    attributes.except(:id).blank?
   end
+
+  #def attributes
+    #as_json(except: ['id', 'errors'])
+  #end
 
   private
 
   def redis_value
     raise 'ID is not defined' if id.nil?
-    Redis::Value.new([self.class.name,id].join(':'))
+    @redis_value ||= Redis::Value.new([self.class.name,id].join(':'))
   end
 end

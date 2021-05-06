@@ -88,3 +88,5 @@ gem "bugsnag", "~> 6.20"
 gem "technical-analysis", "~> 0.2.4"
 
 gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
+
+gem "virtus", "~> 1.0"

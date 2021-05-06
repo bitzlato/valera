@@ -52,7 +52,7 @@ class Universe
   alias_method :to_param, :id
 
   def reset_settings!
-    settings.assign_attributes options['global_settings']
+    settings.update_attributes options['global_settings']
   end
 
   private

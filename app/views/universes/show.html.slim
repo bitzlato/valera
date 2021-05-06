@@ -1,7 +1,15 @@
 .container
   = link_to t('.back'), universes_path
   h1 Universe #{universe.id}
-  code= universe.settings.as_json
+  .row
+    .col-md-6
+      a.btn.btn-sm.btn-secondary[data-toggle="collapse" href='#' data-target='#universe_state']= t('.state') + '▼'
+      code.collapse#universe_state
+        pre= JSON.pretty_generate universe.state.as_json
+    .col-md-6
+      a.btn.btn-sm.btn-secondary[data-toggle="collapse" href='#' data-target='#universe_settings']= t('.settings') + '▼'
+      code.collapse#universe_settings
+        pre= JSON.pretty_generate universe.settings.as_json
   hr
   = render 'universes', universes: [universe]
 

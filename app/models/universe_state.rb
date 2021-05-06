@@ -1,10 +1,11 @@
 # New state for processor
 class UniverseState
-  include ActiveModel::Model
   include RedisModel
 
-  attr_accessor(*BinanceDrainer::KEYS)
-
-  attr_accessor :peatio_quote_balance, :peatio_base_balance
-  attr_accessor :last_orders
+  BinanceDrainer::KEYS.each do |key|
+    attribute key, BigDecimal
+  end
+  attribute :peatio_base_balance, BigDecimal
+  attribute :peatio_quote_balance, BigDecimal
+  attribute :last_orders, Array
 end
