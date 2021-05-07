@@ -43,8 +43,12 @@ class Universe
     self
   end
 
+  def channel_key
+    id
+  end
+
   def title
-    "#{name}[#{self.class.name}]"
+    "#{self.class.name}#{id}"
   end
   alias_method :to_s, :title
 
@@ -59,13 +63,14 @@ class Universe
 
     state.assign_attributes last_orders: orders
     state.save!
+    UniverseChannel.update self
   rescue => err
     report_exception err
     logger.error "#{to_s} #{err}"
   end
 
   def id
-    [name, market.id].join(':')
+    [name, market.id].join('-')
   end
   alias_method :to_param, :id
 

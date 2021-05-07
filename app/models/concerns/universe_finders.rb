@@ -4,6 +4,7 @@ module UniverseFinders
   end
 
   def find(id)
+    raise 'ID must present' if id.blank?
     all.find { |u| u.id == id }.reload
   end
 end

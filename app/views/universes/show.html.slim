@@ -13,3 +13,6 @@
 
   h2 Grafana
   iframe[src=grafana_iframe_src(universe) width="100%" height=500 frameborder=0]
+
+  javascript:
+    window.subscribeToUniverse(#{raw universe.channel_key.to_json});

@@ -15,6 +15,7 @@ class BargainerStrategy < Universe
       super.merge avgPrice: avgPrice
     end
     def avgPrice
+      return if askPrice.nil? || bidPrice.nil?
       (askPrice + bidPrice)/2
     end
   end
