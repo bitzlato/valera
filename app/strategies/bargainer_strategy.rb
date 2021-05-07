@@ -7,8 +7,8 @@ class BargainerStrategy < Universe
     attribute :base_max_upstream_threshold, BigDecimal, default: 0.2
 
     validates :base_volume, presence: true, numericality: { greater_than: 0 }
-    validates :base_threshold, presence: true, numericality: { greater_than: 0, eqaual_or_less_then: 1 }
-    validates :base_max_upstream_threshold, presence: true, numericality: { greater_than: 0, equal_or_less_then: 0.5 }
+    validates :base_threshold, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
+    validates :base_max_upstream_threshold, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 0.5 }
   end
   class State < UniverseState
     def self.assign_attributes(attrs)

@@ -13,55 +13,65 @@ module RedisModel
 
     def self.find_or_build(id, default_settings = {})
       record = new(id: id)
-      record.safe_restore! default_settings
+      if record.persisted?
+        record.safe_restore!
+      else
+        record.update_attributes! default_settings
+      end
       record
     end
   end
 
   def update_attributes(attributes)
+    update_attributes!(attributes)
+    true
+  rescue ActiveModel::ValidationError
+    false
+  end
+
+  def update_attributes!(attributes)
     assign_attributes attributes
-    save! if valid?
+    save!
   end
 
   def persisted?
-    true
+    redis_value.value.present?
   end
 
   def save!
+    validate!
     redis_value.value = attributes.except(:id).to_json
   end
 
-  def safe_restore!(default_settings = {})
+  def safe_restore!
     restore!
-    raise "Invalid restored attributes #{self}" unless valid?
-    return self if present?
-    assign_attributes default_settings
-    raise "Invalid default settings #{default_settings} for #{self}" unless valid?
-  rescue ActiveModel::UnknownAttributeError => err
+    validate!
+  rescue ActiveModel::ValidationError, ActiveModel::UnknownAttributeError => err
     Rails.logger.error "#{err} restoring #{self}##{id}, reset to defaults"
-    assign_attributes default_settings
-    raise "Invalid default settings #{default_settings} for #{self}" unless valid?
+    clear_attributes!
+    set_default_attributes!
+    save!
   end
 
   def restore!
-    value = redis_value.value
-    assign_attributes JSON.parse(value) if value.present?
+    assign_attributes JSON.parse(redis_value.value) if persisted?
   end
 
   def clear!
     redis_value.delete
-    instance_variables.reject { |a| a == :@id }.each { |var| remove_instance_variable var }
+    clear_attributes!
+    set_default_attributes!
   end
 
   def blank?
     attributes.except(:id).blank?
   end
 
-  #def attributes
-    #as_json(except: ['id', 'errors'])
-  #end
-
   private
+
+  def clear_attributes!
+    instance_variables.reject { |a| a == :@id }.each { |var| remove_instance_variable var }
+  end
 
   def redis_value
     raise 'ID is not defined' if id.nil?

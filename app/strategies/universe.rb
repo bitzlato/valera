@@ -69,7 +69,7 @@ class Universe
   alias_method :to_param, :id
 
   def reset_settings!
-    settings_class.new(id: id).update_attributes @default_settings
+    settings_class.new(id: id).update_attributes! @default_settings
     remove_instance_variable :@settings if instance_variable_defined? :@settings
   end
 
