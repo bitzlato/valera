@@ -6,36 +6,41 @@ class Universe
   include UpdatePeatioBalance
   extend UniverseFinders
 
-  attr_reader :peatio_client, :market, :name, :state, :description, :settings, :botya
+  attr_reader :peatio_client, :market, :name, :state, :comment, :settings, :botya
 
-  delegate :settings_class, :state_class, to: :class
+  delegate :description, :settings_class, :state_class, to: :class
 
   # @param name [String] key of bot from Rails credentials
   # @param market [Market]
-  def initialize(name:, market:, peatio_client:, default_settings: {}, description: nil)
+  def initialize(name:, market:, peatio_client:, default_settings: {}, comment: nil)
     @name = name
     @market = market
     @default_settings = default_settings
     @peatio_client = peatio_client
     @botya = Botya.new(market: market, peatio_client: peatio_client, name: name)
     @state = state_class.find_or_build id
-    @description = description
+    @comment = comment
+  end
+
+  def self.description
+    raise 'undefined strategy'
   end
 
   def self.settings_class
+    return [self.name, 'Settings'].join('::').constantize if self.constants.include? :Settings
     UniverseSettings
   end
 
   def self.state_class
+    return [self.name, 'State'].join('::').constantize if self.constants.include? :State
     UniverseState
   end
 
   def reload
-    settings.restore!
-    state.restore!
+    settings.safe_restore!
+    state.safe_restore!
     self
   end
-
 
   def title
     "#{name}[#{self.class.name}]"
@@ -76,8 +81,8 @@ class Universe
   private
 
   def perform
-    ask_price = state.askPrice + state.askPrice * settings.ask_place_threshold/100
-    bid_price = state.bidPrice + state.bidPrice * settings.bid_place_threshold/100
+    ask_price = calculate_price(:ask)
+    bid_price = calculate_price(:bid)
 
     logger.info "(#{botya.name}) Perform market #{market} with state #{state} -> #{bid_price} #{ask_price}"
     orders = []
@@ -99,11 +104,12 @@ class Universe
     nil
   end
 
-  # Объём заявки
-  #
+  def calculate_price(side)
+    raise 'not implemented'
+  end
+
   def calculate_volume(side)
-    # TODO Высчитывать на основе чего-то там
-    settings.send side.to_s+'_volume'
+    raise 'not implemented'
   end
 
   def write_to_influx(side, volume, price)

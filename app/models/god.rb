@@ -22,7 +22,7 @@ class God
         settings = options.fetch('settings', {})
         settings = settings.fetch('global', {}).merge settings.dig('markets', market.id) || {}
         peatio_client = PeatioClient.new Rails.application.credentials.bots.fetch(options['credentials'].to_sym).merge(name: key)
-        universes << universe_class.new(name: key, market: market, peatio_client: peatio_client, default_settings: settings, description: options['description'])
+        universes << universe_class.new(name: key, market: market, peatio_client: peatio_client, default_settings: settings, comment: options['comment'])
       end
     end
     universes

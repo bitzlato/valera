@@ -40,16 +40,19 @@ class BinanceDrainer
   end
 
   def error(e)
+    # Possible e.message:
+    # Errno::ECONNRESET
+    Bugsnag.notify e.message do |b|
+      b.meta_data = { market_id: market.id }
+    end
     binding.pry
-    dump_headers e
-    logger.error e
+    logger.error "error (#{e.type}) with message #{e.message}"
   end
 
   def close(e=nil)
     # When ctrl-c
     # e.code == 1006
     # e.reason == ''
-    binding.pry
     dump_headers e
     logger.warn "closed with code #{e.code}"
   end

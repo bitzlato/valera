@@ -13,11 +13,7 @@ module RedisModel
 
     def self.find_or_build(id, default_settings = {})
       record = new(id: id)
-      record.restore!
-      if record.blank?
-        record.assign_attributes default_settings
-        raise "Invalid default settings #{default_settings} for #{self}" unless valid?
-      end
+      record.safe_restore! default_settings
       record
     end
   end
@@ -33,6 +29,18 @@ module RedisModel
 
   def save!
     redis_value.value = attributes.except(:id).to_json
+  end
+
+  def safe_restore!(default_settings = {})
+    restore!
+    raise "Invalid restored attributes #{self}" unless valid?
+    return self if present?
+    assign_attributes default_settings
+    raise "Invalid default settings #{default_settings} for #{self}" unless valid?
+  rescue ActiveModel::UnknownAttributeError => err
+    Rails.logger.error "#{err} restoring #{self}##{id}, reset to defaults"
+    assign_attributes default_settings
+    raise "Invalid default settings #{default_settings} for #{self}" unless valid?
   end
 
   def restore!

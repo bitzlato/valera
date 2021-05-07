@@ -18,6 +18,7 @@ module Exbot
     config.autoload_paths += Dir[
       "#{Rails.root}/app/services",
       "#{Rails.root}/app/strategies",
+      "#{Rails.root}/app/strategies/entities",
     ]
 
     # Configuration for the application, engines, and railties goes here.

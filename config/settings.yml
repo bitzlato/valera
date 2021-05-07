@@ -4,41 +4,12 @@ defaults: &defaults
   universes:
     stoner:
       class: StoneStrategy
-      description: Камни (danil@orionet.ru)
+      comment: Камни (danil@orionet.ru)
       credentials: danil_orionet_ru
-      settings:
-        global:
-          ask_place_threshold: 5
-          bid_place_threshold: -5
-        markets: &markets
-          ETH_BTC:       
-            ask_volume: 0.0001
-            bid_volume: 0.0001
-          ETH_USDT:      
-            ask_volume: 0.0001
-            bid_volume: 0.0001
-          BTC_USDT:      
-            ask_volume: 0.0001
-            bid_volume: 0.0001
-          BTC_MCR:       
-            ask_volume: 0.0001
-            bid_volume: 0.0001
-          ETH_MCR:       
-            ask_volume: 0.0001
-            bid_volume: 0.0001
-          USD_TMCR:      
-            ask_volume: 1
-            bid_volume: 1
     bargainer:
       class: BargainerStrategy
-      description: Проторговщик, торгует на малые объёмы но постоянно и сам с собой (danil@onelec.ru)
+      comment: Проторговщик, торгует на малые объёмы но постоянно и сам с собой (danil@onelec.ru)
       credentials: danil_onelec_ru
-      settings:
-        global:
-          ask_place_threshold: 1
-          bid_place_threshold: -1
-        markets:
-          <<: *markets
 development:
   <<: *defaults
 staging:

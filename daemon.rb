@@ -12,4 +12,5 @@ EM.run do
       .new(market)
       .attach(client)
   end
+  puts 'em run'
 end

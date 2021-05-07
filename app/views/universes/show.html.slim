@@ -1,6 +1,8 @@
 .container
   = link_to t('.back'), universes_path
   h1 Universe #{universe.id}
+  .mb-2.text-small.text-muted= universe.comment
+  div.mb-2= universe.description
   .row
     .col-md-6
       a.btn.btn-sm.btn-secondary[data-toggle="collapse" href='#' data-target='#universe_state']= t('.state') + '▼'
