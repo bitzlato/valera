@@ -52,6 +52,7 @@ class Universe
   # @param changes [Hash]
   def bump!(changes)
     logger.info "Bump with #{changes}"
+    settings.restore!
     state.assign_attributes changes
     update_peatio_balances!
 
