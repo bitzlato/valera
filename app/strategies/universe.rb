@@ -6,7 +6,7 @@ class Universe
   include UpdatePeatioBalance
   extend UniverseFinders
 
-  attr_reader :peatio_client, :market, :name, :state, :comment, :settings, :botya
+  attr_reader :peatio_client, :market, :name, :state, :comment, :settings, :botya, :logger
 
   delegate :description, :settings_class, :state_class, to: :class
 
@@ -20,6 +20,7 @@ class Universe
     @botya = Botya.new(market: market, peatio_client: peatio_client, name: name)
     @state = state_class.find_or_build id
     @comment = comment
+    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(id)
   end
 
   def self.description
@@ -50,9 +51,9 @@ class Universe
   # Change state
   # @param changes [Hash]
   def bump!(changes)
+    logger.info "Bump with #{changes}"
     state.assign_attributes changes
     update_peatio_balances!
-    logger.info "Perform #{to_s} with #{state}"
 
     orders = perform
 
@@ -81,20 +82,16 @@ class Universe
   private
 
   def perform
-    ask_price = calculate_price(:ask)
-    bid_price = calculate_price(:bid)
-
-    logger.info "(#{botya.name}) Perform market #{market} with state #{state} -> #{bid_price} #{ask_price}"
     orders = []
-    orders << create_order(:ask, ask_price)
-    orders << create_order(:bid, bid_price)
+    orders << create_order(:ask, calculate_price(:ask), calculate_volume(:ask))
+    orders << create_order(:bid, calculate_price(:bid), calculate_volume(:bid))
     orders.compact
   end
 
   EX_SIDES = { bid: :buy, ask: :sell }
 
-  def create_order(side, price)
-    volume = calculate_volume side
+  def create_order(side, price, volume)
+    logger.debug "create_order(#{side}, #{price}, #{volume})"
     botya.create_order! EX_SIDES.fetch(side), volume, price
     write_to_influx side, volume, price
     { side: side, price: price, volume: volume }

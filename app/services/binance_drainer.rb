@@ -27,11 +27,11 @@ class BinanceDrainer
 
   INFLUX_TABLE = 'upstream'
   include AutoLogger
-  attr_reader :market
+  attr_reader :market, :logger
 
   def initialize(market)
     @market = market
-    @logger = ActiveSupport::TaggedLogging.new _build_auto_logger
+    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(market)
   end
 
   def open(e)
@@ -104,9 +104,5 @@ class BinanceDrainer
 
   def dump_headers(e)
     logger.debug e.target.headers.inspect
-  end
-
-  def logger
-    @logger.tagged(market)
   end
 end

@@ -1,10 +1,9 @@
-table.table.table-condensed.table-bordered
+table.table.table-condensed.table-bordered.table-narrow
   thead.thead-dark
     tr
       th rowspan=2 Strategy
       th rowspan=2 Market
       th.text-right rowspan=2 Side
-      th.text-right rowspan=2 Peatio balance
       th.text-right rowspan=2 Binance ask/bid
       th.text-center rowspan=2 colspan=2 Settings
       th.text-center colspan=2 Last order
@@ -22,8 +21,6 @@ table.table.table-condensed.table-bordered
           = link_to universe.market, market_path(universe.market.id)
 
         td.text-right ASK
-        td.text-right
-          = format_money universe.state.peatio_base_balance, universe.market.base
         td.text-right= format_money universe.state.askPrice, universe.market.quote
         td.text-right rowspan=2
           = render 'universe_settings_form', universe: universe, scope: :base
@@ -35,7 +32,6 @@ table.table.table-condensed.table-bordered
 
       tr
         td.text-right BID
-        td.text-right= format_money universe.state.peatio_quote_balance, universe.market.quote
         td.text-right= format_money universe.state.bidPrice, universe.market.quote
         td.text-right
           = render 'universe_settings_form', universe: universe, scope: :bid
