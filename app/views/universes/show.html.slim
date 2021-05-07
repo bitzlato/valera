@@ -1,18 +1,21 @@
 .container-fluid
   = link_to t('.back'), universes_path
   .row
-    .col-md-6
+    .col-md-4
       h1 Universe #{universe.id}
       .mb-2.text-small.text-muted= universe.comment
       div.mb-2= universe.description
-    .col-md-6
+    .col-md-4
+      = render 'form', universe: universe
+      div[data-cable-broadcast=UniverseChannel.broadcasting_for(universe) data-cable-field='update_date']= Time.zone.now
+    .col-md-4
       code.text-small
-        pre= JSON.pretty_generate universe.state.as_json
-  hr
-  = render 'universes', universes: [universe]
+        pre[data-cable-broadcast=UniverseChannel.broadcasting_for(universe) data-cable-field='pretty_state']
+          = JSON.pretty_generate universe.state.as_json
+  -# = render 'universes', universes: [universe]
 
   h2 Grafana
   iframe[src=grafana_iframe_src(universe) width="100%" height=500 frameborder=0]
 
   javascript:
-    window.subscribeToUniverse(#{raw universe.channel_key.to_json});
+    window.subscribeToUniverse(#{raw universe.id.to_json});

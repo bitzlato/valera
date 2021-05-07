@@ -43,10 +43,6 @@ class Universe
     self
   end
 
-  def channel_key
-    id
-  end
-
   def title
     "#{self.class.name}#{id}"
   end

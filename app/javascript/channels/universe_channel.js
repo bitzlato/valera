@@ -3,11 +3,14 @@ import consumer from "./consumer"
 export const createSubscription = (id) => {
   const actions = {
     received(data) {
-      console.log('received', data)
+      const scope = '[data-cable-broadcast="universe:' + id + '"]'
+      $(scope + '[data-cable-field="pretty_state"]')
+      .html(JSON.stringify(data.state, null, 2));
+
+      $(scope + '[data-cable-field="update_date"]')
+      .html(new Date)
+      .effect('highlight');
     },
-    connected() {
-      console.log(`Connected to ${id}`)
-    }
   };
   consumer.subscriptions.create( { channel: "UniverseChannel", id: id }, actions );
 }

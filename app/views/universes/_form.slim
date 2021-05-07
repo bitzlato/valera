@@ -1,0 +1,9 @@
+table.table.table-condensed.table-bordered.table-narrow
+  thead.thead-dark
+    tr
+      - universe.settings.scopes.each do |scope|
+        th #{scope} settings
+  tbody
+    tr
+      - universe.settings.scopes.each do |scope|
+        td.text-right= render 'universe_settings_form', universe: universe, scope: scope

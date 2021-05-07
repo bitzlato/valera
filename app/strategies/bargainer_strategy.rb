@@ -2,6 +2,7 @@ class BargainerStrategy < Universe
   # Настройки стратегии проторговщика
   #
   class Settings < UniverseSettings
+    SCOPES = %i[base]
     attribute :base_volume, BigDecimal, default: 0.0001
     attribute :base_threshold, BigDecimal, default: 0.01
     attribute :base_max_upstream_threshold, BigDecimal, default: 0.2
@@ -35,6 +36,7 @@ class BargainerStrategy < Universe
   def calculate_price(side)
     threshold = settings.base_threshold
     threshold = threshold*rand(100)/100
+    threshold = -threshold if side == :bid
     logger.debug "#{side} threshold = #{threshold}"
     priceFromUpstream = state.avgPrice + state.avgPrice * threshold / 100
     # TODO Брать среднюю цену стакана из peatio
