@@ -53,7 +53,7 @@ class BinanceDrainer
       logger.warn 'Reattach'
       attach
     elsif Rails.env.development?
-      binding.pry
+      binding.pry # rubocop:disable Lint/Debugger
     end
   end
 

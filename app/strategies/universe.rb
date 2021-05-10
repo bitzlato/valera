@@ -8,7 +8,7 @@ class Universe
   include UpdatePeatioBalance
   extend UniverseFinders
 
-  attr_reader :peatio_client, :market, :name, :state, :comment, :settings, :botya, :logger
+  attr_reader :peatio_client, :market, :name, :state, :comment, :botya, :logger
 
   delegate :description, :settings_class, :state_class, to: :class
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Market
-  attr_reader :quote, :base, :symbol, :binance_syncer
+  attr_reader :quote, :base, :binance_syncer
 
   def self.all
     Settings.markets.map do |name|

@@ -29,7 +29,7 @@ module ApplicationHelper
   def present_latest_order(last_orders, side, key, currency)
     return middot if last_orders.nil?
 
-    order = last_orders.find { |order| order['side'] == side }
+    order = last_orders.find { |o| o['side'] == side }
     return middot if order.nil?
 
     format_money(order[key.to_s], currency)

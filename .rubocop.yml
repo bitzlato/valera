@@ -1,4 +1,3 @@
-inherit_from: .rubocop_todo.yml
 AllCops:
   NewCops: enable
   Exclude:
@@ -17,3 +16,119 @@ AllCops:
 Layout/LineLength:
   Exclude: 
     - 'app/strategies/*'
+
+# Offense count: 2
+# Configuration parameters: DebuggerReceivers, DebuggerMethods.
+Lint/Debugger:
+  Exclude:
+    - 'config/initializers/exception_reporting.rb'
+
+# Offense count: 10
+# Configuration parameters: IgnoredMethods, CountRepeatedAttributes.
+Metrics/AbcSize:
+  Max: 66
+
+# Offense count: 1
+# Configuration parameters: CountComments, CountAsOne, ExcludedMethods, IgnoredMethods.
+# IgnoredMethods: refine
+Metrics/BlockLength:
+  Max: 27
+
+# Offense count: 2
+# Configuration parameters: IgnoredMethods.
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+# Offense count: 8
+# Configuration parameters: CountComments, CountAsOne, ExcludedMethods, IgnoredMethods.
+Metrics/MethodLength:
+  Max: 42
+
+# Offense count: 2
+# Configuration parameters: IgnoredMethods.
+Metrics/PerceivedComplexity:
+  Max: 12
+
+# Offense count: 2
+# Configuration parameters: EnforcedStyle, IgnoredPatterns.
+# SupportedStyles: snake_case, camelCase
+Naming/MethodName:
+  Exclude:
+    - 'app/strategies/bargainer_strategy.rb'
+    - 'app/strategies/order_book_strategy.rb'
+
+# Offense count: 6
+# Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
+# AllowedNames: at, by, db, id, in, io, ip, of, on, os, pp, to
+Naming/MethodParameterName:
+  Exclude:
+    - 'app/models/kassa_rates.rb'
+    - 'app/services/binance_drainer.rb'
+
+# Offense count: 1
+# Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
+# NamePrefix: is_, has_, have_
+# ForbiddenPrefixes: is_, has_, have_
+# AllowedMethods: is_a?
+# MethodDefinitionMacros: define_method, define_singleton_method
+Naming/PredicateName:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/initializers/money.rb'
+
+# Offense count: 7
+# Configuration parameters: EnforcedStyle, AllowedIdentifiers.
+# SupportedStyles: snake_case, camelCase
+Naming/VariableName:
+  Exclude:
+    - 'app/strategies/bargainer_strategy.rb'
+    - 'app/strategies/order_book_strategy.rb'
+    - 'app/strategies/stone_strategy.rb'
+
+# Offense count: 2
+Security/Open:
+  Exclude:
+    - 'app/models/kassa_rates.rb'
+    - 'app/models/source_rates.rb'
+
+Style/AsciiComments:
+  Exclude:
+    - 'app/models/botya.rb'
+    - 'app/models/kassa_rates.rb'
+    - 'app/models/source_rates.rb'
+    - 'app/strategies/bargainer_strategy.rb'
+    - 'app/strategies/order_book_strategy.rb'
+
+# Offense count: 34
+# Configuration parameters: AllowedConstants.
+Style/Documentation:
+  Enabled: false
+
+# Offense count: 3
+# Configuration parameters: MaxUnannotatedPlaceholdersAllowed, IgnoredMethods.
+# SupportedStyles: annotated, template, unannotated
+Style/FormatStringToken:
+  EnforcedStyle: template
+
+# Offense count: 2
+# Configuration parameters: AllowedVariables.
+Style/GlobalVars:
+  Exclude:
+    - 'config/initializers/exception_reporting.rb'
+
+# Offense count: 2
+Style/IdenticalConditionalBranches:
+  Exclude:
+    - 'app/controllers/universe_settings_controller.rb'
+
+# Offense count: 1
+Style/MissingRespondToMissing:
+  Exclude:
+    - 'app/services/binance_client.rb'
+
+# Offense count: 1
+# Configuration parameters: AllowedMethods.
+# AllowedMethods: respond_to_missing?
+Style/OptionalBooleanParameter:
+  Exclude:
+    - 'config/initializers/exception_reporting.rb'

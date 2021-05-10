@@ -79,9 +79,9 @@ class Botya
         logger.warn "Order doesn't created!"
       end
     end
-    orders_to_cancel.each do |order|
-      logger.info "Cancel order ##{order['id']}"
-      peatio_client.cancel_order order['id']
+    orders_to_cancel.each do |o|
+      logger.info "Cancel order ##{o['id']}"
+      peatio_client.cancel_order o['id']
     rescue StandardError => e
       logger.error e
       logger.warn "Order doesn't canceled!"
