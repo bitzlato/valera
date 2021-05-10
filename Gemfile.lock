@@ -172,6 +172,9 @@ GEM
     guard-rubocop (1.4.0)
       guard (~> 2.0)
       rubocop (< 2.0)
+    guard-shell (0.7.2)
+      guard (>= 2.0.0)
+      guard-compat (~> 1.0)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -386,6 +389,7 @@ DEPENDENCIES
   guard
   guard-minitest
   guard-rubocop
+  guard-shell
   influxdb (~> 0.8.1)
   jbuilder (~> 2.7)
   listen (~> 3.3)

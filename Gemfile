@@ -52,6 +52,7 @@ group :development, :test do
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-rubocop'
+  gem 'guard-shell'
   gem 'rubocop-rails'
 end
 
