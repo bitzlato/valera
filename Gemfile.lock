@@ -282,6 +282,7 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
+    ruby-prof (1.4.3)
     ruby-progressbar (1.11.0)
     rubyzip (2.3.0)
     safe_yaml (1.0.5)
@@ -399,6 +400,7 @@ DEPENDENCIES
   rails (~> 6.1.1)
   redis-objects
   rubocop-rails
+  ruby-prof
   safe_yaml (~> 1.0.5)
   sass-rails (>= 6)
   scss-lint
