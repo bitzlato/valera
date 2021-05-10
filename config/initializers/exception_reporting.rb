@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $debug_on_exception = Rails.env.development?
 
 def catch_and_report_exception(options = {})
@@ -21,6 +23,6 @@ end
 
 def report_exception_to_ets(exception)
   Raven.capture_exception(exception) if defined?(Raven)
-rescue StandardError => ets_exception
-  report_exception(ets_exception, false)
+rescue StandardError => e
+  report_exception(e, false)
 end

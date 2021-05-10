@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'open-uri'
 # Отдаёт текущий базовый курс с внешней биржи
 class SourceRates
@@ -7,13 +9,13 @@ class SourceRates
   # Подготовленные курсы
   def rates
     raw_data
-      .each_with_object({}) { |i,a| a[(i['first_currency']+i['second_currency']).downcase.to_sym]=i['price'].to_d }
+      .each_with_object({}) { |i, a| a[(i['first_currency'] + i['second_currency']).downcase.to_sym] = i['price'].to_d }
   end
 
   private
 
   def raw_data
-    Rails.cache.fetch :source_rates, :expires_in => EXPIRES_IN do
+    Rails.cache.fetch :source_rates, expires_in: EXPIRES_IN do
       JSON.parse(URI.open(URL).read)['result']
     end
   end

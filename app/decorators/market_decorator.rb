@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MarketDecorator < ApplicationDecorator
   delegate_all
   def self.table_columns

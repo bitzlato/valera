@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class UniverseChannel < ApplicationCable::Channel
   def self.update(universe)
     broadcast_to universe, {
-      :state => universe.state.as_json,
-      :settings => universe.settings.as_json
+      state: universe.state.as_json,
+      settings: universe.settings.as_json
     }
   end
 

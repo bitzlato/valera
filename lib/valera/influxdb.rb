@@ -1,10 +1,9 @@
-# encoding: UTF-8
 # frozen_string_literal: true
 
 module Valera
   module InfluxDB
     class << self
-      def client(opts={})
+      def client(opts = {})
         # Map InfluxDB clients with received opts.
         clients[opts] ||= ::InfluxDB::Client.new(parse(config.merge(opts)))
       end
@@ -24,7 +23,8 @@ module Valera
       def parse(configs)
         hosts = configs[:host]
         return configs if hosts.nil?
-        configs[:host] = hosts[Zlib::crc32(configs[:keyshard].to_s) % hosts.count]
+
+        configs[:host] = hosts[Zlib.crc32(configs[:keyshard].to_s) % hosts.count]
         configs
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BotSettings
   include ActiveModel::Model
   include Redis::Objects

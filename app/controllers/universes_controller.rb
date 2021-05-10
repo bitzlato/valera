@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class UniversesController < ApplicationController
   def index
-    render :locals => { :universes => god.universes }
+    render locals: { universes: god.universes }
   end
 
   def show
     universe = Universe.find params[:id]
-    render :locals => { :universe => universe }
+    render locals: { universe: universe }
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Market
   attr_reader :quote, :base, :symbol, :binance_syncer
 
@@ -19,13 +21,13 @@ class Market
     other.id == id
   end
 
-  def initialize(base , quote )
+  def initialize(base, quote)
     @base = base
     @quote = quote
   end
 
   def id
-    [base,quote].join('_')
+    [base, quote].join('_')
   end
 
   def symbol

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'openssl'
 # puts PeatioAPI::Client.new(endpoint: ENTPOINT).get_public('/api/v2/peatio/public/markets/tickers')
 # puts client.get '/api/v2/peatio/orders', market: 'ethbtc'
@@ -8,7 +10,11 @@ class PeatioClient
 
   attr_reader :name
 
-  def initialize(name: nil, access_key: ENV['PEATIO_API_ACCESS_KEY'], secret_key: ENV['PEATIO_API_SECRET_KEY'], endpoint: ENV['PEATIO_ENDPOINT'], prefix: '/api/v2/peatio')
+  def initialize(name: nil,
+                 access_key: ENV['PEATIO_API_ACCESS_KEY'],
+                 secret_key: ENV['PEATIO_API_SECRET_KEY'],
+                 endpoint: ENV['PEATIO_ENDPOINT'],
+                 prefix: '/api/v2/peatio')
     @access_key = access_key
     @secret_key = secret_key
     @endpoint = endpoint
@@ -19,6 +25,7 @@ class PeatioClient
   def to_s
     name
   end
+
   def account_balances(currency = nil)
     if currency.present?
       get("/account/balances/#{currency}")
@@ -40,17 +47,17 @@ class PeatioClient
     post '/market/orders', order
   end
 
-  #optional :market,
-  #optional :base_unit,
-  #optional :quote_unit,
-  #optional :state,
-  #optional :limit,
-  #optional :page,
-  #optional :order_by,
-  #optional :ord_type,
-  #optional :type,
-  #optional :time_from,
-  #optional :time_to,
+  # optional :market,
+  # optional :base_unit,
+  # optional :quote_unit,
+  # optional :state,
+  # optional :limit,
+  # optional :page,
+  # optional :order_by,
+  # optional :ord_type,
+  # optional :type,
+  # optional :time_from,
+  # optional :time_to,
   def orders(params = {})
     get '/market/orders', params
   end
@@ -77,7 +84,7 @@ class PeatioClient
 
   def connection
     nonce = (Time.now.to_f * 1000).to_i.to_s
-    Faraday.new :url => endpoint do |c|
+    Faraday.new url: endpoint do |c|
       c.headers = {
         'Content-Type' => 'application/json',
         'Accept' => 'application/json',
@@ -95,13 +102,21 @@ class PeatioClient
   end
 
   def parse_response(response)
-    raise WrongResponse, "Wrong response status (#{response.status}) with body '#{response.body}'" unless response.success?
+    unless response.success?
+      raise WrongResponse,
+            "Wrong response status (#{response.status}) with body '#{response.body}'"
+    end
     return nil if response.body.empty?
-    raise WrongResponse, "Wrong content type (#{response['content-type']})" if response['content-type'] != 'application/json'
+
+    if response['content-type'] != 'application/json'
+      raise WrongResponse,
+            "Wrong content type (#{response['content-type']})"
+    end
+
     JSON.parse response.body
   end
 
   def logger
-    Logger.new(STDOUT)
+    Logger.new($stdout)
   end
 end

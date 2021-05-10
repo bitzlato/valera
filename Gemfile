@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -27,26 +29,26 @@ gem 'jbuilder', '~> 2.7'
 # gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.4', :require => false
-gem 'env-tweaks', '~> 1.0.0'
+gem 'active_link_to'
+gem 'bootsnap', '>= 1.4.4', require: false
 gem 'connection_pool'
+gem 'draper'
+gem 'env-tweaks', '~> 1.0.0'
 gem 'redis-objects'
+gem 'safe_yaml', '~> 1.0.5', require: 'safe_yaml/load'
+gem 'semver2'
 gem 'settingslogic'
 gem 'sidekiq'
 gem 'sidekiq-cron'
-gem 'semver2'
-gem 'safe_yaml', '~> 1.0.5', :require => 'safe_yaml/load'
-gem 'active_link_to'
-gem 'draper'
 
 group :development, :test do
-  gem 'scss-lint'
   gem 'foreman'
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'scss-lint'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', :platforms => %i[mri mingw x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-rubocop'
@@ -58,8 +60,8 @@ group :development do
   gem 'web-console', '>= 4.1.0'
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
-  gem 'rack-mini-profiler', '~> 2.0'
   gem 'listen', '~> 3.3'
+  gem 'rack-mini-profiler', '~> 2.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
@@ -73,13 +75,13 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', :platforms => %i[mingw mswin x64_mingw jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'nokogiri', '~> 1.11'
 
-gem 'auto_logger', :path => 'vendor/auto_logger'
+gem 'auto_logger', path: 'vendor/auto_logger'
 
-gem 'binance', '~> 1.2', :github => 'andyklimczak/binance', :branch => 'immutable-strings-ruby-27'
+gem 'binance', '~> 1.2', github: 'andyklimczak/binance', branch: 'immutable-strings-ruby-27'
 
 gem 'eventmachine'
 
@@ -91,6 +93,6 @@ gem 'bugsnag', '~> 6.20'
 
 gem 'technical-analysis', '~> 0.2.4'
 
-gem 'best_in_place', :git => 'https://github.com/mmotherwell/best_in_place'
+gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
 
 gem 'virtus', '~> 1.0'

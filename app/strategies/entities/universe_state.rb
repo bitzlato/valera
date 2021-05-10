@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # New state for processor
 class UniverseState
   include RedisModel

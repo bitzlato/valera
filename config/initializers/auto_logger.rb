@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 if ENV.true? 'COLLAPSE_AUTO_LOGGER'
-  if ENV['COLLAPSE_AUTO_LOGGER'] == 'STDOUT'
-    logger = Logger.new(STDOUT)
-  else
-    logger = Rails.logger
-  end
-  AutoLogger.logger_builder = -> (tag, default_formatter) {
+  logger = if ENV['COLLAPSE_AUTO_LOGGER'] == 'STDOUT'
+             Logger.new($stdout)
+           else
+             Rails.logger
+           end
+  AutoLogger.logger_builder = lambda { |tag, _default_formatter|
     ActiveSupport::TaggedLogging
       .new(logger)
       .tagged(tag)

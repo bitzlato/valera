@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RedisModel
   extend ActiveSupport::Concern
   included do
@@ -12,7 +14,7 @@ module RedisModel
     alias_method :to_param, :id
 
     def self.find_or_build(id, default_settings = {})
-      record = new(:id => id)
+      record = new(id: id)
       if record.persisted?
         record.safe_restore!
       else
@@ -46,8 +48,8 @@ module RedisModel
   def safe_restore!
     restore!
     validate!
-  rescue ActiveModel::ValidationError, ActiveModel::UnknownAttributeError => err
-    Rails.logger.error "#{err} restoring #{self}##{id}, reset to defaults"
+  rescue ActiveModel::ValidationError, ActiveModel::UnknownAttributeError => e
+    Rails.logger.error "#{e} restoring #{self}##{id}, reset to defaults"
     clear_attributes!
     set_default_attributes!
     save!
@@ -75,6 +77,7 @@ module RedisModel
 
   def redis_value
     raise 'ID is not defined' if id.nil?
-    @redis_value ||= Redis::Value.new([self.class.name,id].join(':'))
+
+    @redis_value ||= Redis::Value.new([self.class.name, id].join(':'))
   end
 end

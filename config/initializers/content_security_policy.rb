@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Be sure to restart your server when you modify this file.
 
 # Define an application-wide content security policy
@@ -30,11 +31,11 @@
 # Rails.application.config.content_security_policy_report_only = true
 #
 #
- #Rails.application.config.action_dispatch.default_headers = {
-   #'X-Frame-Options' => 'SAMEORIGIN',
-   #'X-XSS-Protection' => '1; mode=block',
-   #'X-Content-Type-Options' => 'nosniff',
-   #'X-Download-Options' => 'noopen',
-   #'X-Permitted-Cross-Domain-Policies' => 'none',
-   #'Referrer-Policy' => 'strict-origin-when-cross-origin'
-#}
+# Rails.application.config.action_dispatch.default_headers = {
+# 'X-Frame-Options' => 'SAMEORIGIN',
+# 'X-XSS-Protection' => '1; mode=block',
+# 'X-Content-Type-Options' => 'nosniff',
+# 'X-Download-Options' => 'noopen',
+# 'X-Permitted-Cross-Domain-Policies' => 'none',
+# 'Referrer-Policy' => 'strict-origin-when-cross-origin'
+# }

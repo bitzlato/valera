@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Bot universe for specific market
 class Universe
   INFLUX_TABLE = 'processor'
@@ -8,7 +10,7 @@ class Universe
 
   attr_reader :peatio_client, :market, :name, :state, :comment, :settings, :botya, :logger
 
-  delegate :description, :settings_class, :state_class, :to => :class
+  delegate :description, :settings_class, :state_class, to: :class
 
   # @param name [String] key of bot from Rails credentials
   # @param market [Market]
@@ -17,7 +19,7 @@ class Universe
     @market = market
     @default_settings = default_settings
     @peatio_client = peatio_client
-    @botya = Botya.new(:market => market, :peatio_client => peatio_client, :name => name)
+    @botya = Botya.new(market: market, peatio_client: peatio_client, name: name)
     @state = state_class.find_or_build id
     @comment = comment
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(id)
@@ -29,11 +31,13 @@ class Universe
 
   def self.settings_class
     return [name, 'Settings'].join('::').constantize if constants.include? :Settings
+
     UniverseSettings
   end
 
   def self.state_class
     return [name, 'State'].join('::').constantize if constants.include? :State
+
     UniverseState
   end
 
@@ -46,7 +50,7 @@ class Universe
   def title
     "#{self.class.name}#{id}"
   end
-  alias_method :to_s, :title
+  alias to_s title
 
   # Change state
   # @param changes [Hash]
@@ -58,64 +62,65 @@ class Universe
 
     orders = perform
 
-    state.assign_attributes :last_orders => orders
+    state.assign_attributes last_orders: orders
     state.save!
     UniverseChannel.update self
-  rescue StandardError => err
-    report_exception err
-    logger.error "#{to_s} #{err}"
+  rescue StandardError => e
+    report_exception e
+    logger.error "#{self} #{e}"
   end
 
   def id
     [name, market.id].join('-')
   end
-  alias_method :to_param, :id
+  alias to_param id
 
   def reset_settings!
-    settings_class.new(:id => id).update_attributes! @default_settings
+    settings_class.new(id: id).update_attributes! @default_settings
     remove_instance_variable :@settings if instance_variable_defined? :@settings
   end
 
   def settings
     return @settings if instance_variable_defined? :@settings
+
     @settings = settings_class.find_or_build id, @default_settings
   end
 
   private
 
   def perform
-    %i{ask bid}.map do |side|
+    %i[ask bid].map do |side|
       create_order(side, calculate_price(side), calculate_volume(side))
     end.compact
   end
 
-  EX_SIDES = { :bid => :buy, :ask => :sell }
+  EX_SIDES = { bid: :buy, ask: :sell }.freeze
 
   def create_order(side, price, volume)
     logger.debug "create_order(#{side}, #{price}, #{volume})"
     botya.create_order! EX_SIDES.fetch(side), volume, price
     write_to_influx side, volume, price
-    { :side => side, :price => price, :volume => volume }
-  rescue StandardError => err
-    report_exception err
-    logger.error err
+    { side: side, price: price, volume: volume }
+  rescue StandardError => e
+    report_exception e
+    logger.error e
     nil
   end
 
-  def calculate_price(side)
+  def calculate_price(_side)
     raise 'not implemented'
   end
 
-  def calculate_volume(side)
+  def calculate_volume(_side)
     raise 'not implemented'
   end
 
   def write_to_influx(side, volume, price)
     Valera::InfluxDB.client
-      .write_point(
-        INFLUX_TABLE,
-        :values => { :"#{side}_volume" => volume, :"#{side}_price" => price },
-        :tags => { :market => market.id, :bot => name }
-    )
+                    .write_point(
+                      INFLUX_TABLE,
+                      values: { "#{side}_volume": volume, "#{side}_price": price },
+                      tags: { market: market.id, bot: name }
+                    )
   end
 end

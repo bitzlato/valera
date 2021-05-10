@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class UniverseSettings
   include RedisModel
-  SCOPES = %i[base ask bid]
+  SCOPES = %i[base ask bid].freeze
 
   def scopes
     self.class.const_get :SCOPES

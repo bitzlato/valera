@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Connects to binance stream and store kline to internal influx
 #
 class BinanceDrainer
@@ -21,7 +23,7 @@ class BinanceDrainer
       'l' => :low,
       'v' => :volume
     }
-  }
+  }.freeze
 
   KEYS = MAPPING.values.map(&:values).flatten
 
@@ -43,19 +45,19 @@ class BinanceDrainer
     # Possible e.message:
     # Errno::ECONNRESET
     Bugsnag.notify e.message do |b|
-      b.meta_data = { :market_id => market.id }
+      b.meta_data = { market_id: market.id }
     end
     logger.error "error (#{e.type}) with message #{e.message}"
 
     if e.message == Errno::ECONNRESET
       logger.warn 'Reattach'
       attach
-    else
-      binding.pry if Rails.env.development?
+    elsif Rails.env.development?
+      binding.pry
     end
   end
 
-  def close(e=nil)
+  def close(e = nil)
     # When ctrl-c
     # e.code == 1006
     # e.reason == ''
@@ -76,11 +78,11 @@ class BinanceDrainer
   def attach(client = nil)
     @client ||= client
     logger.info 'Attach'
-    @client.multi :streams => [
-      { :type => 'aggTrade', :symbol => market.binance_symbol },
-      { :type => 'bookTicker', :symbol => market.binance_symbol },
-      { :type => 'kline', :symbol => market.binance_symbol, :interval => '1m'}
-    ], :methods => methods
+    @client.multi streams: [
+      { type: 'aggTrade', symbol: market.binance_symbol },
+      { type: 'bookTicker', symbol: market.binance_symbol },
+      { type: 'kline', symbol: market.binance_symbol, interval: '1m' }
+    ], methods: methods
   end
 
   private
@@ -98,16 +100,17 @@ class BinanceDrainer
   end
 
   def map(data, mapping)
-    data = data['k'] if data.has_key?('k') && data['k'].is_a?(Hash)
+    data = data['k'] if data.key?('k') && data['k'].is_a?(Hash)
     data.each_with_object({}) do |p, a|
       key, value = p
-      a[mapping[key]] = value.to_d if mapping.has_key? key
+      a[mapping[key]] = value.to_d if mapping.key? key
     end
   end
 
   def write_to_influx(data)
     Valera::InfluxDB.client
-      .write_point( INFLUX_TABLE, :values => data, :tags => { :market => market.id, :upstream => :binance })
+                    .write_point(INFLUX_TABLE, values: data, tags: { market: market.id,
+                                                                     upstream: :binance })
   end
 
   def dump_headers(e)
