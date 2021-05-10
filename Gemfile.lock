@@ -125,6 +125,8 @@ GEM
     colorize (0.8.1)
     concurrent-ruby (1.1.8)
     connection_pool (2.2.3)
+    crack (0.4.5)
+      rexml
     crass (1.0.6)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -175,6 +177,7 @@ GEM
     guard-shell (0.7.2)
       guard (>= 2.0.0)
       guard-compat (~> 1.0)
+    hashdiff (1.0.1)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -195,6 +198,8 @@ GEM
     mini_mime (1.0.3)
     mini_portile2 (2.5.0)
     minitest (5.14.4)
+    minitest-around (0.5.0)
+      minitest (~> 5.0)
     money (6.14.1)
       i18n (>= 0.6.4, <= 2)
     msgpack (1.4.2)
@@ -343,6 +348,7 @@ GEM
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.0.0)
+    vcr (6.0.0)
     virtus (1.0.5)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
@@ -357,6 +363,10 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (>= 3.0, < 4.0)
+    webmock (3.11.0)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
     webpacker (5.2.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
@@ -393,6 +403,7 @@ DEPENDENCIES
   influxdb (~> 0.8.1)
   jbuilder (~> 2.7)
   listen (~> 3.3)
+  minitest-around
   money (~> 6.14)
   nokogiri (~> 1.11)
   pg (~> 1.1)
@@ -418,9 +429,11 @@ DEPENDENCIES
   technical-analysis (~> 0.2.4)
   turbolinks (~> 5)
   tzinfo-data
+  vcr
   virtus (~> 1.0)
   web-console (>= 4.1.0)
   webdrivers
+  webmock (~> 3.5)
   webpacker (~> 5.0)
 
 RUBY VERSION

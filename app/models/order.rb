@@ -10,18 +10,18 @@ class Order
   include Comparable
   SIDES = %i[ask bid]
 
-  attribute :side, String
+  attribute :side, Symbol
   attribute :volume, BigDecimal
   attribute :price, BigDecimal
 
   validates :volume, presence: true, numericality: { greater_than: 0 }
   validates :price, presence: true, numericality: { greater_than: 0 }
-  validates :side, presence: true, inclusion: SIDES
+  validates :side, presence: true, inclusion: { in: SIDES }
 
   delegate :hash, to: :to_s
 
-  def self.build(*attrs)
-    order = initialize(attrs)
+  def self.build(attrs)
+    order = new(attrs)
     order.validate!
     order.freeze
   end
@@ -40,8 +40,7 @@ class Order
   end
 
   def to_s
-    buffer = side + ':' +  format("%0.#{PRECISION}f", volume) + 'x' +  format("%0.#{PRECISION}f", price)
-    buffer
+    side.to_s + ':' +  format("%0.#{PRECISION}f", volume) + 'x' +  format("%0.#{PRECISION}f", price)
   end
 
   def volume_price

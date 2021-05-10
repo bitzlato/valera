@@ -2,13 +2,11 @@
 
 # Bot universe for specific market
 class Universe
-  INFLUX_TABLE = 'processor'
-
   include AutoLogger
   include UpdatePeatioBalance
   extend UniverseFinders
 
-  attr_reader :peatio_client, :market, :name, :state, :comment, :botya, :logger
+  attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater
 
   delegate :description, :settings_class, :state_class, to: :class
 
@@ -19,10 +17,10 @@ class Universe
     @market = market
     @default_settings = default_settings
     @peatio_client = peatio_client
-    @botya = Botya.new(market: market, peatio_client: peatio_client, name: name)
     @state = state_class.find_or_build id
     @comment = comment
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(id)
+    @updater = OrdersUpdater.new(market: market, peatio_client: peatio_client, name: name)
   end
 
   def self.description
@@ -60,7 +58,8 @@ class Universe
     state.assign_attributes changes
     update_peatio_balances!
 
-    orders = perform
+    orders = build_orders
+    updater.update! orders
 
     state.assign_attributes last_orders: orders
     state.save!
@@ -88,23 +87,15 @@ class Universe
 
   private
 
-  def perform
-    %i[ask bid].map do |side|
-      create_order(side, calculate_price(side), calculate_volume(side))
+  def build_orders
+    Set.new Order::SIDES.map do |side|
+      build_order(side, calculate_price(side), calculate_volume(side))
     end.compact
   end
 
-  EX_SIDES = { bid: :buy, ask: :sell }.freeze
-
-  def create_order(side, price, volume)
-    logger.debug "create_order(#{side}, #{price}, #{volume})"
-    botya.create_order! EX_SIDES.fetch(side), volume, price
-    write_to_influx side, volume, price
-    { side: side, price: price, volume: volume }
-  rescue StandardError => e
-    report_exception e
-    logger.error e
-    nil
+  def build_order(side, price, volume)
+    logger.debug "build_order(#{side}, #{price}, #{volume})"
+    Order.build( side: side, price: price, volume: volume )
   end
 
   def calculate_price(_side)
@@ -115,12 +106,4 @@ class Universe
     raise 'not implemented'
   end
 
-  def write_to_influx(side, volume, price)
-    Valera::InfluxDB.client
-                    .write_point(
-                      INFLUX_TABLE,
-                      values: { "#{side}_volume": volume, "#{side}_price": price },
-                      tags: { market: market.id, bot: name }
-                    )
-  end
 end

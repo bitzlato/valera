@@ -39,14 +39,12 @@ class OrderBookStrategy < Universe
 
   private
 
-  def perform
-    orders = []
-    %i[ask bid].each do |side|
-      settings.base_depth.times do
-        orders << create_order(side, calculate_price(side), calculate_volume(side))
+  def build_orders
+    %i[ask bid].map do |side|
+      settings.base_depth.times.map do
+        build_order(side, calculate_price(side), calculate_volume(side))
       end
-    end
-    orders.compact
+    end.flatten.compact
   end
 
   def calculate_price(side)

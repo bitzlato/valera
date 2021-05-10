@@ -74,6 +74,9 @@ group :test do
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'ruby-prof'
   gem 'webdrivers'
+  gem 'webmock',             '~> 3.5'
+  gem 'vcr'
+  gem 'minitest-around'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

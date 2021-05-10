@@ -2,110 +2,108 @@
 
 # rubocop:disable Metrics/MethodLength
 
-# Бот маркет-мейкер
+# Smartly updates private order book for market/account and logs changes.
 #
-# Проверяет уже установленные ордера на указанном маркете.
-# Двигает их в нужнуж сторону или создаёт новые если их нет.
-#
-class Botya
+class OrdersUpdater
   include AutoLogger
-  # Наценка от базового курса
-  BUY_MULT = 0.98
-  SALE_MULT = 1.025
 
-  # Процент разницы цены между текущей заявкой, на который зарзрешается сотавить заявку и не создавать новую
-  #
-  UNTOUCH_PERCENT = 0.01
+  INFLUX_TABLE = 'processor'
 
-  PRECISION = 4 # Gets from peatio config. Specific for every currency
+  # If volume*price of order is changed on less then this percentage the order will not be changed
+  AVAILABLE_DIVERGENCE = 0.01
+  SIDES_MAP = { bid: :buy, ask: :sell }.freeze
 
-  attr_reader :name
+  attr_reader :peatio_client, :market, :logger, :name
 
-  # @bid_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
-  # @ask_place_threshold How far away from the mid price do you want to place the first ask (Enter 0.01 to indicate 1%)?
-  def initialize(peatio_client:, market:, name:)
-    @market = market
-    @peatio_client = peatio_client || PeatioClient.new
+  def initialize(peatio_client:, market:, name: )
+    @market = market || raise("No market")
+    @peatio_client = peatio_client || raise("No peatio client")
+    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger)
+      .tagged([market,peatio_client.name].join(' '))
     @name = name
   end
 
-  # @param side Enum[:buy, :sell]
-  def cancel_orders!(side = nil)
-    if side.present?
-      logger.info "Cancel orders for #{market} with side #{side}"
-      peatio_client.cancel_orders market: market.peatio_symbol, side: side
-    else
-      logger.info "Cancel orders for #{market}"
-      peatio_client.cancel_orders market: market.peatio_symbol
+  # Updates orders on market. Cancel redundant orders and create new if necessary
+  # @param Set[Order]
+  def update!(orders)
+    raise 'Must be a Set' unless orders.is_a? Set
+    logger.info "Update with #{orders.to_a.join(',')}"
+    Order::SIDES.each do |side|
+      update_by_side! side, orders.filter { |o| o.side == side }
     end
   end
 
-  def create_orders!(orders); end
+  def update_by_side!(side, orders)
+    logger.debug "Update by side #{side} #{orders}"
 
-  # @param side Enum[:buy, :sell]
-  # @param volume Float
-  # @param price Float
-  def create_order!(side, volume, price)
-    price = price.round(PRECISION)
-    logger.debug "Perform #{side} order for #{market}, #{volume} for #{price}"
-    existen_order = nil
-    orders_to_cancel = []
-    peatio_client.orders(market: market.peatio_symbol, type: side, state: :wait).each do |order|
-      if price_outdated?(order['price'].to_d, price)
-        logger.debug "Mark for cancel order ##{order['id']} as outdated price #{order['price']} <> #{price}"
-        orders_to_cancel << order
-      elsif order['remaining_volume'].to_d != volume.to_d
-        logger.debug(
-          "Mark for cancel order ##{order['id']} as outdated volume #{order['remaining_volume']} <> #{volume}"
-        )
-        orders_to_cancel << order
-      elsif existen_order.present?
-        logger.debug "Mark for cancel order ##{order['id']} as duplicate"
-        orders_to_cancel << order
-      else
-        existen_order = order
-      end
-    end
-    if existen_order.present?
-      logger.debug "Existen #{side} order for #{market}, #{volume} for #{price}, don't need to create"
-    else
-      begin
-        logger.info "Create #{side} order for #{market}, #{volume} for #{price}"
-        order = peatio_client
-                .create_order(market: market.peatio_symbol, ord_type: :limit, side: side, volume: volume, price: price)
-        logger.debug "Created order ##{order['id']}"
-      rescue StandardError => e
-        logger.error e
-        logger.warn "Order doesn't created!"
-      end
-    end
-    orders_to_cancel.each do |o|
-      logger.info "Cancel order ##{o['id']}"
-      peatio_client.cancel_order o['id']
-    rescue StandardError => e
-      logger.error e
-      logger.warn "Order doesn't canceled!"
-    end
-    logger.debug 'Successful performed'
-  rescue StandardError => e
-    logger.error e
-    raise e
-  end
+    persisted_orders = fetch_active_orders(side)
+    logger.debug "Fetched orders #{persisted_orders}"
 
-  def base_balance
-    peatio_client.account_balances(market.base.downcase)['balance'].to_d
-  end
+    outdated_orders = find_outdated_orders(fetch_active_orders(side), orders)
+    logger.debug "Outdated orders #{outdated_orders}"
 
-  def quote_balance
-    peatio_client.account_balances(market.quote.downcase)['balance'].to_d
+    logger.debug "Cancel orders #{outdated_orders}"
+    cancel_orders! outdated_orders
+
+    orders_to_create = find_orders_to_create(orders, outdated_orders)
+    logger.debug "Create orders #{outdated_orders}"
+    create_orders! orders_to_create
+
+    orders_to_create
   end
 
   private
 
   attr_reader :market, :peatio_client
 
-  def price_outdated?(price1, price2)
-    price1 != price2
+  def find_orders_to_create(orders, outdated_orders)
+    orders.filter do |order|
+      !outdated_orders.find { |o| o.price == order.price }
+    end
+  end
+
+  def fetch_active_orders(side)
+    peatio_client
+      .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
+      .map do |data|
+      PersistedOrder.new(
+        data.symbolize_keys.slice(*PersistedOrder.attribute_set.map(&:name) )
+      )
+    end
+  end
+
+  def cancel_orders!(orders)
+    orders.each do |order|
+      peatio_client.cancel_order order.id
+    end
+  end
+
+  def find_outdated_orders(persisted_orders, recent_orders)
+    persisted_orders.filter do |po|
+      !!recent_orders.find { |o| o.price != po.price }
+    end
+  end
+
+  def create_orders!(orders)
+    orders.each do |order|
+      peatio_client.create_order(
+        market: market.peatio_symbol,
+        ord_type: :limit,
+        price: order.price,
+        volume: order.volume,
+        side: SIDES_MAP.fetch( order.side )
+      )
+      write_to_influx(order)
+    end
+  end
+
+  def write_to_influx(order)
+    Valera::InfluxDB.client
+                    .write_point(
+                      INFLUX_TABLE,
+                      values: { "#{order.side}_volume": order.volume, "#{order.side}_price": order.price },
+                      tags: { market: market.id, bot: name }
+                    )
   end
 end
 # rubocop:enable Metrics/MethodLength

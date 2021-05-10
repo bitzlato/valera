@@ -1,0 +1,319 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: "<PEATIO_ENDPOINT>/api/v2/peatio/market/orders?market=btcusdt&state=wait&type=sell"
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      X-Auth-Apikey:
+      - "<PEATIO_API_ACCESS_KEY>"
+      X-Auth-Nonce:
+      - '1620640005017'
+      X-Auth-Signature:
+      - 90b478dc07aae7de67933413c41438cea7f5d9235e783c7ba2719e00b3808fe5
+      User-Agent:
+      - Faraday v0.17.4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 10 May 2021 09:46:45 GMT
+      Etag:
+      - W/"b6f6c1829830fd67f9a22aa14fbe1057"
+      Page:
+      - '1'
+      Per-Page:
+      - '100'
+      Server:
+      - envoy
+      Vary:
+      - Origin
+      X-Envoy-Upstream-Service-Time:
+      - '9'
+      X-Request-Id:
+      - 78e953ee-4799-4337-be20-4f09a43a2160
+      X-Runtime:
+      - '0.007985'
+      Content-Length:
+      - '775'
+    body:
+      encoding: UTF-8
+      string: '[{"id":487559,"uuid":"ce664e0b-42a3-4a6a-8649-8e9f926889ae","side":"sell","ord_type":"limit","price":"60131.4829","avg_price":"0.0","state":"wait","market":"btcusdt","market_type":"spot","created_at":"2021-05-10T09:46:45Z","updated_at":"2021-05-10T09:46:45Z","origin_volume":"0.001","remaining_volume":"0.001","executed_volume":"0.0","maker_fee":"0.0","taker_fee":"0.0","trades_count":0},{"id":487558,"uuid":"3cc69d32-9841-4ae5-8d59-9764be332fbf","side":"sell","ord_type":"limit","price":"59684.0585","avg_price":"0.0","state":"wait","market":"btcusdt","market_type":"spot","created_at":"2021-05-10T09:46:44Z","updated_at":"2021-05-10T09:46:44Z","origin_volume":"0.001","remaining_volume":"0.001","executed_volume":"0.0","maker_fee":"0.0","taker_fee":"0.0","trades_count":0}]'
+  recorded_at: Mon, 10 May 2021 09:46:45 GMT
+- request:
+    method: get
+    uri: "<PEATIO_ENDPOINT>/api/v2/peatio/market/orders?market=btcusdt&state=wait&type=sell"
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      X-Auth-Apikey:
+      - "<PEATIO_API_ACCESS_KEY>"
+      X-Auth-Nonce:
+      - '1620640005321'
+      X-Auth-Signature:
+      - 7b3c557014261120aa7f238d554144f5f4598c928379977c55963fab3b6feba1
+      User-Agent:
+      - Faraday v0.17.4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 10 May 2021 09:46:45 GMT
+      Etag:
+      - W/"5315e6e7f022dc101ef1a30718f2d551"
+      Page:
+      - '1'
+      Per-Page:
+      - '100'
+      Server:
+      - envoy
+      Vary:
+      - Origin
+      X-Envoy-Upstream-Service-Time:
+      - '8'
+      X-Request-Id:
+      - 33af37d3-3ba9-49d9-8e7a-2fab706872a1
+      X-Runtime:
+      - '0.006569'
+      Content-Length:
+      - '388'
+    body:
+      encoding: UTF-8
+      string: '[{"id":487559,"uuid":"ce664e0b-42a3-4a6a-8649-8e9f926889ae","side":"sell","ord_type":"limit","price":"60131.4829","avg_price":"0.0","state":"wait","market":"btcusdt","market_type":"spot","created_at":"2021-05-10T09:46:45Z","updated_at":"2021-05-10T09:46:45Z","origin_volume":"0.001","remaining_volume":"0.001","executed_volume":"0.0","maker_fee":"0.0","taker_fee":"0.0","trades_count":0}]'
+  recorded_at: Mon, 10 May 2021 09:46:45 GMT
+- request:
+    method: post
+    uri: "<PEATIO_ENDPOINT>/api/v2/peatio/market/orders/487559/cancel"
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      X-Auth-Apikey:
+      - "<PEATIO_API_ACCESS_KEY>"
+      X-Auth-Nonce:
+      - '1620640005643'
+      X-Auth-Signature:
+      - 21fe2bb5862e5056c00890314628c4ac480ade81444b4594f21b58b1ffa3873d
+      User-Agent:
+      - Faraday v0.17.4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 10 May 2021 09:46:45 GMT
+      Etag:
+      - W/"b665421e29545ff7ea03b5537ab0ccf0"
+      Server:
+      - envoy
+      Vary:
+      - Origin
+      X-Envoy-Upstream-Service-Time:
+      - '11'
+      X-Request-Id:
+      - 99bfc6d6-2afa-407e-986b-b472b909a4c7
+      X-Runtime:
+      - '0.008841'
+      Content-Length:
+      - '386'
+    body:
+      encoding: UTF-8
+      string: '{"id":487559,"uuid":"ce664e0b-42a3-4a6a-8649-8e9f926889ae","side":"sell","ord_type":"limit","price":"60131.4829","avg_price":"0.0","state":"wait","market":"btcusdt","market_type":"spot","created_at":"2021-05-10T09:46:45Z","updated_at":"2021-05-10T09:46:45Z","origin_volume":"0.001","remaining_volume":"0.001","executed_volume":"0.0","maker_fee":"0.0","taker_fee":"0.0","trades_count":0}'
+  recorded_at: Mon, 10 May 2021 09:46:45 GMT
+- request:
+    method: post
+    uri: "<PEATIO_ENDPOINT>/api/v2/peatio/market/orders"
+    body:
+      encoding: UTF-8
+      string: '{"market":"btcusdt","ord_type":"limit","price":"1.0","volume":"2.0","side":"sell"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      X-Auth-Apikey:
+      - "<PEATIO_API_ACCESS_KEY>"
+      X-Auth-Nonce:
+      - '1620640005946'
+      X-Auth-Signature:
+      - 9f342454d12fe52f39e2f721759730c8baeded55ae53090d3a32f7fec73f3713
+      User-Agent:
+      - Faraday v0.17.4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 10 May 2021 09:46:46 GMT
+      Etag:
+      - W/"5de6a60725735c12bb83619cf92eeb54"
+      Server:
+      - envoy
+      Vary:
+      - Origin
+      X-Envoy-Upstream-Service-Time:
+      - '167'
+      X-Request-Id:
+      - cc880fcd-032d-4b3d-aa53-07140a3e2c73
+      X-Runtime:
+      - '0.159025'
+      Content-Length:
+      - '378'
+    body:
+      encoding: UTF-8
+      string: '{"id":487561,"uuid":"f48eb59f-bee7-41b5-98af-b993e65e9c71","side":"sell","ord_type":"limit","price":"1.0","avg_price":"0.0","state":"pending","market":"btcusdt","market_type":"spot","created_at":"2021-05-10T09:46:46Z","updated_at":"2021-05-10T09:46:46Z","origin_volume":"2.0","remaining_volume":"2.0","executed_volume":"0.0","maker_fee":"0.0","taker_fee":"0.0","trades_count":0}'
+  recorded_at: Mon, 10 May 2021 09:46:46 GMT
+- request:
+    method: get
+    uri: "<PEATIO_ENDPOINT>/api/v2/peatio/market/orders?market=btcusdt&state=wait&type=buy"
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      X-Auth-Apikey:
+      - "<PEATIO_API_ACCESS_KEY>"
+      X-Auth-Nonce:
+      - '1620640006408'
+      X-Auth-Signature:
+      - 0d24df2803a7d187c9eea3abea4e9d5c8b437199085a54d16eee021151863c99
+      User-Agent:
+      - Faraday v0.17.4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 10 May 2021 09:46:46 GMT
+      Etag:
+      - W/"4f53cda18c2baa0c0354bb5f9a3ecbe5"
+      Page:
+      - '1'
+      Per-Page:
+      - '100'
+      Server:
+      - envoy
+      Vary:
+      - Origin
+      X-Envoy-Upstream-Service-Time:
+      - '8'
+      X-Request-Id:
+      - 3db789f1-e177-4738-91e1-2fadff238bca
+      X-Runtime:
+      - '0.006555'
+      Content-Length:
+      - '2'
+    body:
+      encoding: UTF-8
+      string: "[]"
+  recorded_at: Mon, 10 May 2021 09:46:46 GMT
+- request:
+    method: get
+    uri: "<PEATIO_ENDPOINT>/api/v2/peatio/market/orders?market=btcusdt&state=wait&type=buy"
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      X-Auth-Apikey:
+      - "<PEATIO_API_ACCESS_KEY>"
+      X-Auth-Nonce:
+      - '1620640006698'
+      X-Auth-Signature:
+      - ae40b9d09aac958a4786540ce2eaef28b73284d3bc41086c35ecb9f2fc8f0159
+      User-Agent:
+      - Faraday v0.17.4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 10 May 2021 09:46:46 GMT
+      Etag:
+      - W/"4f53cda18c2baa0c0354bb5f9a3ecbe5"
+      Page:
+      - '1'
+      Per-Page:
+      - '100'
+      Server:
+      - envoy
+      Vary:
+      - Origin
+      X-Envoy-Upstream-Service-Time:
+      - '5'
+      X-Request-Id:
+      - 2cbdb042-a58c-40f8-b20e-b4d67928ac03
+      X-Runtime:
+      - '0.004716'
+      Content-Length:
+      - '2'
+    body:
+      encoding: UTF-8
+      string: "[]"
+  recorded_at: Mon, 10 May 2021 09:46:46 GMT
+recorded_with: VCR 6.0.0

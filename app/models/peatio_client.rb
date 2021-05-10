@@ -15,10 +15,10 @@ class PeatioClient
                  secret_key: ENV['PEATIO_API_SECRET_KEY'],
                  endpoint: ENV['PEATIO_ENDPOINT'],
                  prefix: '/api/v2/peatio')
-    @access_key = access_key
-    @secret_key = secret_key
-    @endpoint = endpoint
-    @prefix = prefix
+    @access_key = access_key || raise("No access_key")
+    @secret_key = secret_key || raise("No secret_key")
+    @endpoint = endpoint || raise("No endpoint")
+    @prefix = prefix || raise("No prefix")
     @name = name
   end
 
@@ -66,6 +66,7 @@ class PeatioClient
     post "/market/orders/#{order_id}/cancel"
   end
 
+  # @param optional Hash with keys: market, side
   def cancel_orders(params = {})
     post '/market/orders/cancel', params
   end

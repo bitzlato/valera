@@ -93,7 +93,6 @@ Security/Open:
 
 Style/AsciiComments:
   Exclude:
-    - 'app/models/botya.rb'
     - 'app/models/kassa_rates.rb'
     - 'app/models/source_rates.rb'
     - 'app/strategies/bargainer_strategy.rb'

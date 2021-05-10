@@ -33,6 +33,7 @@ Run first bot only
 
 # TODO
 
+* [ ] Interactively Enable/Disable strategy
 * [ ] Manage trade values
 * [ ] Cancel all orders on stop
 * [ ] Reconnect or cancel all orders if socket is closed
