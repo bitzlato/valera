@@ -45,8 +45,14 @@ class BinanceDrainer
     Bugsnag.notify e.message do |b|
       b.meta_data = { market_id: market.id }
     end
-    binding.pry
     logger.error "error (#{e.type}) with message #{e.message}"
+
+    if e.message == Errno::ECONNRESET
+      logger.warn "Reattach"
+      attach
+    else
+      binding.pry if Rails.env.development?
+    end
   end
 
   def close(e=nil)
@@ -67,8 +73,10 @@ class BinanceDrainer
     bump! values
   end
 
-  def attach(client)
-    client.multi streams: [
+  def attach(client = nil)
+    @client ||= client
+    logger.info "Attach"
+    @client.multi streams: [
       { type: 'aggTrade', symbol: market.binance_symbol },
       { type: 'bookTicker', symbol: market.binance_symbol },
       { type: 'kline', symbol: market.binance_symbol, interval: '1m'},
