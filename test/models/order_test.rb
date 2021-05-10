@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-#
+
 class OrderTest < ActiveSupport::TestCase
-  test "invalid order" do
+  test 'invalid order' do
     refute Order.new.valid?
   end
 
@@ -31,6 +31,6 @@ class OrderTest < ActiveSupport::TestCase
       Order.build(side: :ask, price: 1.001, volume: 2)
     ]
 
-    assert_equal set2 & set1, Set[ Order.build(side: :ask, price: 1.002, volume: 1) ]
+    assert_equal set2 & set1, Set[Order.build(side: :ask, price: 1.002, volume: 1)]
   end
 end

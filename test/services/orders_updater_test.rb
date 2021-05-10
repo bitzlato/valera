@@ -1,4 +1,6 @@
-require "test_helper"
+# frozen_string_literal: true
+
+require 'test_helper'
 
 class OrdersUpdaterTest < ActiveSupport::TestCase
   setup do
@@ -6,7 +8,7 @@ class OrdersUpdaterTest < ActiveSupport::TestCase
     @peatio_client = PeatioClient.new
     @updater = OrdersUpdater.new(peatio_client: @peatio_client, market: @market, name: 'test')
   end
-  test "update!" do
+  test 'update!' do
     orders = Set[
       Order.new(side: :ask, volume: 2, price: 1)
     ]

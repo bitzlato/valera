@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Order entity. Internal entity. Passed to peatio client to creating
 #
@@ -8,7 +9,7 @@ class Order
   include ActiveModel::AttributeAssignment
   include ActiveModel::Validations
   include Comparable
-  SIDES = %i[ask bid]
+  SIDES = %i[ask bid].freeze
 
   attribute :side, Symbol
   attribute :volume, BigDecimal
@@ -36,11 +37,12 @@ class Order
 
   def <=>(other)
     return nil unless side == other.side
+
     volume_price <=> other.volume_price
   end
 
   def to_s
-    side.to_s + ':' +  format("%0.#{PRECISION}f", volume) + 'x' +  format("%0.#{PRECISION}f", price)
+    "#{side}:#{format("%0.#{PRECISION}f", volume)}x#{format("%0.#{PRECISION}f", price)}"
   end
 
   def volume_price

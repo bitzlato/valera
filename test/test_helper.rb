@@ -4,7 +4,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
 require 'minitest/mock'
-Dir[File.expand_path("../support/**/*.rb", __FILE__)].each { |rb| require(rb) }
+Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each { |rb| require(rb) }
 
 module ActiveSupport
   class TestCase
@@ -16,8 +16,7 @@ module ActiveSupport
 
     def around(&block)
       client = Class.new
-      def client.write_point(*args)
-      end
+      def client.write_point(*args); end
       Valera::InfluxDB.stub(:client, client, &block)
     end
   end

@@ -15,10 +15,10 @@ class PeatioClient
                  secret_key: ENV['PEATIO_API_SECRET_KEY'],
                  endpoint: ENV['PEATIO_ENDPOINT'],
                  prefix: '/api/v2/peatio')
-    @access_key = access_key || raise("No access_key")
-    @secret_key = secret_key || raise("No secret_key")
-    @endpoint = endpoint || raise("No endpoint")
-    @prefix = prefix || raise("No prefix")
+    @access_key = access_key || raise('No access_key')
+    @secret_key = secret_key || raise('No secret_key')
+    @endpoint = endpoint || raise('No endpoint')
+    @prefix = prefix || raise('No prefix')
     @name = name
   end
 

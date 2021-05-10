@@ -95,7 +95,7 @@ class Universe
 
   def build_order(side, price, volume)
     logger.debug "build_order(#{side}, #{price}, #{volume})"
-    Order.build( side: side, price: price, volume: volume )
+    Order.build(side: side, price: price, volume: volume)
   end
 
   def calculate_price(_side)
@@ -105,5 +105,4 @@ class Universe
   def calculate_volume(_side)
     raise 'not implemented'
   end
-
 end

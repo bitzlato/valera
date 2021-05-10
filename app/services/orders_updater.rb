@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/MethodLength
-
 # Smartly updates private order book for market/account and logs changes.
 #
 class OrdersUpdater
@@ -15,11 +13,11 @@ class OrdersUpdater
 
   attr_reader :peatio_client, :market, :logger, :name
 
-  def initialize(peatio_client:, market:, name: )
-    @market = market || raise("No market")
-    @peatio_client = peatio_client || raise("No peatio client")
+  def initialize(peatio_client:, market:, name:)
+    @market = market || raise('No market')
+    @peatio_client = peatio_client || raise('No peatio client')
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger)
-      .tagged([market,peatio_client.name].join(' '))
+                                          .tagged([market, peatio_client.name].join(' '))
     @name = name
   end
 
@@ -27,9 +25,10 @@ class OrdersUpdater
   # @param Set[Order]
   def update!(orders)
     raise 'Must be a Set' unless orders.is_a? Set
+
     logger.info "Update with #{orders.to_a.join(',')}"
     Order::SIDES.each do |side|
-      update_by_side! side, orders.filter { |o| o.side == side }
+      update_by_side!(side, orders.filter { |o| o.side == side })
     end
   end
 
@@ -54,8 +53,6 @@ class OrdersUpdater
 
   private
 
-  attr_reader :market, :peatio_client
-
   def find_orders_to_create(orders, outdated_orders)
     orders.filter do |order|
       !outdated_orders.find { |o| o.price == order.price }
@@ -67,7 +64,7 @@ class OrdersUpdater
       .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
       .map do |data|
       PersistedOrder.new(
-        data.symbolize_keys.slice(*PersistedOrder.attribute_set.map(&:name) )
+        data.symbolize_keys.slice(*PersistedOrder.attribute_set.map(&:name))
       )
     end
   end
@@ -80,7 +77,7 @@ class OrdersUpdater
 
   def find_outdated_orders(persisted_orders, recent_orders)
     persisted_orders.filter do |po|
-      !!recent_orders.find { |o| o.price != po.price }
+      !recent_orders.find { |o| o.price != po.price }.nil?
     end
   end
 
@@ -91,7 +88,7 @@ class OrdersUpdater
         ord_type: :limit,
         price: order.price,
         volume: order.volume,
-        side: SIDES_MAP.fetch( order.side )
+        side: SIDES_MAP.fetch(order.side)
       )
       write_to_influx(order)
     end
@@ -106,4 +103,3 @@ class OrdersUpdater
                     )
   end
 end
-# rubocop:enable Metrics/MethodLength
