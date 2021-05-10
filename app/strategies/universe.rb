@@ -46,7 +46,7 @@ class Universe
   end
 
   def title
-    "#{self.class.name}#{id}"
+    "[#{self.class.name}]#{id}"
   end
   alias to_s title
 
