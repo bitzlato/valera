@@ -11,7 +11,10 @@ class StoneStrategy < Universe
     validates :bid_volume, presence: true, numericality: { greater_than: 0 }
   end
   def self.description
-    'desc'
+    %{
+    <p>Камни.</p>
+    <p>Создаёт заявки с существенным сдвигом (<em>bid_place_threshold</em>, <em>ask_place_threshold</em>) от последней цены покупки/продажи на бирже-источнике (binance) размером <em>ask_volume</em>, <em>bid_volume</em>.</p>
+    }.html_safe
   end
 
   private
