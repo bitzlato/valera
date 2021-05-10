@@ -38,7 +38,7 @@ class BinanceDrainer
 
   def open(e)
     dump_headers e
-    logger.info 'connected'
+    logger.info 'Open'
   end
 
   def error(e)
@@ -62,13 +62,13 @@ class BinanceDrainer
     # e.code == 1006
     # e.reason == ''
     dump_headers e
-    logger.warn "closed with code #{e.code}"
+    logger.warn "Closed with code #{e.code}"
   end
 
   def message(e)
     dump_headers e
     data = JSON.parse(e.data)
-    logger.info data
+    logger.debug data
     stream = data['stream'].split('@').last.split('_').first
     values = map data['data'], MAPPING[stream]
     write_to_influx values
