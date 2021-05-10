@@ -13,7 +13,7 @@ class StoneStrategy < Universe
   def self.description
     %{
     <p>Камни.</p>
-    <p>Создаёт заявки с существенным сдвигом (<em>bid_place_threshold</em>, <em>ask_place_threshold</em>) от последней цены покупки/продажи на бирже-источнике (binance) размером <em>ask_volume</em>, <em>bid_volume</em>.</p>
+    <p>Создаёт заявки с существенным сдвигом (<code>bid_place_threshold</code>, <code>ask_place_threshold</code>) от последней цены покупки/продажи на бирже-источнике (binance) размером <code>ask_volume</code>, <code>bid_volume</code>.</p>
     }.html_safe
   end
 

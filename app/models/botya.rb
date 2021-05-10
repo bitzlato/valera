@@ -36,6 +36,9 @@ class Botya
     end
   end
 
+  def create_orders!(orders)
+  end
+
   # @param side Enum[:buy, :sell]
   # @param volume Float
   # @param price Float

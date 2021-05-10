@@ -2,6 +2,10 @@ defaults: &defaults
   # markets: ["BTC:USDT", "BTC:MCR", "ETH:BTC", "ETH:USDT", "ETH:MCR", "USDT:MCR"]
   markets: ["BTC:USDT"]
   universes:
+    book_order:
+      class: OrderBookStrategy
+      comment: Наполнятель стакана (danil@orionet.ru)
+      credentials: danil_orionet_ru
     stoner:
       class: StoneStrategy
       comment: Камни (danil@orionet.ru)

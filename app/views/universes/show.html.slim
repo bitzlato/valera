@@ -2,7 +2,7 @@
   = link_to t('.back'), universes_path
   .row
     .col-md-4
-      h1 Universe #{universe.id}
+      h1= "#{universe.class}##{universe.id}"
       .mb-2.text-small.text-muted= universe.comment
       div.mb-2= universe.description
     .col-md-4

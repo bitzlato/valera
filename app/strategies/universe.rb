@@ -84,10 +84,9 @@ class Universe
   private
 
   def perform
-    orders = []
-    orders << create_order(:ask, calculate_price(:ask), calculate_volume(:ask))
-    orders << create_order(:bid, calculate_price(:bid), calculate_volume(:bid))
-    orders.compact
+    %i{ask bid}.map do |side|
+      create_order(side, calculate_price(side), calculate_volume(side))
+    end.compact
   end
 
   EX_SIDES = { bid: :buy, ask: :sell }
