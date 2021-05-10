@@ -1,13 +1,11 @@
 $debug_on_exception = Rails.env.development?
 
 def catch_and_report_exception(options = {})
-  begin
-    yield
-    nil
-  rescue options.fetch(:class) { StandardError } => e
-    report_exception(e)
-    e
-  end
+  yield
+  nil
+rescue options.fetch(:class) { StandardError } => e
+  report_exception(e)
+  e
 end
 
 def report_exception(exception, report_to_ets = true)
@@ -23,6 +21,6 @@ end
 
 def report_exception_to_ets(exception)
   Raven.capture_exception(exception) if defined?(Raven)
-rescue => ets_exception
+rescue StandardError => ets_exception
   report_exception(ets_exception, false)
 end

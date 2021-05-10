@@ -28,12 +28,12 @@ class Universe
   end
 
   def self.settings_class
-    return [self.name, 'Settings'].join('::').constantize if self.constants.include? :Settings
+    return [name, 'Settings'].join('::').constantize if constants.include? :Settings
     UniverseSettings
   end
 
   def self.state_class
-    return [self.name, 'State'].join('::').constantize if self.constants.include? :State
+    return [name, 'State'].join('::').constantize if constants.include? :State
     UniverseState
   end
 
@@ -61,7 +61,7 @@ class Universe
     state.assign_attributes :last_orders => orders
     state.save!
     UniverseChannel.update self
-  rescue => err
+  rescue StandardError => err
     report_exception err
     logger.error "#{to_s} #{err}"
   end
@@ -96,7 +96,7 @@ class Universe
     botya.create_order! EX_SIDES.fetch(side), volume, price
     write_to_influx side, volume, price
     { :side => side, :price => price, :volume => volume }
-  rescue => err
+  rescue StandardError => err
     report_exception err
     logger.error err
     nil

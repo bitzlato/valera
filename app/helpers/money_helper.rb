@@ -3,7 +3,7 @@ module MoneyHelper
 
   def present_fee(fee, amount = nil)
     content_tag :span, :class => 'text-nowrap text-monospace' do
-      buffer = (fee*100).to_s + '%'
+      buffer = "#{fee*100}%"
       buffer << amount * fee if amount
       buffer
     end

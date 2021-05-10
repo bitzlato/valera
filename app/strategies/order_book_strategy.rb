@@ -44,9 +44,8 @@ class OrderBookStrategy < Universe
     threshold = settings.base_min_threshold + (settings.base_max_threshold - settings.base_min_threshold)*rand(100)/100
     threshold = -threshold if side == :bid
     logger.debug "#{side} base_max_threshold = #{settings.base_max_threshold}, base_min_threshold = #{settings.base_min_threshold}, threshold = #{threshold}"
-    priceFromUpstream = state.avgPrice + state.avgPrice * threshold / 100
+    state.avgPrice + state.avgPrice * threshold / 100
     # TODO Брать среднюю цену стакана из peatio
-    priceFromUpstream
   end
 
   def calculate_volume(_side)

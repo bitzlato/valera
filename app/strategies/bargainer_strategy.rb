@@ -38,9 +38,8 @@ class BargainerStrategy < Universe
     threshold = threshold*rand(100)/100
     threshold = -threshold if side == :bid
     logger.debug "#{side} threshold = #{threshold}"
-    priceFromUpstream = state.avgPrice + state.avgPrice * threshold / 100
+    state.avgPrice + state.avgPrice * threshold / 100
     # TODO Брать среднюю цену стакана из peatio
-    priceFromUpstream
   end
 
   def calculate_volume(_side)

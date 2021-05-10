@@ -21,7 +21,7 @@ class PeatioClient
   end
   def account_balances(currency = nil)
     if currency.present?
-      get('/account/balances/' + currency.to_s)
+      get("/account/balances/#{currency}")
     else
       get('/account/balances')
     end

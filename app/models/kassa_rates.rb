@@ -30,7 +30,7 @@ class KassaRates
   #:acrubpmusd=>0.012927847983026196,
   #:acrubpmvusd=>0.012843779607414032,
   def rates
-    Rails.cache.fetch self.class.name + '_rates', :expires_in => EXPIRES_IN do
+    Rails.cache.fetch "#{self.class.name}_rates", :expires_in => EXPIRES_IN do
       Nokogiri::XML.parse(raw_data)
         .xpath('//item')
         .each_with_object({}) { |e, h| h[market(e)]=e.xpath('out').text.to_f/e.xpath('in').text.to_f }
@@ -50,7 +50,7 @@ class KassaRates
   end
 
   def raw_data
-    Rails.cache.fetch self.class.name + '_raw_data', :expires_in => EXPIRES_IN do
+    Rails.cache.fetch "#{self.class.name}_raw_data", :expires_in => EXPIRES_IN do
       URI.open(URL).read
     end
   end

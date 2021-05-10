@@ -69,7 +69,7 @@ class Botya
         order = peatio_client
           .create_order(:market => market.peatio_symbol, :ord_type => :limit, :side => side, :volume => volume, :price => price)
         logger.debug "Created order ##{order['id']}"
-      rescue => err
+      rescue StandardError => err
         logger.error err
         logger.warn "Order doesn't created!"
       end
@@ -77,12 +77,12 @@ class Botya
     orders_to_cancel.each do |order|
       logger.info "Cancel order ##{order['id']}"
       peatio_client.cancel_order order['id']
-    rescue => err
+    rescue StandardError => err
       logger.error err
       logger.warn "Order doesn't canceled!"
     end
     logger.debug 'Successful performed'
-  rescue => err
+  rescue StandardError => err
     logger.error err
     raise err
   end

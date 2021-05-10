@@ -33,7 +33,7 @@ module ApplicationHelper
   def format_percent(value)
     return middot if value.nil?
     content_tag :span, :class => 'text-monospace' do
-      value.to_s + '%'
+      "#{value}%"
     end
   end
 end

@@ -25,6 +25,6 @@ class StoneStrategy < Universe
   end
 
   def calculate_volume(side)
-    settings.send side.to_s+'_volume'
+    settings.send "#{side}_volume"
   end
 end
