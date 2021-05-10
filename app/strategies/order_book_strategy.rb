@@ -1,19 +1,19 @@
 class OrderBookStrategy < Universe
   class Settings < UniverseSettings
     MAX_THRESHOLD = 5
-    attribute :base_volume, BigDecimal, default: 0.001
-    attribute :base_depth, Integer, default: 5
-    attribute :base_max_threshold, BigDecimal, default: 3
-    attribute :base_min_threshold, BigDecimal, default: 1
+    attribute :base_volume, BigDecimal, :default => 0.001
+    attribute :base_depth, Integer, :default => 5
+    attribute :base_max_threshold, BigDecimal, :default => 3
+    attribute :base_min_threshold, BigDecimal, :default => 1
 
-    validates :base_volume, presence: true, numericality: { greater_than: 0 }
-    validates :base_depth, presence: true, numericality: { greater_than: 0, less_than: 20, only_integer: true }
-    validates :base_max_threshold, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: MAX_THRESHOLD }
-    validates :base_min_threshold, presence: true, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_THRESHOLD }
+    validates :base_volume, :presence => true, :numericality => { :greater_than => 0 }
+    validates :base_depth, :presence => true, :numericality => { :greater_than => 0, :less_than => 20, :only_integer => true }
+    validates :base_max_threshold, :presence => true, :numericality => { :greater_than_or_equal_to => 0, :less_than_or_equal_to => MAX_THRESHOLD }
+    validates :base_min_threshold, :presence => true, :numericality => { :greater_than_or_equal_to => 1, :less_than_or_equal_to => MAX_THRESHOLD }
   end
   class State < UniverseState
     def to_hash
-      super.merge avgPrice: avgPrice
+      super.merge :avgPrice => avgPrice
     end
     def avgPrice
       return if askPrice.nil? || bidPrice.nil?

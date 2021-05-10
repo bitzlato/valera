@@ -1,0 +1,16 @@
+inherit_from: .rubocop_todo.yml
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'bin/*'
+    - 'log/**/*'
+    - 'public/**/*'
+    - 'tmp/**/*'
+    - '.git/**/*'
+    - 'storage/**/*'
+    - 'app/helpers/smart_form_helper.rb'
+    - db/schema.rb
+    - Guardfile
+

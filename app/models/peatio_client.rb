@@ -77,13 +77,13 @@ class PeatioClient
 
   def connection
     nonce = (Time.now.to_f * 1000).to_i.to_s
-    Faraday.new url: endpoint do |c|
+    Faraday.new :url => endpoint do |c|
       c.headers = {
         'Content-Type' => 'application/json',
         'Accept' => 'application/json',
         'X-Auth-Apikey' => access_key,
         'X-Auth-Nonce' => nonce,
-        'X-Auth-Signature' => OpenSSL::HMAC.hexdigest("SHA256", secret_key, nonce + access_key)
+        'X-Auth-Signature' => OpenSSL::HMAC.hexdigest('SHA256', secret_key, nonce + access_key)
       }
       c.adapter Faraday.default_adapter
       c.response :logger if ENV.true? 'FARADAY_LOGGER'

@@ -1,8 +1,8 @@
 module ApplicationHelper
-  GRAFANA_URL = "https://grafana.brandymint.ru/d-solo/ayEuw39Mz/valera?orgId=1&refresh=5s"
+  GRAFANA_URL = 'https://grafana.brandymint.ru/d-solo/ayEuw39Mz/valera?orgId=1&refresh=5s'
   GRAFANA_DEFAULT_PANEL_ID = 8
   def middot
-    content_tag :div, '&middot;'.html_safe, class: 'text-muted'
+    content_tag :div, '&middot;'.html_safe, :class => 'text-muted'
   end
 
   def app_title
@@ -32,7 +32,7 @@ module ApplicationHelper
 
   def format_percent(value)
     return middot if value.nil?
-    content_tag :span, class: 'text-monospace' do
+    content_tag :span, :class => 'text-monospace' do
       value.to_s + '%'
     end
   end

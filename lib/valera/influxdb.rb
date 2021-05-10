@@ -10,7 +10,7 @@ module Valera
       end
 
       def config
-        yaml = ::Pathname.new("config/influxdb.yml")
+        yaml = ::Pathname.new('config/influxdb.yml')
         return {} unless yaml.exist?
 
         erb = ::ERB.new(yaml.read)

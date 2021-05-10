@@ -15,7 +15,7 @@ elsif Rails.env.production? || Rails.env.staging? || Rails.env.development?
 
   Sidekiq.logger = ActiveSupport::Logger.new Rails.root.join './log/sidekiq.log'
   Sidekiq.configure_server do |config|
-    config.redis =  { url: ENV.fetch('VALERA_SIDEKIQ_REDIS_URL', 'redis://localhost:6379/4') }
+    config.redis =  { :url => ENV.fetch('VALERA_SIDEKIQ_REDIS_URL', 'redis://localhost:6379/4') }
     config.error_handlers << proc do |ex, context|
       Bugsnag.notify ex do |b|
         b.meta_data = context
@@ -25,7 +25,7 @@ elsif Rails.env.production? || Rails.env.staging? || Rails.env.development?
   end
 
   Sidekiq.configure_client do |config|
-    config.redis = { url: ENV.fetch('VALERA_SIDEKIQ_REDIS_URL', 'redis://localhost:6379/4') }
+    config.redis = { :url => ENV.fetch('VALERA_SIDEKIQ_REDIS_URL', 'redis://localhost:6379/4') }
     Sidekiq.logger.info "Configure server for application #{AppVersion}"
   end
 elsif Rails.env.test?
@@ -36,7 +36,7 @@ else
 end
 
 
-CRONTAB_FILE = "./config/sidekiq_crontab.yml"
+CRONTAB_FILE = './config/sidekiq_crontab.yml'
 
 if Rails.env.staging? || Rails.env.production? || ENV.true?('LOAD_SIDEKIQ_CRONTAB')
   Sidekiq::Cron::Job.destroy_all!

@@ -2,7 +2,7 @@ module MoneyHelper
   DEFAULT_PRECISION = 8
 
   def present_fee(fee, amount = nil)
-    content_tag :span, class: 'text-nowrap text-monospace' do
+    content_tag :span, :class => 'text-nowrap text-monospace' do
       buffer = (fee*100).to_s + '%'
       buffer << amount * fee if amount
       buffer
@@ -11,11 +11,11 @@ module MoneyHelper
 
   def format_divergence(amount, currency)
     if amount.zero?
-      content_tag :span, class: 'text-success' do
+      content_tag :span, :class => 'text-success' do
         t ('helpers.no_divergence')
       end
     else
-      format_money amount, currency, css_class: 'text-warning', tooltip: 'Должно быть 0'
+      format_money amount, currency, :css_class => 'text-warning', :tooltip => 'Должно быть 0'
     end
   end
 
@@ -35,13 +35,13 @@ module MoneyHelper
       currency = amount.currency
       amount = amount.to_d
     end
-    options = options.symbolize_keys.reverse_merge show_currency: true
+    options = options.symbolize_keys.reverse_merge :show_currency => true
     currency = currency.is_a?(Money::Currency) ? currency : Money::Currency.find(currency)
     css_classes = %w[text-nowrap text-monospace]
     css_classes << options[:css_class]
     buffer = money_precission(amount, currency.try(:precision) || DEFAULT_PRECISION)
-    buffer += format_currency(currency, css_class: 'text-muted ml-1') if options[:show_currency] && !amount.nil?
-    content_tag :span, class: css_classes.join(' '), title: options[:tooltip], data: { toggle: :tooltip } do
+    buffer += format_currency(currency, :css_class => 'text-muted ml-1') if options[:show_currency] && !amount.nil?
+    content_tag :span, :class => css_classes.join(' '), :title => options[:tooltip], :data => { :toggle => :tooltip } do
       buffer.html_safe
     end
   end
@@ -57,6 +57,6 @@ module MoneyHelper
   end
 
   def format_currency(currency_id, css_class: '')
-    content_tag :span, currency_id.to_param, class: "text-uppercase text-monospace #{css_class}"
+    content_tag :span, currency_id.to_param, :class => "text-uppercase text-monospace #{css_class}"
   end
 end

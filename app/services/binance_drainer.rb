@@ -6,12 +6,12 @@ class BinanceDrainer
       'b' => :bidPrice,
       'B' => :bidQty,
       'a' => :askPrice,
-      'A' => :askQty,
+      'A' => :askQty
     },
 
     'aggTrade' => {
       'p' => :tradePrice,
-      'q' => :tradeQuantity,
+      'q' => :tradeQuantity
     },
 
     'kline' => {
@@ -36,19 +36,19 @@ class BinanceDrainer
 
   def open(e)
     dump_headers e
-    logger.info "connected"
+    logger.info 'connected'
   end
 
   def error(e)
     # Possible e.message:
     # Errno::ECONNRESET
     Bugsnag.notify e.message do |b|
-      b.meta_data = { market_id: market.id }
+      b.meta_data = { :market_id => market.id }
     end
     logger.error "error (#{e.type}) with message #{e.message}"
 
     if e.message == Errno::ECONNRESET
-      logger.warn "Reattach"
+      logger.warn 'Reattach'
       attach
     else
       binding.pry if Rails.env.development?
@@ -75,12 +75,12 @@ class BinanceDrainer
 
   def attach(client = nil)
     @client ||= client
-    logger.info "Attach"
-    @client.multi streams: [
-      { type: 'aggTrade', symbol: market.binance_symbol },
-      { type: 'bookTicker', symbol: market.binance_symbol },
-      { type: 'kline', symbol: market.binance_symbol, interval: '1m'},
-    ], methods: methods
+    logger.info 'Attach'
+    @client.multi :streams => [
+      { :type => 'aggTrade', :symbol => market.binance_symbol },
+      { :type => 'bookTicker', :symbol => market.binance_symbol },
+      { :type => 'kline', :symbol => market.binance_symbol, :interval => '1m'}
+    ], :methods => methods
   end
 
   private
@@ -107,7 +107,7 @@ class BinanceDrainer
 
   def write_to_influx(data)
     Valera::InfluxDB.client
-      .write_point( INFLUX_TABLE, values: data, tags: { market: market.id, upstream: :binance })
+      .write_point( INFLUX_TABLE, :values => data, :tags => { :market => market.id, :upstream => :binance })
   end
 
   def dump_headers(e)

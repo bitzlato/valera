@@ -20,6 +20,6 @@ class InfluxWriter
       .each_with_object({}) { |p, a| a[p.first] = p.last.to_d.to_s == p.last ? p.last.to_d : p.last } # Numerify values
     Valera::InfluxDB
       .client
-      .write_point(table, {values: values, tags: tags}.symbolize_keys, "ns")
+      .write_point(table, {:values => values, :tags => tags}.symbolize_keys, 'ns')
   end
 end

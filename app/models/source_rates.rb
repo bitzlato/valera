@@ -13,7 +13,7 @@ class SourceRates
   private
 
   def raw_data
-    Rails.cache.fetch :source_rates, expires_in: EXPIRES_IN do
+    Rails.cache.fetch :source_rates, :expires_in => EXPIRES_IN do
       JSON.parse(URI.open(URL).read)['result']
     end
   end

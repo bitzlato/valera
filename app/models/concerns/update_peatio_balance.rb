@@ -9,8 +9,8 @@ module UpdatePeatioBalance
   def update_peatio_balances!
     balances = peatio_client.account_balances
     state.assign_attributes(
-      peatio_base_balance: find_balance(balances, market.base.downcase),
-      peatio_quote_balance: find_balance(balances, market.quote.downcase)
+      :peatio_base_balance => find_balance(balances, market.base.downcase),
+      :peatio_quote_balance => find_balance(balances, market.quote.downcase)
     )
   end
 end

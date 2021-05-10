@@ -12,7 +12,7 @@ module RedisModel
     alias_method :to_param, :id
 
     def self.find_or_build(id, default_settings = {})
-      record = new(id: id)
+      record = new(:id => id)
       if record.persisted?
         record.safe_restore!
       else

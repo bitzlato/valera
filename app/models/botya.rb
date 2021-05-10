@@ -29,10 +29,10 @@ class Botya
   def cancel_orders!(side = nil)
     if side.present?
       logger.info "Cancel orders for #{market} with side #{side}"
-      peatio_client.cancel_orders market: market.peatio_symbol, side: side
+      peatio_client.cancel_orders :market => market.peatio_symbol, :side => side
     else
       logger.info "Cancel orders for #{market}"
-      peatio_client.cancel_orders market: market.peatio_symbol
+      peatio_client.cancel_orders :market => market.peatio_symbol
     end
   end
 
@@ -47,7 +47,7 @@ class Botya
     logger.debug "Perform #{side} order for #{market}, #{volume} for #{price}"
     existen_order = nil
     orders_to_cancel = []
-    peatio_client.orders(market: market.peatio_symbol, type: side, state: :wait).each do |order|
+    peatio_client.orders(:market => market.peatio_symbol, :type => side, :state => :wait).each do |order|
       if price_outdated?(order['price'].to_d, price)
         logger.debug "Mark for cancel order ##{order['id']} as outdated price #{order['price']} <> #{price}"
         orders_to_cancel << order
@@ -67,7 +67,7 @@ class Botya
       begin
         logger.info "Create #{side} order for #{market}, #{volume} for #{price}"
         order = peatio_client
-          .create_order(market: market.peatio_symbol, ord_type: :limit, side: side, volume: volume, price: price)
+          .create_order(:market => market.peatio_symbol, :ord_type => :limit, :side => side, :volume => volume, :price => price)
         logger.debug "Created order ##{order['id']}"
       rescue => err
         logger.error err
@@ -81,7 +81,7 @@ class Botya
       logger.error err
       logger.warn "Order doesn't canceled!"
     end
-    logger.debug "Successful performed"
+    logger.debug 'Successful performed'
   rescue => err
     logger.error err
     raise err

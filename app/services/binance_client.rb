@@ -23,12 +23,12 @@ class BinanceClient
     end
 
     def to_influx_data
-      to_h.symbolize_keys.merge(created_at: closetime/1000)
+      to_h.symbolize_keys.merge(:created_at => closetime/1000)
     end
   end
 
   def self.build
-    Binance::Client::REST.new api_key: ENV['BINANCE_API_KEY'], secret_key: ENV['BINANCE_SECRET_KEY']
+    Binance::Client::REST.new :api_key => ENV['BINANCE_API_KEY'], :secret_key => ENV['BINANCE_SECRET_KEY']
   end
 
   attr_reader :client

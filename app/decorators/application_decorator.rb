@@ -3,7 +3,7 @@
 class ApplicationDecorator < Draper::Decorator
   TEXT_RIGHT = %i[debit balance credit amount locked total price available_amount locked_amount total_amount].freeze
 
-  delegate :current_user, :humanized_money_with_currency, to: :h
+  delegate :current_user, :humanized_money_with_currency, :to => :h
 
   def self.table_columns
     object_class.attribute_names.map(&:to_sym)
@@ -33,8 +33,8 @@ class ApplicationDecorator < Draper::Decorator
     end
 
     buffer = I18n.t attr,
-                    scope: [:decorators, decorated_class_key],
-                    default: decorated_class.human_attribute_name(attr)
+                    :scope => [:decorators, decorated_class_key],
+                    :default => decorated_class.human_attribute_name(attr)
 
     buffer << locale_postfix if locale_postfix.present?
     buffer
@@ -57,10 +57,10 @@ class ApplicationDecorator < Draper::Decorator
   def time_formatted(time)
     return '-' unless time
 
-    I18n.l time, format: :long
+    I18n.l time, :format => :long
   end
 
   def flash_highlight(buffer)
-    h.content_tag :div, buffer.html_safe, data: { effect: 'highlight' }
+    h.content_tag :div, buffer.html_safe, :data => { :effect => 'highlight' }
   end
 end

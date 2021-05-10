@@ -27,7 +27,7 @@ gem 'jbuilder', '~> 2.7'
 # gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.4', require: false
+gem 'bootsnap', '>= 1.4.4', :require => false
 gem 'env-tweaks', '~> 1.0.0'
 gem 'connection_pool'
 gem 'redis-objects'
@@ -35,7 +35,7 @@ gem 'settingslogic'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'semver2'
-gem 'safe_yaml', '~> 1.0.5', require: 'safe_yaml/load'
+gem 'safe_yaml', '~> 1.0.5', :require => 'safe_yaml/load'
 gem 'active_link_to'
 gem 'draper'
 
@@ -46,7 +46,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', :platforms => %i[mri mingw x64_mingw]
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-rubocop'
@@ -73,24 +73,24 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', :platforms => %i[mingw mswin x64_mingw jruby]
 
-gem "nokogiri", "~> 1.11"
+gem 'nokogiri', '~> 1.11'
 
-gem "auto_logger", path: 'vendor/auto_logger'
+gem 'auto_logger', :path => 'vendor/auto_logger'
 
-gem "binance", "~> 1.2", github: 'andyklimczak/binance', branch: 'immutable-strings-ruby-27'
+gem 'binance', '~> 1.2', :github => 'andyklimczak/binance', :branch => 'immutable-strings-ruby-27'
 
 gem 'eventmachine'
 
-gem "money", "~> 6.14"
+gem 'money', '~> 6.14'
 
-gem "influxdb", "~> 0.8.1"
+gem 'influxdb', '~> 0.8.1'
 
-gem "bugsnag", "~> 6.20"
+gem 'bugsnag', '~> 6.20'
 
-gem "technical-analysis", "~> 0.2.4"
+gem 'technical-analysis', '~> 0.2.4'
 
-gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
+gem 'best_in_place', :git => 'https://github.com/mmotherwell/best_in_place'
 
-gem "virtus", "~> 1.0"
+gem 'virtus', '~> 1.0'

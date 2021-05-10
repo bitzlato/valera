@@ -8,7 +8,7 @@ class Universe
 
   attr_reader :peatio_client, :market, :name, :state, :comment, :settings, :botya, :logger
 
-  delegate :description, :settings_class, :state_class, to: :class
+  delegate :description, :settings_class, :state_class, :to => :class
 
   # @param name [String] key of bot from Rails credentials
   # @param market [Market]
@@ -17,7 +17,7 @@ class Universe
     @market = market
     @default_settings = default_settings
     @peatio_client = peatio_client
-    @botya = Botya.new(market: market, peatio_client: peatio_client, name: name)
+    @botya = Botya.new(:market => market, :peatio_client => peatio_client, :name => name)
     @state = state_class.find_or_build id
     @comment = comment
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(id)
@@ -58,7 +58,7 @@ class Universe
 
     orders = perform
 
-    state.assign_attributes last_orders: orders
+    state.assign_attributes :last_orders => orders
     state.save!
     UniverseChannel.update self
   rescue => err
@@ -72,7 +72,7 @@ class Universe
   alias_method :to_param, :id
 
   def reset_settings!
-    settings_class.new(id: id).update_attributes! @default_settings
+    settings_class.new(:id => id).update_attributes! @default_settings
     remove_instance_variable :@settings if instance_variable_defined? :@settings
   end
 
@@ -89,13 +89,13 @@ class Universe
     end.compact
   end
 
-  EX_SIDES = { bid: :buy, ask: :sell }
+  EX_SIDES = { :bid => :buy, :ask => :sell }
 
   def create_order(side, price, volume)
     logger.debug "create_order(#{side}, #{price}, #{volume})"
     botya.create_order! EX_SIDES.fetch(side), volume, price
     write_to_influx side, volume, price
-    { side: side, price: price, volume: volume }
+    { :side => side, :price => price, :volume => volume }
   rescue => err
     report_exception err
     logger.error err
@@ -114,8 +114,8 @@ class Universe
     Valera::InfluxDB.client
       .write_point(
         INFLUX_TABLE,
-        values: { "#{side}_volume": volume, "#{side}_price": price },
-        tags: { market: market.id, bot: name }
+        :values => { :"#{side}_volume" => volume, :"#{side}_price" => price },
+        :tags => { :market => market.id, :bot => name }
     )
   end
 end
