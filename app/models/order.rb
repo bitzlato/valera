@@ -4,7 +4,7 @@
 # Order entity. Internal entity. Passed to peatio client to creating
 #
 class Order
-  PRECISION = 8 # Gets from peatio config. Specific for every currency
+  PRECISION = 4 # Gets from peatio config. Specific for every currency
   include Virtus.model
   include ActiveModel::AttributeAssignment
   include ActiveModel::Validations

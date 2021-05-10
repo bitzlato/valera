@@ -88,9 +88,11 @@ class Universe
   private
 
   def build_orders
-    Set.new Order::SIDES.map do |side|
-      build_order(side, calculate_price(side), calculate_volume(side))
-    end.compact
+    Set.new(
+      Order::SIDES.map do |side|
+        build_order(side, calculate_price(side), calculate_volume(side))
+      end.compact
+    )
   end
 
   def build_order(side, price, volume)

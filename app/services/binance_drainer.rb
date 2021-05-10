@@ -38,7 +38,7 @@ class BinanceDrainer
 
   def open(e)
     dump_headers e
-    logger.info 'Open'
+    logger.info 'Open connection'
   end
 
   def error(e)
@@ -47,7 +47,7 @@ class BinanceDrainer
     Bugsnag.notify e.message do |b|
       b.meta_data = { market_id: market.id }
     end
-    logger.error "error (#{e.type}) with message #{e.message}"
+    logger.error "Error (#{e.type}) with message #{e.message}"
 
     if e.message == Errno::ECONNRESET
       logger.warn 'Reattach'
@@ -58,11 +58,8 @@ class BinanceDrainer
   end
 
   def close(e = nil)
-    # When ctrl-c
-    # e.code == 1006
-    # e.reason == ''
     dump_headers e
-    logger.warn "Closed with code #{e.code}"
+    logger.warn "Closed connection with code #{e.code}"
   end
 
   def message(e)

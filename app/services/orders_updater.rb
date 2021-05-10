@@ -83,15 +83,22 @@ class OrdersUpdater
 
   def create_orders!(orders)
     orders.each do |order|
-      peatio_client.create_order(
-        market: market.peatio_symbol,
-        ord_type: :limit,
-        price: order.price,
-        volume: order.volume,
-        side: SIDES_MAP.fetch(order.side)
-      )
-      write_to_influx(order)
+      create_order! order
     end
+  end
+
+  def create_order!(order)
+    peatio_client.create_order(
+      market: market.peatio_symbol,
+      ord_type: :limit,
+      price: order.price,
+      volume: order.volume,
+      side: SIDES_MAP.fetch(order.side)
+    )
+    write_to_influx(order)
+  rescue => err
+    logger.error "Error #{err} creating order #{order}"
+    report_exception err
   end
 
   def write_to_influx(order)
