@@ -21,6 +21,13 @@ Automated crypto currency trading software for peatio
 
 > bundle exec foreman start
 
+## Configure barong
+
+> docker exec -it opendax_barong_1 bundle exec rails runner \
+  'Permission.create!([ { role: :superadmin, verb: :all, path: :valera, action: :accept }, \
+  { role: :admin, verb: :all, path: :valera, action: :accept }, \
+  { role: :accountant, verb: :all, path: :valera, action: :accept }])'
+
 # Development
 
 Run first bot only
