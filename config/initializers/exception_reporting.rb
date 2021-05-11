@@ -22,7 +22,7 @@ def report_exception_to_screen(exception)
 end
 
 def report_exception_to_ets(exception)
-  Raven.capture_exception(exception) if defined?(Raven)
+  Bugsnag.notify exception if defined? Bugsnag
 rescue StandardError => e
   report_exception(e, false)
 end

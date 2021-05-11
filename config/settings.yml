@@ -1,4 +1,5 @@
 defaults: &defaults
+  root_prefix: /valera
   # markets: ["BTC:USDT", "BTC:MCR", "ETH:BTC", "ETH:USDT", "ETH:MCR", "USDT:MCR"]
   markets: ["BTC:USDT"]
   universes:

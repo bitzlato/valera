@@ -1,7 +1,7 @@
 nav.navbar.navbar-expand-lg.navbar-light.bg-light.flex-column.flex-md-row.sticky-top[style="background-color: #e3f2fd;"]
   = content_tag :div, class: 'container-fluid' do
-    a.navbar-brand( href=main_app.root_url title=AppVersion.to_s)
-      = image_tag asset_url('logo.svg'), width: 32
+    a.navbar-brand( href=main_app.root_path title=AppVersion.to_s)
+      = image_tag asset_path('logo.svg'), width: 32
       span.ml-2= app_title
     button.navbar-toggler[type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Navigation"]
       span.navbar-toggler-icon

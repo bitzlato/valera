@@ -38,8 +38,6 @@ gem 'redis-objects'
 gem 'safe_yaml', '~> 1.0.5', require: 'safe_yaml/load'
 gem 'semver2'
 gem 'settingslogic'
-gem 'sidekiq'
-gem 'sidekiq-cron'
 
 group :development, :test do
   gem 'foreman'

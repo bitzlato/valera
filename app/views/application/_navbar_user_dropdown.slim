@@ -10,14 +10,14 @@
         - if current_user.superadmin? || Rails.env.development?
           = link_to t('.sidekiq_web'), Rails.application.routes.url_helpers.operator_sidekiq_web_path, class: 'dropdown-item'
           = link_to t('.operator'), Rails.application.routes.url_helpers.operator_root_path, class: 'dropdown-item'
-        /= link_to t('.api'), root_api_url, class: 'dropdown-item'
+        /= link_to t('.api'), root_api_path, class: 'dropdown-item'
         /- if !Rails.env.production? || current_super_admin.present?
           /.dropdown-divider
           /- if Rails.env.development? || Rails.env.staging?
-            /= link_to 'Letter Opener', letter_opener_web_url, class: 'dropdown-item'
+            /= link_to 'Letter Opener', letter_opener_web_path, class: 'dropdown-item'
             /= link_to 'Mail templates preview', '/rails/mailers', class: 'dropdown-item' if Rails.env.development?
           /- if current_super_admin.present?
-            /= link_to 'Super login as other user', new_super_user_url, class: 'dropdown-item'
-            /= link_to 'Sidekiq', sidekiq_web_url, class: 'dropdown-item'
+            /= link_to 'Super login as other user', new_super_user_path, class: 'dropdown-item'
+            /= link_to 'Sidekiq', sidekiq_web_path, class: 'dropdown-item'
         /.dropdown-divider
-        /= link_to t('.logout'), sessions_url, method: :delete, class: 'dropdown-item'
+        /= link_to t('.logout'), sessions_path, method: :delete, class: 'dropdown-item'
