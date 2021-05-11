@@ -8,7 +8,7 @@ class UniverseSettings
   INACTIVE_STATUS = :inactive
   ACTIVE_STATUS = :active
   INIT_STATUS = :init
-  STATUSES = [INIT_STATUS, ACTIVE_STATUS, INIT_STATUS].freeze
+  STATUSES = [INACTIVE_STATUS, ACTIVE_STATUS, INIT_STATUS].freeze
 
   # Manualy enable/disable
   attribute :base_enabled, Boolean, default: false

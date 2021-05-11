@@ -1,0 +1,27 @@
+[Unit]
+Description = <%= fetch(:application) %> (<%= fetch(:stage) %>) daemon
+After=syslog.target network.target
+
+[Service]
+WatchdogSec=20
+Type=notify
+Environment=RACK_ENV=<%= fetch(:rails_env) %>
+Environment=RAILS_ENV=<%= fetch(:rails_env) %>
+Environment=PWD=<%= current_path %>
+EnvironmentFile=<%= current_path %>/.env
+# Helpful for debugging socket activation, etc.
+WorkingDirectory=<%= current_path %>
+ExecStart=/home/<%= fetch(:user) %>/.rbenv/bin/rbenv exec bundle exec ./bin/daemon.rb
+
+ExecStop=/home/<%= fetch(:user) %>/.rbenv/bin/rbenv exec bundle exec pumactl -S <%= shared_path %>/tmp/pids/puma.state stop
+
+KillMode=mixed
+Restart=always
+RestartSec=1
+SyslogIdentifier=daemon
+
+[Install]
+# Use default.target to autoboot user service
+# https://superuser.com/questions/1025091/start-a-systemd-user-service-at-boot
+# WantedBy = multi-user.target
+WantedBy=default.target

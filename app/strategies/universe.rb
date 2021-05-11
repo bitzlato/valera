@@ -77,7 +77,7 @@ class Universe
         stop!('Bot disabled')
       end
     else
-      logger.info "Does not update bot orders because of status is #{setting.status}"
+      logger.info "Does not update bot orders because of status is #{settings.status}"
     end
 
     state.assign_attributes last_orders: orders

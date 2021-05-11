@@ -71,6 +71,7 @@ set :app_version, SemVer.find.to_s
 
 after 'deploy:check', 'master_key:check'
 after 'deploy:publishing', 'systemd:puma:reload-or-restart'
+after 'deploy:publishing', 'systemd:daemon:reload-or-restart'
 after 'deploy:published', 'bugsnag:release'
 
 # Rake::Task["deploy:assets:backup_manifest"].clear_actions
