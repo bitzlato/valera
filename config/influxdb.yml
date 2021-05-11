@@ -12,6 +12,9 @@ test:
   <<: *default
   database: valera_test
 
+staging:
+  <<: *default
+  database: <%= ENV.fetch('INFLUXDB_DATABASE_NAME', "valera_staging") %>
 production:
   <<: *default
   database: <%= ENV.fetch('INFLUXDB_DATABASE_NAME', "valera_production") %>
