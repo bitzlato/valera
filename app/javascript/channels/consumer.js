@@ -6,4 +6,4 @@ import * as ActionCable from '@rails/actioncable'
 // Uncomment when feels sad
 // ActionCable.logger.enabled = true;
 
-export default ActionCable.createConsumer()
+export default ActionCable.createConsumer('/valera/cable')
