@@ -15,7 +15,8 @@
 # gem 'pg'
 #
 default: &default
-  adapter: postgresql
+  adapter: sqlite3
+  database: ":memory:"
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
@@ -23,7 +24,6 @@ default: &default
 
 development:
   <<: *default
-  database: exbot_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,7 +57,6 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: exbot_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -79,8 +78,7 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+staging:
+  <<: *default
 production:
   <<: *default
-  database: exbot_production
-  username: exbot
-  password: <%= ENV['EXBOT_DATABASE_PASSWORD'] %>

@@ -119,3 +119,5 @@ group :deploy do
   gem 'capistrano-git-with-submodules'
   gem 'bugsnag-capistrano', require: false
 end
+
+gem "sqlite3-ruby", "~> 1.3"
