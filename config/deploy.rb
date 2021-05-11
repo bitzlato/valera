@@ -21,7 +21,7 @@ set :disallow_pushing, true
 # set :db_dump_dir, "./db"
 set :db_dump_extra_opts, '--force'
 
-set :branch, ENV.fetch('BRANCH', 'master')
+set :branch, ENV.fetch('BRANCH', 'main')
 #  ask(:branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp })
 
 set :rbenv_type, :user
