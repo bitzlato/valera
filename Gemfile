@@ -102,7 +102,6 @@ gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
 
 gem 'virtus', '~> 1.0'
 group :deploy do
-  gem 'semver2'
   gem 'capistrano-dotenv-tasks'
   gem 'capistrano3-puma'
   gem 'capistrano', require: false
