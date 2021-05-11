@@ -4,7 +4,7 @@ After=syslog.target network.target
 
 [Service]
 WatchdogSec=20
-Type=notify
+Type=simple
 Environment=RACK_ENV=<%= fetch(:rails_env) %>
 Environment=RAILS_ENV=<%= fetch(:rails_env) %>
 Environment=PWD=<%= current_path %>
