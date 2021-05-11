@@ -41,3 +41,19 @@ Run first bot only
 * [ ] Согласованности по заявками между ботами.
 * [ ] Automaticalyy cancel all orders if there are no fresh data from more then
   N msecs
+# Deployment
+
+## Setup
+
+1. Add `PRODUCTION_HOST` and `STAGING_HOST` to `.envrc`
+2. Initialize directory and configs structure on the server
+
+> bundle exec cap $STAGE systemd:puma:setup systemd:sidekiq:setup master_key:setup
+
+3. Add env varliables to the server .env file
+
+> bundle exec cap $STAGE config:set ENV1=VALUE1 
+
+## Regular deploy
+
+> bundle exec cap $STAGE deploy

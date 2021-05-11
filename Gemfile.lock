@@ -9,12 +9,27 @@ GIT
       faye-websocket (~> 0.10)
 
 GIT
+  remote: https://github.com/groovenauts/capistrano-systemd-multiservice.git
+  revision: 955b99cc7588521ddc26ccd523ebba306e16fa0a
+  specs:
+    capistrano-systemd-multiservice (0.1.0.beta12)
+      capistrano (>= 3.7.0, < 3.17.0)
+
+GIT
   remote: https://github.com/mmotherwell/best_in_place
   revision: 88eb3052623a9a6cd346864d2aca05021c2f80d0
   specs:
     best_in_place (3.1.1)
       actionpack (>= 3.2)
       railties (>= 3.2)
+
+GIT
+  remote: https://github.com/virgoproz/capistrano-master-key.git
+  revision: aa99a50e41733288a5d4e1884af16385855847de
+  specs:
+    capistrano-master-key (1.0.2)
+      capistrano (~> 3.11)
+      sshkit (~> 1.17)
 
 PATH
   remote: vendor/auto_logger
@@ -94,6 +109,8 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    airbrussh (1.4.0)
+      sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
     awesome_print (1.8.0)
     axiom-types (0.1.1)
@@ -108,8 +125,40 @@ GEM
       msgpack (~> 1.0)
     bugsnag (6.20.0)
       concurrent-ruby (~> 1.0)
+    bugsnag-capistrano (2.0.0)
     builder (3.2.4)
     byebug (11.1.3)
+    capistrano (3.16.0)
+      airbrussh (>= 1.0.0)
+      i18n
+      rake (>= 10.0.0)
+      sshkit (>= 1.9.0)
+    capistrano-bundler (2.0.1)
+      capistrano (~> 3.1)
+    capistrano-db-tasks (0.6)
+      capistrano (>= 3.0.0)
+    capistrano-dotenv-tasks (0.1.5)
+      capistrano (~> 3.0)
+    capistrano-faster-assets (1.1.0)
+      capistrano (>= 3.1)
+    capistrano-git-with-submodules (2.0.4)
+      capistrano (~> 3.7)
+    capistrano-nvm (0.0.7)
+      capistrano (~> 3.1)
+    capistrano-rails (1.6.1)
+      capistrano (~> 3.1)
+      capistrano-bundler (>= 1.1, < 3)
+    capistrano-rbenv (2.2.0)
+      capistrano (~> 3.1)
+      sshkit (~> 1.3)
+    capistrano-shell (0.2.0)
+      capistrano (~> 3.1)
+    capistrano-yarn (2.0.2)
+      capistrano (~> 3.0)
+    capistrano3-puma (5.0.4)
+      capistrano (~> 3.7)
+      capistrano-bundler
+      puma (>= 4.0, < 6.0)
     capybara (3.35.3)
       addressable
       mini_mime (>= 0.1.3)
@@ -205,6 +254,9 @@ GEM
     msgpack (1.4.2)
     multipart-post (2.1.1)
     nenv (0.3.0)
+    net-scp (3.0.0)
+      net-ssh (>= 2.6.5, < 7.0.0)
+    net-ssh (6.1.0)
     nio4r (2.5.7)
     nokogiri (1.11.2)
       mini_portile2 (~> 2.5.0)
@@ -337,6 +389,9 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    sshkit (1.21.2)
+      net-scp (>= 1.1.2)
+      net-ssh (>= 2.8.0)
     technical-analysis (0.2.4)
     temple (0.8.1)
     thor (1.1.0)
@@ -389,7 +444,22 @@ DEPENDENCIES
   binance (~> 1.2)!
   bootsnap (>= 1.4.4)
   bugsnag (~> 6.20)
+  bugsnag-capistrano
   byebug
+  capistrano
+  capistrano-bundler
+  capistrano-db-tasks
+  capistrano-dotenv-tasks
+  capistrano-faster-assets
+  capistrano-git-with-submodules
+  capistrano-master-key!
+  capistrano-nvm
+  capistrano-rails
+  capistrano-rbenv
+  capistrano-shell
+  capistrano-systemd-multiservice!
+  capistrano-yarn
+  capistrano3-puma
   capybara (>= 3.26)
   connection_pool
   draper
