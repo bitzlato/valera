@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
-
-require_relative 'config/environment'
+APP_PATH = File.expand_path('../config/application', __dir__)
+require_relative '../config/environment'
 
 SdNotify.ready
 
