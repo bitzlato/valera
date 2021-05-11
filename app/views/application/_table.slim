@@ -18,7 +18,7 @@
     tbody
       - scope.each do |item|
         - item_decorated = item.respond_to?(:decorated?) && item.decorated? ? item : decorator.decorate(item)
-        tr is='dapi-tr' data-href=url_for(item.id) class=item_decorated.class.table_tr_class(item)
+        tr is='dapi-tr' data-href=url_for(item) class=item_decorated.class.table_tr_class(item)
           - columns.each do |column|
             td class=item_decorated.class.table_td_class(column)
               = item_decorated.send column

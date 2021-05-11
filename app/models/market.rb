@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Market
+  extend ActiveModel::Naming
+  include ActiveModel::Conversion
   attr_reader :quote, :base, :binance_syncer
 
   def self.all
@@ -11,6 +13,10 @@ class Market
 
   def self.find(id)
     all.find { |m| m.id == id }
+  end
+
+  def persisted?
+    true
   end
 
   def universes
