@@ -3,14 +3,14 @@
 lock '3.16'
 
 set :user, 'app'
-set :application, 'liza'
+set :application, 'valera'
 
-set :repo_url, 'git@github.com:finfex/liza.git' if ENV['USE_LOCAL_REPO'].nil?
+set :repo_url, 'git@github.com:finfex/valera.git' if ENV['USE_LOCAL_REPO'].nil?
 set :keep_releases, 10
 
-set :roles, %w[sidekiq web app db bugsnag].freeze
+set :roles, %w[web app bugsnag].freeze
 set :linked_files, %w[.env config/master.key]
-set :linked_dirs, %w[log node_modules tmp/pids tmp/cache tmp/sockets public/liza/assets public/uploads public/liza/uploads public/packs]
+set :linked_dirs, %w[log node_modules tmp/pids tmp/cache tmp/sockets public/uploads public/packs]
 
 set :config_files, fetch(:linked_files)
 
@@ -66,15 +66,11 @@ set :puma_start_task, 'systemd:puma:start'
 
 set :init_system, :systemd
 
-set :systemd_sidekiq_role, :sidekiq
-set :systemd_sidekiq_instances, -> { [:default, :reports] }
-
 set :bugsnag_api_key, ENV['BUGSNAG_API_KEY']
 set :app_version, SemVer.find.to_s
 
 after 'deploy:check', 'master_key:check'
 after 'deploy:publishing', 'systemd:puma:reload-or-restart'
-after 'deploy:publishing', 'systemd:sidekiq:reload-or-restart'
 after 'deploy:published', 'bugsnag:release'
 
 # Rake::Task["deploy:assets:backup_manifest"].clear_actions

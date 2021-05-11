@@ -52,7 +52,7 @@ Run first bot only
 
 3. Add env varliables to the server .env file
 
-> bundle exec cap $STAGE config:set ENV1=VALUE1 
+> bundle exec cap $STAGE config:set RAILS_ENV=$STAGE 
 
 ## Regular deploy
 
