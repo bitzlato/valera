@@ -32,6 +32,12 @@ class OrdersUpdater
     end
   end
 
+  # Cancel all orders when bot stops
+  def cancel!
+    logger.debug "Cancel orders"
+    peatio_client.cancel_orders
+  end
+
   def update_by_side!(side, orders)
     logger.debug "Update by side #{side} #{orders}"
 

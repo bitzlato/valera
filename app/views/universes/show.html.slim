@@ -3,6 +3,7 @@
   .row
     .col-md-4
       h1= "#{universe.class}##{universe.id}"
+      = universe_status universe
       .mb-2.text-small.text-muted= universe.comment
       div.mb-2= universe.description
     .col-md-4

@@ -16,9 +16,6 @@ class OrderBookStrategy < Universe
     validates :base_min_threshold, presence: true,
                                    numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_THRESHOLD }
 
-    def scopes
-      %i[base]
-    end
   end
 
   class State < UniverseState

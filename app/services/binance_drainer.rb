@@ -45,7 +45,10 @@ class BinanceDrainer
 
   def open(e)
     dump_headers e
-    logger.info 'Open connection'
+    logger.info "Open connection, start universes #{market.universes.map &:to_s}"
+    market.universes.each do |universes|
+      universes.start!
+    end
   end
 
   def error(e)
@@ -66,7 +69,10 @@ class BinanceDrainer
 
   def close(e = nil)
     dump_headers e
-    logger.warn "Closed connection with code #{e.code}"
+    logger.warn "Closed connection with code #{e.code}, stop universes #{market.universes.map &:to_s}"
+    market.universes.each do |universes|
+      universes.stop! "due closed connection"
+    end
   end
 
   def message(e)

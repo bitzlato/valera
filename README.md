@@ -33,8 +33,11 @@ Run first bot only
 
 # TODO
 
-* [ ] Interactively Enable/Disable strategy
-* [ ] Manage trade values
-* [ ] Cancel all orders on stop
-* [ ] Reconnect or cancel all orders if socket is closed
+* [x] Interactively Enable/Disable strategy
+* [x] Cancel all orders on stop
+* [x] Cancel all orders if socket is closed
+* [x] Manage trade values
 * [ ] Контроллировать чтобы заявки от тейкера/мейкера не пересекались
+* [ ] Согласованности по заявками между ботами.
+* [ ] Automaticalyy cancel all orders if there are no fresh data from more then
+  N msecs

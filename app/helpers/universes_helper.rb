@@ -10,6 +10,19 @@ module UniversesHelper
         format_money value, universe.market.send(currency_method)
       }
     end
-    best_in_place universe.settings, attribute, as: :input, display_with: display_with
+    type = attribute.to_s.include?('enabled') ? :checkbox : :input
+    best_in_place universe.settings, attribute, as: type, display_with: display_with
+  end
+
+  STATUS_LABELS = {
+    init: 'badge-info',
+    active: 'badge-success',
+    inactive: 'badge-warning'
+  }
+
+  def universe_status(universe)
+    content_tag :span, class: 'badge ' + STATUS_LABELS[universe.settings.status] do
+      universe.settings.status.to_s
+    end
   end
 end

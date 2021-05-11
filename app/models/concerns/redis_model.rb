@@ -9,6 +9,7 @@ module RedisModel
     include ActiveModel::Conversion
 
     attribute :id, String
+    attribute :updated_at, Time
 
     alias_method :to_s, :id
     alias_method :to_param, :id
@@ -42,7 +43,9 @@ module RedisModel
 
   def save!
     validate!
+    self.updated_at = Time.zone.now
     redis_value.value = attributes.except(:id).to_json
+    after_save
   end
 
   def safe_restore!
@@ -70,6 +73,9 @@ module RedisModel
   end
 
   private
+
+  def after_save
+  end
 
   def clear_attributes!
     instance_variables.reject { |a| a == :@id }.each { |var| remove_instance_variable var }

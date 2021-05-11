@@ -6,7 +6,7 @@ class Universe
   include UpdatePeatioBalance
   extend UniverseFinders
 
-  attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater
+  attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason
 
   delegate :description, :settings_class, :state_class, to: :class
 
@@ -50,16 +50,35 @@ class Universe
   end
   alias to_s title
 
+  def stop!(reason = 'No reason')
+    settings.stop! reason
+    logger.info "Stop with #{reason}"
+    updater.cancel!
+  end
+
+  def start!
+    settings.start!
+    bump!
+  end
+
   # Change state
   # @param changes [Hash]
-  def bump!(changes)
+  def bump!(changes = {})
     logger.info "Bump with #{changes}"
     settings.restore!
     state.assign_attributes changes
     update_peatio_balances!
 
-    orders = build_orders
-    updater.update! orders
+    if settings.status == UniverseSettings::ACTIVE_STATUS
+      if settings.base_enabled
+        orders = build_orders
+        updater.update! orders
+      else
+        stop!('Bot disabled')
+      end
+    else
+      logger.info "Does not update bot orders because of status is #{setting.status}"
+    end
 
     state.assign_attributes last_orders: orders
     state.save!
