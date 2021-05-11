@@ -1,5 +1,6 @@
-- universe.settings.class.scope_attributes(scope).each do |attribute|
-  .form-group
-    label.text-small for=attribute
-      = t(attribute, default: attribute.to_s)
-    .mb-1= universe_settings_attribute_input universe, attribute
+.row
+  - universe.settings.class.scope_attributes(scope).each do |attribute|
+    .col-md-3.form-group style='min-width: 160px'
+      label.text-small for=attribute
+        = t(attribute, default: attribute.to_s)
+      .mb-1= universe_settings_attribute_input universe, attribute

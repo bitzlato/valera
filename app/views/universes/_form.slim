@@ -1,9 +1,8 @@
-= universe.settings.scopes
-table.table.table-condensed.table-bordered.table-narrow
-  thead.thead-dark
+table.table.table-condensed
+  thead.thead-light
     tr
       - universe.settings.scopes.each do |scope|
-        th #{scope} settings
+        th.text-right width='300px' #{scope} settings
   tbody
     tr
       - universe.settings.scopes.each do |scope|

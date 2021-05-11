@@ -11,6 +11,9 @@ class StoneStrategy < Universe
     validates :ask_volume, presence: true, numericality: { greater_than: 0 }
     validates :bid_place_threshold, presence: true, numericality: { less_than: 0, greater_than: -50 }
     validates :bid_volume, presence: true, numericality: { greater_than: 0 }
+    def scopes
+      %i[ask bid]
+    end
   end
 
   def self.description

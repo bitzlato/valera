@@ -27,6 +27,13 @@ class BinanceDrainer
 
   KEYS = MAPPING.values.map(&:values).flatten
 
+  STREAMS = [
+    # TODO Collect necessary data from strategy configurations
+    # { type: 'aggTrade' },
+    # { type: 'kline', interval: '1m' }
+    { type: 'bookTicker'},
+  ]
+
   INFLUX_TABLE = 'upstream'
   include AutoLogger
   attr_reader :market, :logger
@@ -74,12 +81,11 @@ class BinanceDrainer
 
   def attach(client = nil)
     @client ||= client
-    logger.info 'Attach'
-    @client.multi streams: [
-      { type: 'aggTrade', symbol: market.binance_symbol },
-      { type: 'bookTicker', symbol: market.binance_symbol },
-      { type: 'kline', symbol: market.binance_symbol, interval: '1m' }
-    ], methods: methods
+    logger.info "Attach streams #{STREAMS}"
+    @client.multi(
+      streams: STREAMS.map { |s| s.merge symbol: market.binance_symbol },
+      methods: methods
+    )
   end
 
   private
