@@ -360,6 +360,7 @@ GEM
     scss-lint (0.38.0)
       rainbow (~> 2.0)
       sass (~> 3.4.1)
+    sd_notify (0.1.1)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -489,6 +490,7 @@ DEPENDENCIES
   safe_yaml (~> 1.0.5)
   sass-rails (>= 6)
   scss-lint
+  sd_notify
   selenium-webdriver
   semver2
   settingslogic

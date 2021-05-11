@@ -101,6 +101,7 @@ gem 'technical-analysis', '~> 0.2.4'
 gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
 
 gem 'virtus', '~> 1.0'
+gem 'sd_notify'
 group :deploy do
   gem 'capistrano-dotenv-tasks'
   gem 'capistrano3-puma'
