@@ -52,7 +52,11 @@ Run first bot only
 
 3. Add env varliables to the server .env file
 
-> bundle exec cap $STAGE config:set RAILS_ENV=$STAGE 
+> bundle exec cap $STAGE config:set RAILS_ENV=$STAGE \
+  RAILS_SERVE_STATIC_FILES=true \
+  BUGSNAG_API_KEY=??? \
+  VALERA_REDIS_URL=redis://localhost:6379/4 '
+  JWT_PUBLIC_KEY=??? \
 
 ## Regular deploy
 
