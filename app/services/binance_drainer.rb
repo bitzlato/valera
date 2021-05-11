@@ -44,6 +44,7 @@ class BinanceDrainer
   end
 
   def open(e)
+    SdNotify.status("Drainer open")
     dump_headers e
     logger.info "Open connection, start universes #{market.universes.map(&:to_s)}"
     market.universes.each(&:start!)
@@ -74,6 +75,7 @@ class BinanceDrainer
   end
 
   def message(e)
+    SdNotify.status("Drainer message")
     dump_headers e
     data = JSON.parse(e.data)
     logger.debug data
@@ -86,6 +88,7 @@ class BinanceDrainer
   def attach(client = nil)
     @client ||= client
     logger.info "Attach streams #{STREAMS}"
+    SdNotify.status("Drainer attach")
     @client.multi(
       streams: STREAMS.map { |s| s.merge symbol: market.binance_symbol },
       methods: methods
