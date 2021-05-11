@@ -24,7 +24,7 @@ html
     = render 'navbar' do
       = active_link_to t('.universes'), universes_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
       = active_link_to t('.markets'), markets_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
-      = active_link_to t('.sidekiq'), sidekiq_web_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
+      = active_link_to t('.sidekiq'), sidekiq_web_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item' if defined? Sidekiq
 
     = yield
     = render 'footer'
