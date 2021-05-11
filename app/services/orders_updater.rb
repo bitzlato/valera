@@ -34,7 +34,7 @@ class OrdersUpdater
 
   # Cancel all orders when bot stops
   def cancel!
-    logger.debug "Cancel orders"
+    logger.debug 'Cancel orders'
     peatio_client.cancel_orders
   end
 
@@ -102,9 +102,9 @@ class OrdersUpdater
       side: SIDES_MAP.fetch(order.side)
     )
     write_to_influx(order)
-  rescue => err
-    logger.error "Error #{err} creating order #{order}"
-    report_exception err
+  rescue StandardError => e
+    logger.error "Error #{e} creating order #{order}"
+    report_exception e
   end
 
   def write_to_influx(order)

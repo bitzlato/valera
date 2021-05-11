@@ -3,12 +3,12 @@
 class UniverseSettings
   include RedisModel
 
-  UNSCOPED_ATTRIBUTES = %i[id updated_at status stop_reason]
+  UNSCOPED_ATTRIBUTES = %i[id updated_at status stop_reason].freeze
 
   INACTIVE_STATUS = :inactive
-  ACTIVE_STATUS= :active
+  ACTIVE_STATUS = :active
   INIT_STATUS = :init
-  STATUSES = [INIT_STATUS, ACTIVE_STATUS, INIT_STATUS]
+  STATUSES = [INIT_STATUS, ACTIVE_STATUS, INIT_STATUS].freeze
 
   # Manualy enable/disable
   attribute :base_enabled, Boolean, default: false
@@ -18,7 +18,12 @@ class UniverseSettings
   validates :status, presence: true, inclusion: { in: STATUSES }
 
   def scopes
-    attribute_set.map(&:name).reject { |i| UNSCOPED_ATTRIBUTES.include? i }.map { |i| i.to_s.split('_').first }.uniq.map &:to_sym
+    attribute_set
+      .map(&:name)
+      .reject { |i| UNSCOPED_ATTRIBUTES.include? i }
+      .map { |i| i.to_s.split('_').first }
+      .uniq
+      .map(&:to_sym)
   end
 
   def stop!(reason)

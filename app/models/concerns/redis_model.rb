@@ -74,8 +74,7 @@ module RedisModel
 
   private
 
-  def after_save
-  end
+  def after_save; end
 
   def clear_attributes!
     instance_variables.reject { |a| a == :@id }.each { |var| remove_instance_variable var }

@@ -15,7 +15,6 @@ class OrderBookStrategy < Universe
                                    numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: MAX_THRESHOLD }
     validates :base_min_threshold, presence: true,
                                    numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_THRESHOLD }
-
   end
 
   class State < UniverseState

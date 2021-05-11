@@ -28,11 +28,11 @@ class BinanceDrainer
   KEYS = MAPPING.values.map(&:values).flatten
 
   STREAMS = [
-    # TODO Collect necessary data from strategy configurations
+    # TODO: Collect necessary data from strategy configurations
     # { type: 'aggTrade' },
     # { type: 'kline', interval: '1m' }
-    { type: 'bookTicker'},
-  ]
+    { type: 'bookTicker' }
+  ].freeze
 
   INFLUX_TABLE = 'upstream'
   include AutoLogger
@@ -45,10 +45,8 @@ class BinanceDrainer
 
   def open(e)
     dump_headers e
-    logger.info "Open connection, start universes #{market.universes.map &:to_s}"
-    market.universes.each do |universes|
-      universes.start!
-    end
+    logger.info "Open connection, start universes #{market.universes.map(&:to_s)}"
+    market.universes.each(&:start!)
   end
 
   def error(e)
@@ -69,9 +67,9 @@ class BinanceDrainer
 
   def close(e = nil)
     dump_headers e
-    logger.warn "Closed connection with code #{e.code}, stop universes #{market.universes.map &:to_s}"
+    logger.warn "Closed connection with code #{e.code}, stop universes #{market.universes.map(&:to_s)}"
     market.universes.each do |universes|
-      universes.stop! "due closed connection"
+      universes.stop! 'due closed connection'
     end
   end
 

@@ -18,10 +18,10 @@ module UniversesHelper
     init: 'badge-info',
     active: 'badge-success',
     inactive: 'badge-warning'
-  }
+  }.freeze
 
   def universe_status(universe)
-    content_tag :span, class: 'badge ' + STATUS_LABELS[universe.settings.status] do
+    content_tag :span, class: "badge #{STATUS_LABELS[universe.settings.status]}" do
       universe.settings.status.to_s
     end
   end
