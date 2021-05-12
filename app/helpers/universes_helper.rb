@@ -21,8 +21,11 @@ module UniversesHelper
   }.freeze
 
   def universe_status(universe)
-    content_tag :span, class: "badge #{STATUS_LABELS[universe.settings.status]}" do
+    buffer = content_tag :span, class: "badge #{STATUS_LABELS[universe.settings.status]}" do
       universe.settings.status.to_s
     end
+
+    buffer << content_tag(:div, universe.settings.stop_reason) if universe.settings.status == UniverseSettings::INACTIVE_STATUS
+    buffer.html_safe
   end
 end

@@ -57,6 +57,7 @@ class Universe
   end
 
   def start!
+    logger.info "Start"
     settings.start!
     bump!
   end
@@ -69,13 +70,9 @@ class Universe
     state.assign_attributes changes
     update_peatio_balances!
 
-    if settings.status == UniverseSettings::ACTIVE_STATUS
-      if settings.base_enabled
-        orders = build_orders
-        updater.update! orders
-      else
-        stop!('Bot disabled')
-      end
+    if settings.base_enabled && settings.status == UniverseSettings::ACTIVE_STATUS
+      orders = build_orders
+      updater.update! orders
     else
       logger.info "Does not update bot orders because of status is #{settings.status}"
     end

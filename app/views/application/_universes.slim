@@ -19,6 +19,7 @@ table.table.table-condensed.table-bordered2.table-narrow
           .text-small.test-muted= universe.class.name
           .text-small.text-muted= universe.comment
           = universe_status universe
+          .text-small.text-muted.mt-2= t universe.settings.updated_at, format: :default
         td rowspan=2
           = link_to universe.market, market_path(universe.market.id)
 
