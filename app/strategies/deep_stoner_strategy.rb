@@ -48,7 +48,7 @@ class DeepStonerStrategy < Universe
             logger.debug("Skip order for #{side} #{level}")
             nil
           else
-            build_order(side, calculate_price(side, level), volume)
+            build_order(side, calculate_price(side, level), volume, level)
           end
         end
       end.flatten.compact

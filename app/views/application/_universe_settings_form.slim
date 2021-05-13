@@ -14,7 +14,7 @@
     tbody
       - universe.settings.levels.times.each do |level|
         tr
-          th.text-nowrap width="70px"= (level+1).to_s
+          th.text-nowrap width="70px"= level.to_s
           - universe.settings.leveled_attributes_unsuffixed.each do |attribute|
             td
               = universe_settings_attribute_input universe,  attribute.to_s+'_'+level.to_s

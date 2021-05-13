@@ -115,13 +115,13 @@ class Universe
     )
   end
 
-  def build_order(side, price, volume)
+  def build_order(side, price, volume, level = 0)
     if price.nil?
       logger.warn 'Skip order building for side because price is undefined'
       nil
     else
       logger.debug "build_order(#{side}, #{price}, #{volume})"
-      Order.build(side: side, price: price, volume: volume)
+      Order.build(side: side, price: price, volume: volume, level: level)
     end
   end
 

@@ -120,6 +120,7 @@ class OrdersUpdater
     # Errno::ECONNREFUSED
   end
 
+  # @param order <Order>
   def create_order!(order)
     result = peatio_client.create_order(
       market: market.peatio_symbol,
@@ -129,20 +130,20 @@ class OrdersUpdater
       side: SIDES_MAP.fetch(order.side)
     )
     created_order = build_persisted_order result
-    write_to_influx(created_order)
+    write_to_influx(created_order, level: order.level)
     created_order
   rescue StandardError => e
     logger.error "Error #{e} creating order #{order}"
     report_exception e
   end
 
-  def write_to_influx(order)
+  def write_to_influx(order, level: 0)
     side = SIDES_MAP.invert.fetch(order.side)
     Valera::InfluxDB.client
                     .write_point(
                       INFLUX_TABLE,
                       values: { "#{side}_volume": order.origin_volume, "#{side}_price": order.price },
-                      tags: { market: market.id, bot: name }
+                      tags: { market: market.id, bot: name, level: level }
                     )
   end
 end

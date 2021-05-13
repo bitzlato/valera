@@ -14,6 +14,7 @@ class Order
   attribute :side, Symbol
   attribute :volume, BigDecimal
   attribute :price, BigDecimal
+  attribute :level, Integer, default: 0
 
   validates :volume, presence: true, numericality: { greater_than: 0 }
   validates :price, presence: true, numericality: { greater_than: 0 }
