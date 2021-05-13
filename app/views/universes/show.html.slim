@@ -12,7 +12,7 @@
       div.mb-2 data-cable-broadcast=UniverseChannel.broadcasting_for(universe) data-cable-field='update_date'
         = Time.zone.now
       code.text-small style='max-height: 420px; overflow: scroll; display: block'
-        pre data-cable-broadcast=UniverseChannel.broadcasting_for(universe) data-cable-field='pretty_state' style='columns: 250px auto'
+        pre data-cable-broadcast=UniverseChannel.broadcasting_for(universe) data-cable-field='pretty_state' style='height: 420px; columns: 250px'
           = JSON.pretty_generate universe.state.as_json
   -# = render 'universes', universes: [universe]
 

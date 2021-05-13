@@ -1,0 +1,18 @@
+- last_orders = universe.state.last_orders.select { |order| order['side'] == OrdersUpdater::SIDES_MAP[side] }
+- if last_orders.any?
+  table.table.table-condensed
+    thead
+      tr
+        th ID
+        th Volume
+        th Price
+    tbody
+      - last_orders.each do |order|
+        tr
+          td
+            .text-monospace.text-muted= '#' + order['id'].to_s
+          td= format_money(order['origin_volume'], universe.market.base)
+          td= format_money(order['price'], universe.market.quote)
+
+- else
+  .text-center.mt-2= middot

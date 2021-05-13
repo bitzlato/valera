@@ -1,15 +1,12 @@
-table.table.table-condensed.table-bordered2.table-narrow
+table.table.table-condensed.table-bordered2.table-narrow style='border-right: 1px solid #eee; border-left: 1px solid #eee'
   thead.thead-dark
     tr
-      th rowspan=2 width='320px' Strategy
-      th rowspan=2 Market
-      th.text-right rowspan=2 Side
-      th.text-center rowspan=2 Settings
-      th.text-right rowspan=2 Binance ask/bid
-      th.text-center colspan=2 Last order
-    tr 
-      th.text-right Volume
-      th.text-right Price
+      th width='320px' Strategy
+      th Market
+      th.text-center Settings
+      th.text-right Side
+      th.text-right Binance ask/bid
+      th.text-center Latest orders
 
   tbody
     - universes.each do |universe|
@@ -23,16 +20,16 @@ table.table.table-condensed.table-bordered2.table-narrow
         td rowspan=2
           = link_to universe.market, market_path(universe.market.id)
 
-        td.text-right rowspan=2 style='padding: 0px'
+        td.text-right rowspan=2 style='padding: 0px; border-left: 1px solid #eee; border-right: 1px solid #eee'
           = render 'universes/form', universe: universe
 
         td.text-right ASK
-        td.text-right= format_money universe.state.askPrice, universe.market.quote
-        td.text-right= present_latest_order universe.state.last_orders, 'ask', :volume, universe.market.base
-        td.text-right= present_latest_order universe.state.last_orders, 'ask', :price, universe.market.quote
+        td.text-right= format_money universe.state.binance_askPrice, universe.market.quote
+        td.text-right style='padding: 0; border-left: 1px solid #eee'
+          = render 'last_orders', universe: universe, side: :ask
 
       tr
         td.text-right BID
-        td.text-right= format_money universe.state.bidPrice, universe.market.quote
-        td.text-right= present_latest_order universe.state.last_orders, 'bid', :volume, universe.market.base
-        td.text-right= present_latest_order universe.state.last_orders, 'bid', :price, universe.market.quote
+        td.text-right= format_money universe.state.binance_bidPrice, universe.market.quote
+        td.text-right style='padding: 0; border-left: 1px solid #eee'
+          = render 'last_orders', universe: universe, side: :bid

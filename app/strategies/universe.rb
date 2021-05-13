@@ -19,7 +19,7 @@ class Universe
     @peatio_client = peatio_client
     @state = state_class.find_or_build id
     @comment = comment
-    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(id)
+    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged([self.class, id].join(' '))
     @updater = OrdersUpdater.new(market: market, peatio_client: peatio_client, name: name)
   end
 
@@ -53,6 +53,7 @@ class Universe
   def stop!(reason = 'No reason')
     settings.stop! reason
     logger.info "Stop with #{reason}"
+    state.update_attributes! last_orders: []
     updater.cancel!
   end
 
@@ -74,13 +75,13 @@ class Universe
     # update_peatio_balances!
 
     if settings.base_enabled && settings.status == UniverseSettings::ACTIVE_STATUS
-      orders = build_orders
-      updater.update! orders
+      created_orders = updater.update! build_orders
+      state.assign_attributes last_orders: created_orders
     else
       logger.info "Does not update bot orders because of status is #{settings.status}"
+      state.assign_attributes last_orders: []
     end
 
-    state.assign_attributes last_orders: orders
     state.save!
     UniverseChannel.update self
   rescue StandardError => e

@@ -14,5 +14,5 @@ class UniverseState
   # attribute :peatio_base_balance, BigDecimal
   # attribute :peatio_quote_balance, BigDecimal
   #
-  attribute :last_orders, Array
+  attribute :last_orders, Array[PersistedOrder]
 end

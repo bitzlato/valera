@@ -25,7 +25,6 @@ class PersistedOrder
   PRECISION = Order::PRECISION
 
   include Virtus.model
-  include ActiveModel::AttributeAssignment
 
   attribute :id, Integer
   attribute :meta, Hash
@@ -34,6 +33,10 @@ class PersistedOrder
   attribute :origin_volume, BigDecimal
   attribute :remaining_volume, BigDecimal
   attribute :price, BigDecimal
+
+  def initialize(attrs)
+    super(attrs).freeze
+  end
 
   def inspect
     to_s

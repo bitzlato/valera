@@ -9,7 +9,7 @@ class OrdersUpdater
 
   # If volume*price of order is changed on less then this percentage the order will not be changed
   AVAILABLE_DIVERGENCE = 0.01
-  SIDES_MAP = { bid: :buy, ask: :sell }.freeze
+  SIDES_MAP = { bid: 'buy', ask: 'sell' }.freeze
 
   attr_reader :peatio_client, :market, :logger, :name
 
@@ -17,7 +17,7 @@ class OrdersUpdater
     @market = market || raise('No market')
     @peatio_client = peatio_client || raise('No peatio client')
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger)
-                                          .tagged([market, peatio_client.name].join(' '))
+      .tagged([self.class.name, market, peatio_client.name].join(' '))
     @name = name
   end
 
@@ -27,52 +27,79 @@ class OrdersUpdater
     raise 'Must be a Set' unless orders.is_a? Set
 
     logger.info "Update with #{orders.to_a.join(',')}"
-    Order::SIDES.each do |side|
+    Order::SIDES.map do |side|
       update_by_side!(side, orders.filter { |o| o.side == side })
-    end
+    end.flatten
   end
 
   # Cancel all orders when bot stops
   def cancel!
-    logger.debug 'Cancel orders'
+    logger.debug 'Cancel all orders'
     peatio_client.cancel_orders
   end
 
   def update_by_side!(side, orders)
-    logger.debug "Update by side #{side} #{orders}"
+    logger.debug "[#{side}] Update by side #{side} #{orders}"
 
     persisted_orders = fetch_active_orders(side)
-    logger.debug "Fetched orders #{persisted_orders}"
+    logger.debug "[#{side}] Persisted orders #{persisted_orders}" if persisted_orders.any?
 
-    outdated_orders = find_outdated_orders(fetch_active_orders(side), orders)
-    logger.debug "Outdated orders #{outdated_orders}"
+    outdated_orders = find_outdated_orders(persisted_orders, orders)
+    logger.debug "[#{side}] Outdated orders #{outdated_orders}" if outdated_orders.any?
 
-    logger.debug "Cancel orders #{outdated_orders}"
-    cancel_orders! outdated_orders
+    if outdated_orders.any?
+      logger.debug "[#{side}] Cancel orders #{outdated_orders}"
+      cancel_orders! outdated_orders
+    end
 
-    orders_to_create = find_orders_to_create(orders, outdated_orders)
-    logger.debug "Create orders #{outdated_orders}"
-    create_orders! orders_to_create
+    orders_to_create = filter_orders_to_create(orders, persisted_orders - outdated_orders)
+    return [] if orders_to_create.blank?
 
-    orders_to_create
+    logger.debug "[#{side}] Create orders #{orders_to_create}"
+    created_orders = create_orders! orders_to_create
+    logger.debug "[#{side}] Created orders #{created_orders}"
+
+    created_orders
   end
 
   private
 
-  def find_orders_to_create(orders, outdated_orders)
-    orders.filter do |order|
-      !outdated_orders.find { |o| o.price == order.price }
+  def filter_orders_to_create(orders, persisted_orders)
+    orders.select do |order|
+      !persisted_orders.find do |persisted_order|
+        binding.pry
+        persisted_order.price == order.price && persisted_order.origin_volume = order.volume
+      end
     end
   end
 
   def fetch_active_orders(side)
-    peatio_client
+     peatio_client
       .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
-      .map do |data|
-      PersistedOrder.new(
-        data.symbolize_keys.slice(*PersistedOrder.attribute_set.map(&:name))
-      )
-    end
+      .map { |data| build_persisted_order data }
+  end
+
+  #"id"=>1085518,
+  #"uuid"=>"eefb9c4e-ca2a-464c-b22d-520176c30637",
+  #"side"=>"sell",
+  #"ord_type"=>"limit",
+  #"price"=>"50377.1418",
+  #"avg_price"=>"0.0",
+  #"state"=>"pending",
+  #"market"=>"btcusdt",
+  #"market_type"=>"spot",
+  #"created_at"=>"2021-05-13T08:15:30Z",
+  #"updated_at"=>"2021-05-13T08:15:30Z",
+  #"origin_volume"=>"0.0001",
+  #"remaining_volume"=>"0.0001",
+  #"executed_volume"=>"0.0",
+  #"maker_fee"=>"0.0",
+  #"taker_fee"=>"0.0",
+  #"trades_count"=>0
+  def build_persisted_order(data)
+    PersistedOrder.new(
+      data.symbolize_keys.slice(*PersistedOrder.attribute_set.map(&:name))
+    )
   end
 
   def cancel_orders!(orders)
@@ -88,31 +115,34 @@ class OrdersUpdater
   end
 
   def create_orders!(orders)
-    orders.each do |order|
+    orders.map do |order|
       create_order! order
     end
     # Errno::ECONNREFUSED
   end
 
   def create_order!(order)
-    peatio_client.create_order(
+    result = peatio_client.create_order(
       market: market.peatio_symbol,
       ord_type: :limit,
       price: order.price,
       volume: order.volume,
       side: SIDES_MAP.fetch(order.side)
     )
-    write_to_influx(order)
+    created_order = build_persisted_order result
+    write_to_influx(created_order)
+    created_order
   rescue StandardError => e
     logger.error "Error #{e} creating order #{order}"
     report_exception e
   end
 
   def write_to_influx(order)
+    side = SIDES_MAP.invert.fetch( order.side )
     Valera::InfluxDB.client
                     .write_point(
                       INFLUX_TABLE,
-                      values: { "#{order.side}_volume": order.volume, "#{order.side}_price": order.price },
+                      values: { "#{side}_volume": order.origin_volume, "#{side}_price": order.price },
                       tags: { market: market.id, bot: name }
                     )
   end
