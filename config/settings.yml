@@ -2,6 +2,9 @@ defaults: &defaults
   root_prefix: /valera
   # markets: ["BTC:USDT", "BTC:MCR", "ETH:BTC", "ETH:USDT", "ETH:MCR", "USDT:MCR"]
   markets: ["BTC:USDT"]
+  upstreams: 
+    - binance
+    - peatio
   universes:
     deep_stoner:
       class: DeepStonerStrategy
@@ -13,6 +16,8 @@ defaults: &defaults
       credentials: danil_onelec_ru
 development:
   <<: *defaults
+  upstreams: 
+    - peatio
 staging:
   <<: *defaults
 production:

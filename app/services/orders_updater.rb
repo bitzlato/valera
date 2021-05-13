@@ -91,6 +91,7 @@ class OrdersUpdater
     orders.each do |order|
       create_order! order
     end
+    # Errno::ECONNREFUSED
   end
 
   def create_order!(order)

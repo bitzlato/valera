@@ -21,7 +21,7 @@ end
 module ActiveSupport
   class TestCase
     # Add more helper methods to be used by all tests here...
-    def self.test(test_name, &block)
+    def self.test(test_name = 'unnamed', &block)
       return super if block.nil?
 
       cassette = [name, test_name].map do |str|

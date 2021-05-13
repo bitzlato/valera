@@ -25,7 +25,10 @@ module UniversesHelper
       universe.settings.status.to_s
     end
 
-    buffer << content_tag(:div, universe.settings.stop_reason) if universe.settings.status == UniverseSettings::INACTIVE_STATUS
+    if universe.settings.status == UniverseSettings::INACTIVE_STATUS
+      buffer << content_tag(:div,
+                            universe.settings.stop_reason)
+    end
     buffer.html_safe
   end
 end

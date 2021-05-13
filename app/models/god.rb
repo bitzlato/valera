@@ -4,10 +4,15 @@ class God
   include AutoLogger
   include Singleton
 
-  attr_reader :universes
+  attr_reader :universes, :drainers
+
+  class << self
+    delegate :universes, :drainers, to: :instance
+  end
 
   def initialize
     @universes = build_universes
+    @drainers = build_drainers
   end
 
   def reset_settings!
@@ -15,6 +20,12 @@ class God
   end
 
   private
+
+  def build_drainers
+    Settings.upstreams.map do |upstream|
+      "#{upstream.camelcase}Drainer".constantize
+    end
+  end
 
   def build_universes
     universes = []

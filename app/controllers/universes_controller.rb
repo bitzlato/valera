@@ -3,7 +3,7 @@
 class UniversesController < ApplicationController
   def index
     universes = god.universes
-    universes.each &:reload
+    universes.each(&:reload)
     render locals: { universes: universes }
   end
 

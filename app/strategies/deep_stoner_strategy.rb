@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Naming/MethodName
 class DeepStonerStrategy < Universe
   class Settings < UniverseSettings
     MAX_THRESHOLD = 5
@@ -54,10 +55,11 @@ class DeepStonerStrategy < Universe
     threshold = -threshold if side == :bid
     logger.debug "#{side} base_max_threshold = #{settings.base_max_threshold}, base_min_threshold = #{settings.base_min_threshold}, threshold = #{threshold}"
     state.avgPrice + state.avgPrice * threshold / 100
-    # TODO: Брать среднюю цену стакана из peatio
+    # TODO: Get average order book price from peatio
   end
 
   def calculate_volume(_side)
     settings.base_volume
   end
 end
+# rubocop:enable Naming/MethodName

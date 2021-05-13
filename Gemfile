@@ -98,24 +98,26 @@ gem 'technical-analysis', '~> 0.2.4'
 
 gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
 
-gem 'virtus', '~> 1.0'
 gem 'sd_notify'
+gem 'virtus', '~> 1.0'
 group :deploy do
-  gem 'capistrano-dotenv-tasks'
-  gem 'capistrano3-puma'
+  gem 'bugsnag-capistrano', require: false
   gem 'capistrano', require: false
-  gem 'capistrano-rbenv', require: false
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-nvm', require: false
+  gem 'capistrano3-puma'
   gem 'capistrano-bundler', require: false
-  gem 'capistrano-yarn', require: false
-  gem 'capistrano-shell', require: false
   gem 'capistrano-db-tasks', require: false
-  gem 'capistrano-systemd-multiservice', github: 'groovenauts/capistrano-systemd-multiservice', require: false
-  gem 'capistrano-master-key', require: false, github: 'virgoproz/capistrano-master-key'
+  gem 'capistrano-dotenv-tasks'
   gem 'capistrano-faster-assets', require: false
   gem 'capistrano-git-with-submodules'
-  gem 'bugsnag-capistrano', require: false
+  gem 'capistrano-master-key', require: false, github: 'virgoproz/capistrano-master-key'
+  gem 'capistrano-nvm', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rbenv', require: false
+  gem 'capistrano-shell', require: false
+  gem 'capistrano-systemd-multiservice', github: 'groovenauts/capistrano-systemd-multiservice', require: false
+  gem 'capistrano-yarn', require: false
 end
 
-gem "sqlite3-ruby", "~> 1.3"
+gem 'sqlite3'
+
+gem 'peatio_client', '~> 0.0.7'

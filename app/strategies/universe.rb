@@ -3,7 +3,7 @@
 # Bot universe for specific market
 class Universe
   include AutoLogger
-  include UpdatePeatioBalance
+  # include UpdatePeatioBalance
   extend UniverseFinders
 
   attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason
@@ -57,7 +57,7 @@ class Universe
   end
 
   def start!
-    logger.info "Start"
+    logger.info 'Start'
     settings.start!
     bump!
   end
@@ -65,10 +65,13 @@ class Universe
   # Change state
   # @param changes [Hash]
   def bump!(changes = {})
+    changes ||= {}
     logger.info "Bump with #{changes}"
     settings.restore!
     state.assign_attributes changes
-    update_peatio_balances!
+
+    # TODO: Move to separate daemon
+    # update_peatio_balances!
 
     if settings.base_enabled && settings.status == UniverseSettings::ACTIVE_STATUS
       orders = build_orders

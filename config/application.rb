@@ -21,6 +21,7 @@ module Exbot
 
     config.autoload_paths += Dir[
       "#{Rails.root}/app/services",
+      "#{Rails.root}/app/drainers",
       "#{Rails.root}/app/strategies",
       "#{Rails.root}/app/strategies/entities",
     ]
