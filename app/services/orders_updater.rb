@@ -67,7 +67,6 @@ class OrdersUpdater
   def filter_orders_to_create(orders, persisted_orders)
     orders.select do |order|
       !persisted_orders.find do |persisted_order|
-        binding.pry
         persisted_order.price == order.price && persisted_order.origin_volume = order.volume
       end
     end
