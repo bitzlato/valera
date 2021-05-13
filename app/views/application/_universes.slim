@@ -10,10 +10,11 @@ table.table.table-condensed.table-bordered2.table-narrow style='border-right: 1p
 
   tbody
     - universes.each do |universe|
-      tr is='dapi-tr' data-href=universe_path(universe)
+      tr
         th rowspan=2
           .mb-2= link_to universe.name, universe_path(universe)
-          .text-small.test-muted= universe.class.name
+            .text-small.test-muted= universe.class.name
+          = render 'universe_enabler', universe: universe
           .text-small.text-muted= universe.comment
           = universe_status universe
           .text-small.text-muted.mt-2= t universe.settings.updated_at, format: :default

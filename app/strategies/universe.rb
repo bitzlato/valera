@@ -74,11 +74,11 @@ class Universe
     # TODO: Move to separate daemon
     # update_peatio_balances!
 
-    if settings.base_enabled && settings.status == UniverseSettings::ACTIVE_STATUS
+    if settings.enabled && settings.status == UniverseSettings::ACTIVE_STATUS
       created_orders = updater.update! build_orders
       state.assign_attributes last_orders: created_orders
     else
-      logger.info "Does not update bot orders because of status is #{settings.status}"
+      logger.info "Does not update bot orders because bot is disabled or inactive"
       state.assign_attributes last_orders: []
     end
 

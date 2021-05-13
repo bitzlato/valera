@@ -3,6 +3,7 @@
   .row
     .col-md-4
       h1= "#{universe.class}##{universe.id}"
+      = render 'universe_enabler', universe: universe
       = universe_status universe
       .mb-2.text-small.text-muted= universe.comment
       div.mb-2= universe.description

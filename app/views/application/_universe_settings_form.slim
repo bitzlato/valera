@@ -1,6 +1,15 @@
+- attributes = universe.settings.class.scope_attributes(scope)
 .row
-  - universe.settings.class.scope_attributes(scope).each do |attribute|
+  - attributes.reject { |a| a.to_s.split('_').last.to_i.to_s == a.to_s.split('_').last }.each do |attribute|
     .col-md-3.form-group style='min-width: 160px'
-      label.text-small for=attribute
-        = t(attribute, default: attribute.to_s)
-      .mb-1= universe_settings_attribute_input universe, attribute
+      .md-2= render 'settings_field', universe: universe, attribute: attribute
+
+- if universe.settings.levels.present?
+  table.table.table-condensed
+    - universe.settings.levels.times.each do |level|
+      - attributes = universe.settings.class.attributes_for_level(level)
+      tr
+        th width="50px"= level
+        - attributes.select { |a| a.to_s.split('_').last.to_i.to_s == a.to_s.split('_').last }.each do |attribute|
+          td
+            = render 'settings_field', universe: universe, attribute: attribute

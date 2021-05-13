@@ -3,7 +3,7 @@
 class UniverseSettings
   include RedisModel
 
-  UNSCOPED_ATTRIBUTES = %i[id updated_at status stop_reason].freeze
+  UNSCOPED_ATTRIBUTES = %i[id updated_at status stop_reason enabled].freeze
 
   INACTIVE_STATUS = :inactive
   ACTIVE_STATUS = :active
@@ -11,11 +11,20 @@ class UniverseSettings
   STATUSES = [INACTIVE_STATUS, ACTIVE_STATUS, INIT_STATUS].freeze
 
   # Manualy enable/disable
-  attribute :base_enabled, Boolean, default: false
+  attribute :enabled, Boolean, default: false
   attribute :status, Symbol, default: INIT_STATUS
   attribute :stop_reason, String
 
   validates :status, presence: true, inclusion: { in: STATUSES }
+
+  def self.attributes_for_level(level)
+    level = level.to_s
+    attribute_set.map(&:name).select { |a| a.to_s.split('_').last == level }
+  end
+
+  def levels
+    0
+  end
 
   def scopes
     attribute_set
