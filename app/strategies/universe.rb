@@ -115,8 +115,13 @@ class Universe
   end
 
   def build_order(side, price, volume)
-    logger.debug "build_order(#{side}, #{price}, #{volume})"
-    Order.build(side: side, price: price, volume: volume)
+    if price.nil?
+      logger.warn "Skip order building for side because price is undefined"
+      nil
+    else
+      logger.debug "build_order(#{side}, #{price}, #{volume})"
+      Order.build(side: side, price: price, volume: volume)
+    end
   end
 
   def calculate_price(_side)

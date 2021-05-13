@@ -18,17 +18,7 @@ class DeepStonerStrategy < Universe
                                    numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_THRESHOLD }
   end
 
-  class State < UniverseState
-    def to_hash
-      super.merge avgPrice: avgPrice
-    end
-
-    def avgPrice
-      return if askPrice.nil? || bidPrice.nil?
-
-      (askPrice + bidPrice) / 2
-    end
-  end
+  State = BargainerStrategy::State
 
   def self.description
     %(
@@ -54,7 +44,7 @@ class DeepStonerStrategy < Universe
     threshold = settings.base_min_threshold + (settings.base_max_threshold - settings.base_min_threshold) * rand(100) / 100
     threshold = -threshold if side == :bid
     logger.debug "#{side} base_max_threshold = #{settings.base_max_threshold}, base_min_threshold = #{settings.base_min_threshold}, threshold = #{threshold}"
-    state.avgPrice + state.avgPrice * threshold / 100
+    state.binance_avgPrice + state.binance_avgPrice * threshold / 100
     # TODO: Get average order book price from peatio
   end
 

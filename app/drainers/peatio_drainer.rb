@@ -15,6 +15,8 @@ class PeatioDrainer < BaseDrainer
     # 'last' => :last
   }.freeze
 
+  KEYS = MAPPING.values.freeze
+
   STREAMS = [[:public, 'global.tickers']].freeze
 
   private

@@ -16,8 +16,6 @@ defaults: &defaults
       credentials: danil_onelec_ru
 development:
   <<: *defaults
-  upstreams: 
-    - peatio
 staging:
   <<: *defaults
 production:

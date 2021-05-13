@@ -2,12 +2,12 @@
 
 # New state for processor
 class UniverseState
-  UPSTREAMS = %i[binance peatio].freeze
-
   include RedisModel
 
+  UPSTREAM_KEYS = (BinanceDrainer::KEYS + PeatioDrainer::KEYS).uniq
+  UPSTREAMS = Settings.upstreams
   UPSTREAMS.each do |upstream|
-    BinanceDrainer::KEYS.each do |key|
+    UPSTREAM_KEYS.each do |key|
       attribute [upstream, key].join('_'), BigDecimal
     end
   end
