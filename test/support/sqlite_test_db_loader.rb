@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+#
+# rubocop:disable Security/Eval
+# rubocop:disable Naming/MethodParameterName
+
 #### evals the schema into the current process
 class SqliteTestDbLoader
   # assumes your schema is generated for MySQL
@@ -86,3 +90,5 @@ ActiveSupport.on_load(:active_record) do
   ActiveRecord::Migration.singleton_class.prepend CheckPendingSoftly
   ActiveRecord::TestDatabases.singleton_class.prepend PreserveParallelMemoryDatabase
 end
+# rubocop:enable Security/Eval
+# rubocop:enable Naming/MethodParameterName

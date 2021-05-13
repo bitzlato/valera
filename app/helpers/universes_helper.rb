@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module UniversesHelper
-  PERCENTAGE_SUFFIXES= %w[_threshold _deviation _part]
+  PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part].freeze
 
   def universe_settings_attribute_input(universe, attribute)
     side = attribute.to_s.split('_').first
