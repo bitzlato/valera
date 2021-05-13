@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Naming/MethodName
 class DeepStonerStrategy < Universe
   State = BargainerStrategy::State
 
@@ -19,10 +18,10 @@ class DeepStonerStrategy < Universe
 
     LEVELS = 5
     LEVELS.times.each do |i|
-      attribute 'base_best_price_deviation_' + i.to_s, Float, default: 10
-      validates 'base_best_price_deviation_' + i.to_s, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
-      attribute 'base_liquidity_part_' + i.to_s, Float, default: 10
-      validates 'base_liquidity_part_' + i.to_s, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+      attribute "base_best_price_deviation_#{i}", Float, default: 10
+      validates "base_best_price_deviation_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+      attribute "base_liquidity_part_#{i}", Float, default: 10
+      validates "base_liquidity_part_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
     end
 
     def levels
@@ -57,30 +56,29 @@ class DeepStonerStrategy < Universe
   end
 
   def calculate_price(side, level)
-    deviation = settings.send 'base_best_price_deviation_' + level.to_s
+    deviation = settings.send "base_best_price_deviation_#{level}"
     best_price = state.send "binance_#{side}Price"
 
-    threshold = settings.base_threshold*rand(100)/100
-    deviation = deviation + deviation * threshold / 100
+    threshold = settings.base_threshold * rand(100) / 100
+    deviation += deviation * threshold / 100
     deviation = -deviation if side == :bid
 
-    price = best_price + best_price*deviation/100
+    price = best_price + best_price * deviation / 100
 
     logger.debug("Calculated price for #{side} level #{level} threshold=#{threshold}% deviation=#{deviation}%, best_price=#{best_price} price=#{price}")
 
     price
   end
 
-  def calculate_volume(side, level)
+  def calculate_volume(_side, level)
     volume = settings.base_min_volume
-    liquidity_part = settings.send 'base_liquidity_part_' + level.to_s
+    liquidity_part = settings.send "base_liquidity_part_#{level}"
 
     return 0 if liquidity_part.zero?
 
-    # TODO calculate volume from users_liquidity
+    # TODO: calculate volume from users_liquidity
     return volume if volume < settings.base_max_volume
 
     settings.base_max_volume
   end
 end
-# rubocop:enable Naming/MethodName

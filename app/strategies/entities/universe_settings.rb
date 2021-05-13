@@ -22,6 +22,22 @@ class UniverseSettings
     attribute_set.map(&:name).select { |a| a.to_s.split('_').last == level }
   end
 
+  def self.scope_attributes(scope)
+    attribute_set.map(&:name).select { |k| k.to_s.starts_with? "#{scope}_" }
+  end
+
+  def self.model_name
+    ActiveModel::Name.new(UniverseSettings)
+  end
+
+  def leveled_attributes_unsuffixed
+    attributes
+      .keys
+      .select { |a| a.to_s.split('_').last.to_i.to_s == a.to_s.split('_').last }
+      .map { |a| a.to_s.split('_')[0...-1].join('_') }
+      .uniq
+  end
+
   def levels
     0
   end
@@ -41,14 +57,6 @@ class UniverseSettings
 
   def start!
     update_attributes! status: UniverseSettings::ACTIVE_STATUS, stop_reason: nil
-  end
-
-  def self.scope_attributes(scope)
-    attribute_set.map(&:name).select { |k| k.to_s.starts_with? "#{scope}_" }
-  end
-
-  def self.model_name
-    ActiveModel::Name.new(UniverseSettings)
   end
 
   private

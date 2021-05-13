@@ -17,7 +17,7 @@ class OrdersUpdater
     @market = market || raise('No market')
     @peatio_client = peatio_client || raise('No peatio client')
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger)
-      .tagged([self.class.name, market, peatio_client.name].join(' '))
+                                          .tagged([self.class.name, market, peatio_client.name].join(' '))
     @name = name
   end
 
@@ -65,36 +65,36 @@ class OrdersUpdater
   private
 
   def filter_orders_to_create(orders, persisted_orders)
-    orders.select do |order|
-      !persisted_orders.find do |persisted_order|
+    orders.reject do |order|
+      persisted_orders.find do |persisted_order|
         persisted_order.price == order.price && persisted_order.origin_volume = order.volume
       end
     end
   end
 
   def fetch_active_orders(side)
-     peatio_client
+    peatio_client
       .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
       .map { |data| build_persisted_order data }
   end
 
-  #"id"=>1085518,
-  #"uuid"=>"eefb9c4e-ca2a-464c-b22d-520176c30637",
-  #"side"=>"sell",
-  #"ord_type"=>"limit",
-  #"price"=>"50377.1418",
-  #"avg_price"=>"0.0",
-  #"state"=>"pending",
-  #"market"=>"btcusdt",
-  #"market_type"=>"spot",
-  #"created_at"=>"2021-05-13T08:15:30Z",
-  #"updated_at"=>"2021-05-13T08:15:30Z",
-  #"origin_volume"=>"0.0001",
-  #"remaining_volume"=>"0.0001",
-  #"executed_volume"=>"0.0",
-  #"maker_fee"=>"0.0",
-  #"taker_fee"=>"0.0",
-  #"trades_count"=>0
+  # "id"=>1085518,
+  # "uuid"=>"eefb9c4e-ca2a-464c-b22d-520176c30637",
+  # "side"=>"sell",
+  # "ord_type"=>"limit",
+  # "price"=>"50377.1418",
+  # "avg_price"=>"0.0",
+  # "state"=>"pending",
+  # "market"=>"btcusdt",
+  # "market_type"=>"spot",
+  # "created_at"=>"2021-05-13T08:15:30Z",
+  # "updated_at"=>"2021-05-13T08:15:30Z",
+  # "origin_volume"=>"0.0001",
+  # "remaining_volume"=>"0.0001",
+  # "executed_volume"=>"0.0",
+  # "maker_fee"=>"0.0",
+  # "taker_fee"=>"0.0",
+  # "trades_count"=>0
   def build_persisted_order(data)
     PersistedOrder.new(
       data.symbolize_keys.slice(*PersistedOrder.attribute_set.map(&:name))
@@ -137,7 +137,7 @@ class OrdersUpdater
   end
 
   def write_to_influx(order)
-    side = SIDES_MAP.invert.fetch( order.side )
+    side = SIDES_MAP.invert.fetch(order.side)
     Valera::InfluxDB.client
                     .write_point(
                       INFLUX_TABLE,

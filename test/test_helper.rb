@@ -2,7 +2,7 @@
 
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
-require_relative './support/sqlite_test_db_loader.rb'
+require_relative './support/sqlite_test_db_loader'
 require 'rails/test_help'
 require 'minitest/mock'
 Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each { |rb| require(rb) }
@@ -31,10 +31,14 @@ module TestSetup
   end
 end
 
-class ActiveSupport::TestCase
-  include TestSetup
+module ActiveSupport
+  class TestCase
+    include TestSetup
+  end
 end
 
-class ActionDispatch::IntegrationTest
-  include TestSetup
+module ActionDispatch
+  class IntegrationTest
+    include TestSetup
+  end
 end

@@ -42,6 +42,7 @@ class BargainerStrategy < Universe
 
   def calculate_price(side)
     return nil if state.binance_avgPrice.nil?
+
     threshold = settings.base_threshold
     threshold = threshold * rand(100) / 100
     threshold = -threshold if side == :bid

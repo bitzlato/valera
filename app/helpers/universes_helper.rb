@@ -1,17 +1,23 @@
 # frozen_string_literal: true
 
 module UniversesHelper
+  PERCENTAGE_SUFFIXES= %w[_threshold _deviation _part]
+
   def universe_settings_attribute_input(universe, attribute)
     side = attribute.to_s.split('_').first
     currency_method = side == 'bid' ? :quote : :base
-    display_with = ->(value) { format_percent value } if attribute.to_s.include?('_threshold') || attribute.to_s.include?('_deviation') || attribute.to_s.include?('_part')
+    if PERCENTAGE_SUFFIXES.find { |suffix| attribute.to_s.include? suffix }
+      display_with = lambda { |value|
+        format_percent value
+      }
+    end
     if attribute.to_s.include? '_volume'
       display_with = lambda { |value|
         format_money value, universe.market.send(currency_method)
       }
     end
     type = attribute.to_s.include?('enabled') ? :checkbox : :input
-    collection = ['Disabled', 'Enabled'] if attribute.to_s == 'enabled'
+    collection = %w[Disabled Enabled] if attribute.to_s == 'enabled'
     best_in_place universe.settings, attribute, as: type, display_with: display_with, collection: collection
   end
 
@@ -36,8 +42,9 @@ module UniversesHelper
   def default_settings_attribute(attribute)
     attribute = attribute.to_s
     return attribute unless attribute.include? '_'
-    title = attribute.split('_').slice(1,100).join('_')
-    title = title.split('_').slice(0,title.split('_').length - 1).join('_') if leveled_attribute?(attribute)
+
+    title = attribute.split('_').slice(1, 100).join('_')
+    title = title.split('_').slice(0, title.split('_').length - 1).join('_') if leveled_attribute?(attribute)
     title
   end
 

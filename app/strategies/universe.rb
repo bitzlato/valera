@@ -78,7 +78,7 @@ class Universe
       created_orders = updater.update! build_orders
       state.assign_attributes last_orders: created_orders
     else
-      logger.info "Does not update bot orders because bot is disabled or inactive"
+      logger.info 'Does not update bot orders because bot is disabled or inactive'
       state.assign_attributes last_orders: []
     end
 
@@ -117,7 +117,7 @@ class Universe
 
   def build_order(side, price, volume)
     if price.nil?
-      logger.warn "Skip order building for side because price is undefined"
+      logger.warn 'Skip order building for side because price is undefined'
       nil
     else
       logger.debug "build_order(#{side}, #{price}, #{volume})"
