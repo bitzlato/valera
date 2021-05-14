@@ -72,6 +72,7 @@ class OrdersUpdater
     end
   end
 
+  # TODO Move to drainer
   def fetch_active_orders(side)
     peatio_client
       .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)

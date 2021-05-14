@@ -22,9 +22,11 @@ class God
   private
 
   def build_drainers
-    Settings.upstreams.map do |upstream|
-      "#{upstream.camelcase}Drainer".constantize
-    end
+    Settings
+      .upstreams
+      .values
+      .map { |drainers| drainers.values.map &:constantize }
+      .flatten
   end
 
   def build_universes

@@ -4,7 +4,7 @@ require 'peatio/client/websocket'
 
 # Connects to binance stream and store kline to internal influx
 #
-class PeatioDrainer < BaseDrainer
+class PeatioWebsocketDrainer < WebsocketDrainer
   MAPPING = {
     'open' => :open,
     'high' => :high,

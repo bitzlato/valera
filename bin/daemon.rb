@@ -7,10 +7,10 @@ SdNotify.ready
 God.instance
 SdNotify.status("God was born!")
 EM.run do
-  # Pass a symbol and event handler Hash to connect and process events
   Market.all.each do |market|
-    God.drainers.each do |drainer|
-      drainer.new(market).attach
+    God.drainers.each do |drainer_class|
+      drainer = drainer_class.new(market)
+      drainer.attach
       SdNotify.status("#{market} market drained")
     end
   end

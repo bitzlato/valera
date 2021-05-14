@@ -4,8 +4,9 @@
 class UniverseState
   include RedisModel
 
-  UPSTREAM_KEYS = (BinanceDrainer::KEYS + PeatioDrainer::KEYS).uniq
-  UPSTREAMS = Settings.upstreams
+  # TODO fetch drainers from settings
+  UPSTREAM_KEYS = (BinanceWebsocketDrainer::KEYS + PeatioWebsocketDrainer::KEYS).uniq
+  UPSTREAMS = Settings.upstreams.keys
   UPSTREAMS.each do |upstream|
     UPSTREAM_KEYS.each do |key|
       attribute [upstream, key].join('_'), BigDecimal

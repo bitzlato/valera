@@ -71,11 +71,20 @@ class PeatioClient
     post '/market/orders/cancel', params
   end
 
+  def order_book(market, params = {})
+    get "/public/markets/#{market}/order-book", params
+  end
+
+  def market_depth(market)
+    get "/public/markets/#{market}/depth"
+  end
+
   def post(path, params = {})
     parse_response connection.post prefix + path, params.to_json
   end
 
   def get(path, params = {})
+    puts prefix + path
     parse_response connection.get prefix + path, params
   end
 

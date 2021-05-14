@@ -2,7 +2,7 @@
 
 # Connects to binance stream and store kline to internal influx
 #
-class BinanceDrainer < BaseDrainer
+class BinanceWebsocketDrainer < WebsocketDrainer
   MAPPING = {
     'bookTicker' => {
       'b' => :bidPrice,

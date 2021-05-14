@@ -3,8 +3,11 @@ defaults: &defaults
   # markets: ["BTC:USDT", "BTC:MCR", "ETH:BTC", "ETH:USDT", "ETH:MCR", "USDT:MCR"]
   markets: ["BTC:USDT"]
   upstreams: 
-    - binance
-    - peatio
+    binance:
+      websocket: BinanceWebsocketDrainer
+    peatio:
+      websocket: PeatioWebsocketDrainer
+      rest: PeatioRestDrainer
   universes:
     deep_stoner:
       class: DeepStonerStrategy

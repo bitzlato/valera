@@ -50,6 +50,8 @@ Run first bot only
 * [ ] Согласованности по заявками между ботами.
 * [ ] Automaticalyy cancel all orders if there are no fresh data from more then
   N msecs
+* [ ] Throw order book through websocket in peatio
+* [ ] Move active orders fetching to separate drainer
 # Deployment
 
 ## Setup
