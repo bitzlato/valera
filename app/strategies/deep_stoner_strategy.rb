@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class DeepStonerStrategy < Universe
-  State = BargainerStrategy::State
-
   class Settings < UniverseSettings
     attribute :base_min_volume, BigDecimal, default: 0.001
     validates :base_min_volume, presence: true, numericality: { greater_than: 0 }
@@ -57,7 +55,7 @@ class DeepStonerStrategy < Universe
 
   def calculate_price(side, level)
     deviation = settings.send "base_best_price_deviation_#{level}"
-    best_price = state.send "binance_#{side}Price"
+    best_price = upstream_states[:binance].send "#{side}Price"
 
     threshold = settings.base_threshold * rand(100) / 100
     deviation += deviation * threshold / 100

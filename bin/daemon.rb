@@ -8,7 +8,7 @@ God.instance
 SdNotify.status("God was born!")
 EM.run do
   Market.all.each do |market|
-    God.drainers.each do |drainer_class|
+    Settings.drainers.each do |drainer_class|
       drainer = drainer_class.new(market)
       drainer.attach
       SdNotify.status("#{market} market drained")

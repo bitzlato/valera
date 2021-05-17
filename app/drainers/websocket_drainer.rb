@@ -44,8 +44,9 @@ class WebsocketDrainer < Drainer
     dump_headers event
     data = JSON.parse(event.data)
     logger.debug data
+
     catch :ignoreMessage do
-      bump! map data
+      update! map data
     end
   end
 

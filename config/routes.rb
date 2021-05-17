@@ -7,5 +7,7 @@ Rails.application.routes.draw do
     resources :universes, only: %i[index show]
     resources :markets, only: %i[index show]
     resources :universe_settings
+    resources :upstream_markets
+    resources :upstreams, only: %i[index]
   end
 end

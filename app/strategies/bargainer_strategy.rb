@@ -15,18 +15,6 @@ class BargainerStrategy < Universe
                                             numericality: { greater_than: 0, less_than_or_equal_to: 0.5 }
   end
 
-  class State < UniverseState
-    def to_hash
-      super.merge binance_avgPrice: binance_avgPrice
-    end
-
-    def binance_avgPrice
-      return if binance_askPrice.nil? || binance_bidPrice.nil?
-
-      (binance_askPrice + binance_bidPrice) / 2
-    end
-  end
-
   def self.description
     %{
     <p>Проторговщик. Цель - создать цену.</p>
@@ -41,13 +29,13 @@ class BargainerStrategy < Universe
   private
 
   def calculate_price(side)
-    return nil if state.binance_avgPrice.nil?
+    return nil if upstream_states[:binance].avgPrice.nil?
 
     threshold = settings.base_threshold
     threshold = threshold * rand(100) / 100
     threshold = -threshold if side == :bid
     logger.debug "#{side} threshold = #{threshold}"
-    state.binance_avgPrice + state.binance_avgPrice * threshold / 100
+    upstream_states[:binance].avgPrice + upstream_states[:binance].avgPrice * threshold / 100
     # TODO: Брать среднюю цену стакана из peatio
   end
 

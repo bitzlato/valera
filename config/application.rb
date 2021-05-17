@@ -10,7 +10,7 @@ Bundler.require(*Rails.groups)
 
 module Exbot
   class Application < Rails::Application
-    config.action_cable.mount_path = '/valera/cable'
+    config.action_cable.mount_path = '/valera/cable' + 'FAKE'
 
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
@@ -23,7 +23,6 @@ module Exbot
       "#{Rails.root}/app/services",
       "#{Rails.root}/app/drainers",
       "#{Rails.root}/app/strategies",
-      "#{Rails.root}/app/strategies/entities",
     ]
 
     # Configuration for the application, engines, and railties goes here.

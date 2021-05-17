@@ -1,18 +1,17 @@
 # frozen_string_literal: true
 
 class God
-  include AutoLogger
   include Singleton
 
-  attr_reader :universes, :drainers
+  attr_reader :universes, :markets
 
   class << self
-    delegate :universes, :drainers, to: :instance
+    delegate :universes, :markets, to: :instance
   end
 
   def initialize
+    @markets = build_markets
     @universes = build_universes
-    @drainers = build_drainers
   end
 
   def reset_settings!
@@ -21,21 +20,21 @@ class God
 
   private
 
-  def build_drainers
-    Settings
-      .upstreams
-      .values
-      .map { |drainers| drainers.values.map &:constantize }
-      .flatten
+  def build_markets
+    Settings.markets.map do |name|
+      Market.new(*name.split(':'))
+    end
   end
 
   def build_universes
     universes = []
     Settings.universes.each_pair do |key, options|
-      Market.all.map do |market|
+      markets.map do |market|
         universe_class = options['class'].constantize
         settings = options.fetch('settings', {})
         settings = settings.fetch('global', {}).merge settings.dig('markets', market.id) || {}
+
+        # TODO Use clients pool
         peatio_client = PeatioClient.new(
           **Rails.application.credentials.bots
           .fetch(options['credentials'].to_sym)

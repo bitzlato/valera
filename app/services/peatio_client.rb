@@ -84,7 +84,6 @@ class PeatioClient
   end
 
   def get(path, params = {})
-    puts prefix + path
     parse_response connection.get prefix + path, params
   end
 

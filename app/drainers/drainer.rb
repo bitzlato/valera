@@ -8,6 +8,10 @@ class Drainer
     name.underscore.split('_').first
   end
 
+  def self.keys
+    self::KEYS
+  end
+
   delegate :upstream_tag, to: :class
 
   def initialize(market)
@@ -19,7 +23,15 @@ class Drainer
     raise 'not implemented'
   end
 
+  def upstream_state
+    market.upstream_states[upstream_tag]
+  end
+
   private
+
+  def update!(data)
+    upstream_state.update_attributes! data
+  end
 
   def simple_map(data, mapping)
     return data if mapping.blank?
@@ -44,6 +56,6 @@ class Drainer
   def write_to_influx(data)
     Valera::InfluxDB.client
                     .write_point(INFLUX_TABLE, values: data, tags: { market: market.id,
-                                                                     upstream: self.class.upstream_tag })
+                                                                     upstream: upstream_tag })
   end
 end

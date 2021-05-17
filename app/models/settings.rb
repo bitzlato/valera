@@ -13,3 +13,13 @@ else
     namespace 'development'
   end
 end
+
+class Settings
+  def drainers
+    @drainers ||= Settings
+      .upstreams
+      .values
+      .map { |drainers| drainers.values.map &:constantize }
+      .flatten
+  end
+end

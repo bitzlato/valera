@@ -6,22 +6,10 @@ class Universe
   # include UpdatePeatioBalance
   extend UniverseFinders
 
-  attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason
+  attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason, :upstream_states
+
 
   delegate :description, :settings_class, :state_class, to: :class
-
-  # @param name [String] key of bot from Rails credentials
-  # @param market [Market]
-  def initialize(name:, market:, peatio_client:, default_settings: {}, comment: nil)
-    @name = name
-    @market = market
-    @default_settings = default_settings
-    @peatio_client = peatio_client
-    @state = state_class.find_or_build id
-    @comment = comment
-    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged([self.class, id].join(' '))
-    @updater = OrdersUpdater.new(market: market, peatio_client: peatio_client, name: name)
-  end
 
   def self.description
     raise 'undefined strategy'
@@ -39,9 +27,28 @@ class Universe
     UniverseState
   end
 
+  # @param name [String] key of bot from Rails credentials
+  # @param market [Market]
+  def initialize(name:, market:, peatio_client:, default_settings: {}, comment: nil)
+    @name = name
+    @market = market
+    @default_settings = default_settings
+    @peatio_client = peatio_client
+    @state = state_class.find_or_create! id
+    @comment = comment
+    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged([self.class, id].join(' '))
+    @updater = OrdersUpdater.new(market: market, peatio_client: peatio_client, name: name)
+    @upstream_states = market.upstream_states.values
+  end
+
+  def class_and_name
+    "[#{self.class.name}]#{name}"
+  end
+
   def reload
-    settings.safe_restore!
-    state.safe_restore!
+    settings.reload
+    state.reload
+    upstream_states.each &:reload
     self
   end
 
@@ -53,8 +60,8 @@ class Universe
   def stop!(reason = 'No reason')
     settings.stop! reason
     logger.info "Stop with #{reason}"
-    state.update_attributes! last_orders: []
     updater.cancel!
+    state.update_attributes!(created_orders: [], current_orders: [])
   end
 
   def start!
@@ -63,26 +70,25 @@ class Universe
     bump!
   end
 
+  def notify_changes!
+    # TODO compare with current state and bump if need
+    bump!
+  end
+
   # Change state
   # @param changes [Hash]
   def bump!(changes = {})
-    changes ||= {}
+    reload
     logger.info "Bump with #{changes}"
-    settings.restore!
-    state.assign_attributes changes
-
-    # TODO: Move to separate daemon
-    # update_peatio_balances!
 
     if settings.enabled && settings.status == UniverseSettings::ACTIVE_STATUS
-      created_orders = updater.update! build_orders
-      state.assign_attributes last_orders: created_orders
+      created_orders, current_orders = updater.update! build_orders
+      state.update_attributes! created_orders: created_orders, current_orders: current_orders
     else
       logger.info 'Does not update bot orders because bot is disabled or inactive'
-      state.assign_attributes last_orders: []
+      state.update_attributes! created_orders: []
     end
 
-    state.save!
     UniverseChannel.update self
   rescue StandardError => e
     report_exception e
@@ -102,7 +108,7 @@ class Universe
   def settings
     return @settings if instance_variable_defined? :@settings
 
-    @settings = settings_class.find_or_build id, @default_settings
+    @settings = settings_class.find_or_create! id, @default_settings
   end
 
   private

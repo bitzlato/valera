@@ -11,8 +11,6 @@ class PeatioWebsocketDrainer < WebsocketDrainer
     'low' => :low,
     'volume' => :volume,
     'avg_price' => :avgPrice
-    # 'amount' => :amount,
-    # 'last' => :last
   }.freeze
 
   KEYS = MAPPING.values.freeze

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module RedisModel
+  VERSION = 2
+
   extend ActiveSupport::Concern
   included do
     include Virtus.model
@@ -14,14 +16,12 @@ module RedisModel
     alias_method :to_s, :id
     alias_method :to_param, :id
 
-    def self.find_or_build(id, default_settings = {})
-      record = new(id: id)
-      if record.persisted?
-        record.safe_restore!
-      else
-        record.update_attributes! default_settings
-      end
-      record
+    def self.find_or_create!(id, _default_settings = {})
+      new(id: id).reload
+    end
+
+    def self.attribute_names
+      attribute_set.map(&:name)
     end
   end
 
@@ -44,28 +44,38 @@ module RedisModel
   def save!
     validate!
     self.updated_at = Time.zone.now
-    redis_value.value = attributes.except(:id).to_json
+    redis_value.value = attributes.except(:id)
     after_save
+    self
   end
 
-  def safe_restore!
-    restore!
-    validate!
-  rescue ActiveModel::ValidationError, ActiveModel::UnknownAttributeError => e
-    Rails.logger.error "#{e} restoring #{self}##{id}, reset to defaults"
-    clear_attributes!
-    set_default_attributes!
-    save!
-  end
+  def reload
+    if persisted?
+      begin
+        restore!
+        validate!
+      rescue ActiveModel::ValidationError, ActiveModel::UnknownAttributeError => e
+        Rails.logger.error "#{e} restoring #{self}##{id}, reset to defaults"
+        clear!
+      end
+    else
+      clear!
+    end
 
-  def restore!
-    assign_attributes JSON.parse(redis_value.value) if persisted?
+    self
   end
 
   def clear!
-    redis_value.delete
     clear_attributes!
     set_default_attributes!
+    validate!
+    save!
+  end
+
+  def delete!
+    clear_attributes!
+    set_default_attributes!
+    redis_value.delete
   end
 
   def blank?
@@ -73,6 +83,10 @@ module RedisModel
   end
 
   private
+
+  def restore!
+    assign_attributes redis_value.value if persisted?
+  end
 
   def after_save; end
 
@@ -83,6 +97,10 @@ module RedisModel
   def redis_value
     raise 'ID is not defined' if id.nil?
 
-    @redis_value ||= Redis::Value.new([self.class.name, id].join(':'))
+    @redis_value ||= Redis::Value.new( redis_value_id, marshal: true)
+  end
+
+  def redis_value_id
+    [VERSION, self.class.name, id].join(':')
   end
 end
