@@ -7,6 +7,10 @@ module ApplicationHelper
     content_tag :div, '&middot;'.html_safe, class: 'text-muted'
   end
 
+  def a(universe)
+    link_to universe.name, universe_path(universe)
+  end
+
   def app_title
     'VALERA'
   end

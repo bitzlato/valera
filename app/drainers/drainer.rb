@@ -14,23 +14,26 @@ class Drainer
 
   delegate :upstream_tag, to: :class
 
+  attr_reader :upstream
+
   def initialize(market)
     @market = market
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged([self.class.name, market].join('/'))
+    @upstream = Upstream.all.find { |u| u.id == upstream_tag } || raise("Not found upstream #{upstream_tag}")
   end
 
   def attach
     raise 'not implemented'
   end
 
-  def upstream_state
-    market.upstream_states[upstream_tag]
+  def upstream_market
+    market.upstream_markets.find_by_upstream! upstream
   end
 
   private
 
   def update!(data)
-    upstream_state.update_attributes! data
+    upstream_market.update_attributes! data
   end
 
   def simple_map(data, mapping)

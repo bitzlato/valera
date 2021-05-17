@@ -3,15 +3,20 @@
 class God
   include Singleton
 
-  attr_reader :universes, :markets
-
   class << self
-    delegate :universes, :markets, to: :instance
+    delegate :universes, :markets, :upstreams, to: :instance
   end
 
-  def initialize
-    @markets = build_markets
-    @universes = build_universes
+  def universes
+    @universes ||= build_universes
+  end
+
+  def markets
+    @markets ||= build_markets
+  end
+
+  def upstreams
+    @upstreams ||= build_upstreams
   end
 
   def reset_settings!
@@ -19,6 +24,12 @@ class God
   end
 
   private
+
+  def build_upstreams
+    Settings.upstreams.map do |key, config|
+      Upstream.new key, config
+    end
+  end
 
   def build_markets
     Settings.markets.map do |name|

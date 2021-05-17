@@ -6,8 +6,7 @@ class Universe
   # include UpdatePeatioBalance
   extend UniverseFinders
 
-  attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason, :upstream_states
-
+  attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason, :upstream_markets
 
   delegate :description, :settings_class, :state_class, to: :class
 
@@ -38,7 +37,9 @@ class Universe
     @comment = comment
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged([self.class, id].join(' '))
     @updater = OrdersUpdater.new(market: market, peatio_client: peatio_client, name: name)
-    @upstream_states = market.upstream_states.values
+    # TODO customize used upstreams
+    @upstreams = Upstream.all
+    @upstream_markets = market.upstream_markets
   end
 
   def class_and_name
@@ -48,7 +49,7 @@ class Universe
   def reload
     settings.reload
     state.reload
-    upstream_states.each &:reload
+    upstream_markets.each &:reload
     self
   end
 

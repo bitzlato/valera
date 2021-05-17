@@ -29,13 +29,13 @@ class BargainerStrategy < Universe
   private
 
   def calculate_price(side)
-    return nil if upstream_states[:binance].avgPrice.nil?
+    return nil if upstream_markets.find_by_upstream!(:binance).avgPrice.nil?
 
     threshold = settings.base_threshold
     threshold = threshold * rand(100) / 100
     threshold = -threshold if side == :bid
     logger.debug "#{side} threshold = #{threshold}"
-    upstream_states[:binance].avgPrice + upstream_states[:binance].avgPrice * threshold / 100
+    upstream_markets.find_by_upstream!(:binance).avgPrice + upstream_markets.find_by_upstream!(:binance).avgPrice * threshold / 100
     # TODO: Брать среднюю цену стакана из peatio
   end
 

@@ -4,15 +4,12 @@
 class UpstreamMarket
   include RedisModel
 
-  BASE_KEYS = %i[base_balance quote_balance]
+  BASE_KEYS = %i[]
 
-  UPSTREAM_KEYS = (Settings.drainers.map(&:keys).flatten + BASE_KEYS).uniq
+  UPSTREAM_KEYS = (Settings.drainer_classes.map(&:keys).flatten + BASE_KEYS).uniq
 
-  UPSTREAMS = Settings.upstreams.keys
-  UPSTREAMS.each do |upstream|
-    UPSTREAM_KEYS.each do |key|
-      attribute key, BigDecimal
-    end
+  UPSTREAM_KEYS.each do |key|
+    attribute key, BigDecimal
   end
 
   attr_reader :market, :upstream
@@ -22,7 +19,7 @@ class UpstreamMarket
   end
 
   def self.all
-    Market.all.map { |m| m.upstream_states.values }.flatten.uniq
+    Market.all.map { |m| m.upstream_markets }.flatten.uniq
   end
 
   def initialize(market:, upstream: )

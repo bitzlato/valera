@@ -13,7 +13,7 @@ table.table.table-condensed.table-bordered2.table-narrow style='border-right: 1p
       tr
         th rowspan=2
           .mb-2= link_to universe.name, universe_path(universe)
-            .text-small.test-muted= universe.class.name
+          .text-small.test-muted= universe.class.name
           = render 'universe_enabler', universe: universe
           .text-small.text-muted= universe.comment
           = universe_status universe
@@ -25,12 +25,14 @@ table.table.table-condensed.table-bordered2.table-narrow style='border-right: 1p
           = render 'universes/form', universe: universe
 
         td.text-right ASK
-        td.text-right= format_money universe.state.binance_askPrice, universe.market.quote
+        td.text-right
+          -# TODO = format_money universe.state.binance_askPrice, universe.market.quote
         td.text-right style='padding: 0; border-left: 1px solid #eee'
           = render 'last_orders', universe: universe, side: :ask
 
       tr
         td.text-right BID
-        td.text-right= format_money universe.state.binance_bidPrice, universe.market.quote
+        td.text-right
+          -# TODO = format_money universe.state.binance_bidPrice, universe.market.quote
         td.text-right style='padding: 0; border-left: 1px solid #eee'
           = render 'last_orders', universe: universe, side: :bid

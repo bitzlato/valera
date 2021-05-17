@@ -1,5 +1,5 @@
-- last_orders = universe.state.last_orders.select { |order| order['side'] == OrdersUpdater::SIDES_MAP[side] }
-- if last_orders.any?
+- created_orders = universe.state.created_orders.select { |order| order['side'] == OrdersUpdater::SIDES_MAP[side] }
+- if created_orders.any?
   table.table.table-condensed
     thead
       tr
@@ -7,7 +7,7 @@
         th Volume
         th Price
     tbody
-      - last_orders.each do |order|
+      - created_orders.each do |order|
         tr
           td
             .text-monospace.text-muted= '#' + order['id'].to_s

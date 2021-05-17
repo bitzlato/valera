@@ -5,4 +5,8 @@ class UpstreamMarketsController < ApplicationController
     upstream_markets = UpstreamMarket.all
     render locals: { upstream_markets: upstream_markets }
   end
+
+  def show
+    redirect_to upstream_markets_path
+  end
 end

@@ -55,7 +55,7 @@ class DeepStonerStrategy < Universe
 
   def calculate_price(side, level)
     deviation = settings.send "base_best_price_deviation_#{level}"
-    best_price = upstream_states[:binance].send "#{side}Price"
+    best_price = upstream_markets.find_by_upstream!(:binance).send "#{side}Price"
 
     threshold = settings.base_threshold * rand(100) / 100
     deviation += deviation * threshold / 100

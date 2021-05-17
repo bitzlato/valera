@@ -3,7 +3,7 @@
 class Market
   extend ActiveModel::Naming
   include ActiveModel::Conversion
-  attr_reader :quote, :base, :upstream_states
+  attr_reader :quote, :base
 
   def self.all
     God.markets
@@ -17,10 +17,12 @@ class Market
   def initialize(base, quote)
     @base = base
     @quote = quote
-    @upstream_states = Settings.upstreams.keys
-      .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |upstream, a|
-      a[upstream.to_sym] = UpstreamMarket.find_or_create! upstream: upstream, market: self
-    end
+  end
+
+  def upstream_markets
+    @upstream_markets ||= UpstreamMarkets.new(
+      Upstream.all.map { |u| UpstreamMarket.find_or_create! upstream: u, market: self }
+    )
   end
 
   def persisted?

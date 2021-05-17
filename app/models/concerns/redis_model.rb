@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedisModel
-  VERSION = 2
+  VERSION = 3
 
   extend ActiveSupport::Concern
   included do
@@ -66,16 +66,9 @@ module RedisModel
   end
 
   def clear!
-    clear_attributes!
     set_default_attributes!
     validate!
     save!
-  end
-
-  def delete!
-    clear_attributes!
-    set_default_attributes!
-    redis_value.delete
   end
 
   def blank?
@@ -89,10 +82,6 @@ module RedisModel
   end
 
   def after_save; end
-
-  def clear_attributes!
-    instance_variables.reject { |a| a == :@id }.each { |var| remove_instance_variable var }
-  end
 
   def redis_value
     raise 'ID is not defined' if id.nil?
