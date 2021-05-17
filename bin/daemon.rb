@@ -11,6 +11,7 @@ EM.run do
     Settings.drainer_classes.each do |drainer_class|
       drainer = drainer_class.new(market)
       drainer.attach
+      God.logger.info "Attach #{drainer}"
       SdNotify.status("#{market} market drained")
     end
   end

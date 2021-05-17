@@ -22,6 +22,10 @@ class Drainer
     @upstream = Upstream.all.find { |u| u.id == upstream_tag } || raise("Not found upstream #{upstream_tag}")
   end
 
+  def to_s
+    "[#{self.class.name}]#{market}"
+  end
+
   def attach
     raise 'not implemented'
   end
