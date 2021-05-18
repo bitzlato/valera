@@ -41,6 +41,10 @@ module RedisModel
     redis_value.value.present?
   end
 
+  def touch!
+    save!
+  end
+
   def save!
     validate!
     self.updated_at = Time.zone.now

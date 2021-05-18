@@ -48,6 +48,12 @@ class ApplicationDecorator < Draper::Decorator
     name.sub('Decorator', '').sub('Admin::', '').constantize
   end
 
+  def updated_at
+    h.content_tag :span, class: 'text-nowrap' do
+      I18n.l object.updated_at, format: :default
+    end
+  end
+
   private
 
   def t(key)

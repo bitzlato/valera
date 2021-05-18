@@ -4,8 +4,7 @@ class Drainer
   INFLUX_TABLE = 'upstream'
 
   include AutoLogger
-  include ActiveModel::Conversion
-  extend  ActiveModel::Naming
+  include RedisModel
   extend Finders
 
   attr_reader :market, :logger, :upstream, :account, :upstream_market, :id
@@ -28,13 +27,6 @@ class Drainer
   def self.model_name
     ActiveModel::Name.new(Drainer)
   end
-  def persisted?
-    true
-  end
-
-  def to_s
-    id
-  end
 
   def attach
     raise 'not implemented'
@@ -45,6 +37,7 @@ class Drainer
   def update!(data)
     logger.debug data if ENV.true? 'DEBUG_DRAINER_UPDATE'
     upstream_market.update_attributes! data
+    touch!
     write_to_influx data
   end
 
