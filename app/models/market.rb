@@ -17,6 +17,10 @@ class Market
     )
   end
 
+  def reload
+    self
+  end
+
   def persisted?
     true
   end

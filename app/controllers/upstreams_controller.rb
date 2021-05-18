@@ -5,4 +5,8 @@ class UpstreamsController < ApplicationController
     upstreams = Upstream.all
     render locals: { upstreams: upstreams }
   end
+
+  def show
+    redirect_to upstreams_path
+  end
 end

@@ -4,6 +4,10 @@ class Drainer
   INFLUX_TABLE = 'upstream'
 
   include AutoLogger
+  include ActiveModel::Conversion
+  extend  ActiveModel::Naming
+  extend Finders
+
   attr_reader :market, :logger, :upstream, :account, :upstream_market, :id
 
   delegate :client, to: :account
@@ -19,6 +23,13 @@ class Drainer
     @upstream = account.upstream
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(to_s)
     @upstream_market = market.upstream_markets.find_by_upstream! upstream
+  end
+
+  def self.model_name
+    ActiveModel::Name.new(Drainer)
+  end
+  def persisted?
+    true
   end
 
   def to_s

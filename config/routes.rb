@@ -9,5 +9,7 @@ Rails.application.routes.draw do
     resources :strategy_settings
     resources :upstream_markets, only: %i[index show]
     resources :upstreams, only: %i[index show]
+    resources :accounts, only: %i[index show]
+    resources :drainers, only: %i[index show]
   end
 end

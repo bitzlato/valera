@@ -9,23 +9,21 @@ class PeatioBalanceDrainer < Drainer
 
   def attach
     logger.info("Add periotic timer for #{FETCH_PERIOD} sec")
-    EM.add_periodic_timer FETCH_PERIOD do # sec
-      logger.debug('Timer executed')
-      # fetch_and_update_balances!
+    EM.add_periodic_timer FETCH_PERIOD do
+      update!
     end
   end
 
   private
 
+  def update!
+    fetch_and_update_market_depth!
+  end
+
   def fetch_and_update_balances!
-    accounts.each do |peatio_client|
-      balances = peatio_client.account_balances
-      state = market.upstream_account_state(upstream)
-      state.assign_attributes(
-        peatio_base_balance: find_balance(balances, market.base.downcase),
-        peatio_quote_balance: find_balance(balances, market.quote.downcase)
-      )
-    end
+    balances = peatio_client.account_balances
+    binding.pry
+    account.update_attributes! balances: balances
   end
 
   def fetch_and_update_market_depth!
