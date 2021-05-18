@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'peatio/client/websocket'
-
 # Connects to binance stream and store kline to internal influx
 #
 class PeatioWebsocketDrainer < WebsocketDrainer

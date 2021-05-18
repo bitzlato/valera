@@ -10,9 +10,8 @@ class PeatioRestDrainer < Drainer
   def attach
     logger.info("Add periotic timer for #{FETCH_PERIOD} sec")
     EM.add_periodic_timer FETCH_PERIOD do # sec
-      # logger.debug("Timer executed")
+      logger.debug("Timer executed")
       fetch_and_update_market_depth!
-      # TODO: fetch and update balance
     end
   end
 
@@ -35,9 +34,5 @@ class PeatioRestDrainer < Drainer
 
   def depth_volume(grouped_orders)
     grouped_orders.inject(0.0) { |sum, row| sum + row.first.to_d * row.second.to_d }
-  end
-
-  def client
-    @client ||= PeatioClient.new
   end
 end

@@ -16,8 +16,8 @@ module RedisModel
     alias_method :to_s, :id
     alias_method :to_param, :id
 
-    def self.find_or_create!(id, _default_settings = {})
-      new(id: id).reload
+    def self.build(**attrs)
+      new(**attrs).reload
     end
 
     def self.attribute_names

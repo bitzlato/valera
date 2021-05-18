@@ -7,9 +7,9 @@
 #
 class Strategy
   include AutoLogger
-  extend StrategyFinders
+  extend Finders
 
-  attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason, :upstream_markets
+  attr_reader :account, :market, :name, :state, :comment, :logger, :updater, :stop_reason, :upstream_markets
 
   delegate :description, :settings_class, :state_class, to: :class
   delegate :active?, to: :settings
@@ -32,15 +32,15 @@ class Strategy
 
   # @param name [String] key of bot from Rails credentials
   # @param market [Market]
-  def initialize(name:, market:, peatio_client:, default_settings: {}, comment: nil)
+  def initialize(name:, market:, account:, default_settings: {}, comment: nil)
     @name = name
     @market = market
     @default_settings = default_settings
-    @peatio_client = peatio_client
-    @state = state_class.find_or_create! id
+    @account = account
+    @state = state_class.build id: id
     @comment = comment
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged([self.class, id].join(' '))
-    @updater = OrdersUpdater.new(market: market, peatio_client: peatio_client, name: name)
+    @updater = OrdersUpdater.new(market: market, client: account.client, name: name)
     # TODO: customize used upstreams
     @upstreams = Upstream.all
     @upstream_markets = market.upstream_markets
@@ -108,7 +108,7 @@ class Strategy
   def settings
     return @settings if instance_variable_defined? :@settings
 
-    @settings = settings_class.find_or_create! id, @default_settings
+    @settings = settings_class.build id: id
   end
 
   private

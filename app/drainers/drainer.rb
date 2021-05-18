@@ -4,39 +4,35 @@ class Drainer
   INFLUX_TABLE = 'upstream'
 
   include AutoLogger
-  attr_reader :market, :logger, :upstream
+  attr_reader :market, :logger, :upstream, :account, :upstream_market, :id
 
-  def self.upstream_tag
-    name.underscore.split('_').first
-  end
+  delegate :client, to: :account
 
   def self.keys
     self::KEYS
   end
 
-  delegate :upstream_tag, to: :class
-
-  def initialize(market)
+  def initialize(id:, market:,  account:)
+    @id = id
     @market = market
-    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged([self.class.name, market].join('/'))
-    @upstream = Upstream.all.find { |u| u.id == upstream_tag } || raise("Not found upstream #{upstream_tag}")
+    @account = account
+    @upstream = account.upstream
+    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(to_s)
+    @upstream_market = market.upstream_markets.find_by_upstream! upstream
   end
 
   def to_s
-    "[#{self.class.name}]#{market}"
+    id
   end
 
   def attach
     raise 'not implemented'
   end
 
-  def upstream_market
-    @upstream_market ||= market.upstream_markets.find_by_upstream! upstream
-  end
-
   private
 
   def update!(data)
+    logger.debug data if ENV.true? 'DEBUG_DRAINER_UPDATE'
     upstream_market.update_attributes! data
     write_to_influx data
   end
@@ -53,6 +49,6 @@ class Drainer
   def write_to_influx(data)
     Valera::InfluxDB.client
                     .write_point(INFLUX_TABLE, values: data, tags: { market: market.id,
-                                                                     upstream: upstream_tag })
+                                                                     upstream: upstream.id })
   end
 end

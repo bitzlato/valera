@@ -16,9 +16,12 @@ end
 
 class Settings
   def drainer_classes
-    @drainer_classes ||= upstreams
-                         .values
-                         .map { |drainers| drainers.values.map(&:constantize) }
-                         .flatten
+    Settings.drainers.values.map do |v|
+      v['class'].constantize
+    end.uniq
+  end
+
+  def upstream_keys
+    drainer_classes.map(&:keys).flatten.uniq
   end
 end

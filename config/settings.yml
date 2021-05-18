@@ -1,22 +1,60 @@
 defaults: &defaults
   root_prefix: /valera
-  # markets: ["BTC:USDT", "BTC:MCR", "ETH:BTC", "ETH:USDT", "ETH:MCR", "USDT:MCR"]
-  markets: ["BTC:USDT"]
+  # markets_ ["BTC_USDT", "BTC_MCR", "ETH_BTC", "ETH_USDT", "ETH_MCR", "USDT_MCR"]
+  markets: ["BTC_USDT"]
+
   upstreams: 
-    binance:
-      websocket: BinanceWebsocketDrainer
+    binance: {}
     peatio:
-      websocket: PeatioWebsocketDrainer
-      rest: PeatioRestDrainer
+      credential_client: Peatio::Client::REST
+
+  accounts:
+    peatio_danil_orionet_ru:
+      upstream: peatio
+      credentials: danil_onelec_ru
+    peatio_danil_onelec_ru:
+      upstream: peatio
+      credentials: danil_orionet_ru
+    binance:
+      upstream: binance
+
+  drainers:
+    binance_websocket:
+      class: BinanceWebsocketDrainer
+      account: binance
+      upstream: binance
+
+    peatio_websocket:
+      class: PeatioWebsocketDrainer
+      account: peatio_danil_orionet_ru
+      upstream: peatio
+
+    peatio_rest:
+      class: PeatioRestDrainer
+      account: peatio_danil_orionet_ru
+      upstream: peatio
+
+    peatio_balance_orionet:
+      class: PeatioBalanceDrainer
+      upstream: peatio
+      account: peatio_danil_orionet_ru
+
+    peatio_balance_onelec:
+      class: PeatioBalanceDrainer
+      upstream: peatio
+      account: peatio_danil_onelec_ru
+
   strategies:
     deep_stoner:
       class: DeepStonerStrategy
       comment: Глубокий наполнятель стакана (danil@orionet.ru)
-      credentials: danil_orionet_ru
+      account: peatio_danil_orionet_ru
+
     bargainer:
       class: BargainerStrategy
       comment: Проторговщик, торгует на малые объёмы но постоянно и сам с собой (danil@onelec.ru)
-      credentials: danil_onelec_ru
+      account: peatio_danil_onelec_ru
+
 development:
   <<: *defaults
 staging:

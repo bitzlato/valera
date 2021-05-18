@@ -2,17 +2,9 @@
 
 class Market
   extend ActiveModel::Naming
+  extend Finders
   include ActiveModel::Conversion
   attr_reader :quote, :base
-
-  def self.all
-    God.markets
-  end
-
-  # @param id<String> Example: BTC_USDT
-  def self.find(id)
-    all.find { |m| m.id == id }
-  end
 
   def initialize(base, quote)
     @base = base
@@ -21,7 +13,7 @@ class Market
 
   def upstream_markets
     @upstream_markets ||= UpstreamMarkets.new(
-      Upstream.all.map { |u| UpstreamMarket.find_or_create! upstream: u, market: self }
+      Upstream.all.map { |u| UpstreamMarket.build upstream: u, market: self }
     )
   end
 

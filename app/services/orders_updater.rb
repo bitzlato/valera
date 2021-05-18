@@ -12,13 +12,13 @@ class OrdersUpdater
   AVAILABLE_DIVERGENCE = 0.01
   SIDES_MAP = { bid: 'buy', ask: 'sell' }.freeze
 
-  attr_reader :peatio_client, :market, :logger, :name
+  attr_reader :client, :market, :logger, :name
 
-  def initialize(peatio_client:, market:, name:)
+  def initialize(client:, market:, name:)
     @market = market || raise('No market')
-    @peatio_client = peatio_client || raise('No peatio client')
+    @client =  client || raise('Nitneilc peatio client')
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger)
-                                          .tagged([self.class.name, market, peatio_client.name].join(' '))
+                                          .tagged([self.class.name, market, client.name].join(' '))
     @name = name
   end
 
@@ -37,7 +37,7 @@ class OrdersUpdater
   def cancel!
     logger.debug 'Cancel all orders'
     Async do
-      peatio_client.cancel_orders
+      client.cancel_orders
     end
   end
 
@@ -80,7 +80,7 @@ class OrdersUpdater
 
   # TODO: Move to drainer
   def fetch_active_orders(side)
-    peatio_client
+    client
       .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
       .map { |data| build_persisted_order data }
   end
@@ -111,7 +111,7 @@ class OrdersUpdater
   def cancel_orders!(orders)
     Async do
       orders.each do |order|
-        peatio_client.cancel_order order.id
+        client.cancel_order order.id
       end
     end
   end
@@ -132,7 +132,7 @@ class OrdersUpdater
 
   # @param order <Order>
   def create_order!(order)
-    result = peatio_client.create_order(
+    result = client.create_order(
       market: market.peatio_symbol,
       ord_type: :limit,
       price: order.price,

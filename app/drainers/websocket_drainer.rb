@@ -36,7 +36,6 @@ class WebsocketDrainer < Drainer
     SdNotify.status('Drainer message')
     dump_headers event
     data = JSON.parse(event.data)
-    logger.debug data if ENV.true? 'DEBUG_WEBSOCKET_MESSAGE'
 
     catch :ignoreMessage do
       update! map data
@@ -57,10 +56,6 @@ class WebsocketDrainer < Drainer
     %i[open message error close].each_with_object({}) do |m, a|
       a[m] = method m
     end
-  end
-
-  def client
-    raise 'not implemented'
   end
 
   def dump_headers(event)
