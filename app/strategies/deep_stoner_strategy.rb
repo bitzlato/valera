@@ -58,10 +58,9 @@ class DeepStonerStrategy < Strategy
     best_price = upstream_markets.find_by_upstream!(:binance).send "#{side}Price"
 
     if best_price.blank?
-      logger.debug("Up upstream data")
+      logger.debug('Up upstream data')
       return nil
     end
-
 
     threshold = settings.base_threshold * rand(100) / 100
     deviation += deviation * threshold / 100

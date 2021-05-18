@@ -8,7 +8,7 @@ class StrategiesController < ApplicationController
   end
 
   def show
-    strategy = Strategy.find params[:id]
+    strategy = Strategy.find! params[:id]
     render locals: { strategy: strategy }
   end
 end

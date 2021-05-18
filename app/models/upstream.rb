@@ -2,16 +2,13 @@
 
 class Upstream
   extend Finders
+  include RedisModel
 
-  attr_reader :id, :credential_client_class
+  attr_reader :credential_client_class
 
-  def initialize(id: , credential_client_class: )
-    @id = id
+  def initialize(id:, credential_client_class:)
     @credential_client_class = credential_client_class
-  end
-
-  def to_s
-    id
+    super id: id
   end
 
   def drainers
@@ -26,7 +23,7 @@ class Upstream
 
   def upstream_markets
     @upstream_markets ||=
-      UpstreamMarkets.
-      new( markets.map { |market| market.upstream_markets.find_by_upstream!(self) })
+      UpstreamMarkets
+      .new(markets.map { |market| market.upstream_markets.find_by_upstream!(self) })
   end
 end

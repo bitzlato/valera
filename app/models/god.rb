@@ -35,24 +35,24 @@ class God
   private
 
   def build_accounts
-      Settings.accounts.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
-        key, config = pair
-        credentials = config.key?('credentials') ? Rails.application.credentials.bots.fetch(config['credentials'].to_sym) : nil
-        upstream = upstreams.fetch config['upstream']
-        client = upstream.credential_client_class.new(**credentials) if upstream.credential_client_class.present?
-        hash[key] = Account.new(
-          id: key,
-          upstream: upstream,
-          client: client
-        )
-      end
+    Settings.accounts.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
+      key, config = pair
+      credentials = Rails.application.credentials.bots.fetch(config['credentials'].to_sym) if config.key?('credentials')
+      upstream = upstreams.fetch config['upstream']
+      client = upstream.credential_client_class.new(**credentials) if upstream.credential_client_class.present?
+      hash[key] = Account.new(
+        id: key,
+        upstream: upstream,
+        client: client
+      )
+    end
   end
 
   def build_drainers
     Settings.drainers.map do |key, config|
       drainer_class = config['class'].constantize
 
-      # TODO Use available for drainers markets only config[:markets]
+      # TODO: Use available for drainers markets only config[:markets]
       Market.all.map do |market|
         drainer_class.new(
           id: key,
@@ -73,7 +73,7 @@ class God
 
   def build_markets
     Settings.markets
-      .each_with_object( ActiveSupport::HashWithIndifferentAccess.new) do |name, a|
+            .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |name, a|
       a[name] = Market.new(*name.split('_'))
     end
   end

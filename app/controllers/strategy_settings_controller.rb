@@ -5,12 +5,10 @@ class StrategySettingsController < ApplicationController
     strategy = Strategy.find params[:id]
 
     respond_to do |format|
-      format.html do
-        if strategy.settings.update_attributes params.require(:strategy_settings).permit!
-          redirect_to(strategy_settings, notice: 'Settings was successfully updated.')
-        else
-          render action: 'edit'
-        end
+      if strategy.settings.update_attributes params.require(:strategy_settings).permit!
+        format.html { redirect_to(strategy_settings, notice: 'Settings was successfully updated.') }
+      else
+        format.html { render action: 'edit' }
       end
       format.json { respond_with_bip(strategy.settings) }
     end

@@ -116,13 +116,13 @@ module Peatio
       def parse_response(response)
         unless response.success?
           raise WrongResponse,
-            "Wrong response status (#{response.status}) with body '#{response.body}' for #{name}"
+                "Wrong response status (#{response.status}) with body '#{response.body}' for #{name}"
         end
         return nil if response.body.empty?
 
         if response['content-type'] != 'application/json'
           raise WrongResponse,
-            "Wrong content type (#{response['content-type']}) for #{name}"
+                "Wrong content type (#{response['content-type']}) for #{name}"
         end
 
         JSON.parse response.body

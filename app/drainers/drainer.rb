@@ -12,7 +12,7 @@ class Drainer
     self::KEYS
   end
 
-  def initialize(id:, market:,  account:)
+  def initialize(id:, market:, account:)
     @id = id
     @market = market
     @account = account

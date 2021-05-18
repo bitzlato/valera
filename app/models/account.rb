@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # You account on upstream
 #
 class Account
@@ -8,7 +10,7 @@ class Account
 
   attribute :balances, Hash
 
-  def initialize(id:, upstream: , client:)
+  def initialize(id:, upstream:, client:)
     super id: id
     @upstream = upstream
     @client = client

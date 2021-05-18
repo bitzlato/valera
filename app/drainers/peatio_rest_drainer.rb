@@ -10,7 +10,7 @@ class PeatioRestDrainer < Drainer
   def attach
     logger.info("Add periotic timer for #{FETCH_PERIOD} sec")
     EM.add_periodic_timer FETCH_PERIOD do # sec
-      logger.debug("Timer executed")
+      logger.debug('Timer executed')
       fetch_and_update_market_depth!
     end
   end

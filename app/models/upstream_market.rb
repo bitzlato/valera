@@ -10,7 +10,7 @@ class UpstreamMarket
   attr_reader :market, :upstream
 
   def self.all
-    Market.all.map(&:upstream_markets).flatten.uniq
+    Market.all.map { |m| m.upstream_markets.to_a }.flatten.uniq
   end
 
   def initialize(market:, upstream:)

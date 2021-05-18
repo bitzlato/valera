@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :strategies, only: %i[index show]
     resources :markets, only: %i[index show]
     resources :strategy_settings
-    resources :upstream_markets
-    resources :upstreams, only: %i[index]
+    resources :upstream_markets, only: %i[index show]
+    resources :upstreams, only: %i[index show]
   end
 end
