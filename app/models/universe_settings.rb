@@ -52,11 +52,15 @@ class UniverseSettings
   end
 
   def stop!(reason)
-    update_attributes! status: UniverseSettings::INACTIVE_STATUS, stop_reason: reason
+    update_attributes! status: INACTIVE_STATUS, stop_reason: reason
   end
 
   def start!
-    update_attributes! status: UniverseSettings::ACTIVE_STATUS, stop_reason: nil
+    update_attributes! status: ACTIVE_STATUS, stop_reason: nil
+  end
+
+  def active?
+    status == ACTIVE_STATUS
   end
 
   private

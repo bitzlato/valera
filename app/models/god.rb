@@ -1,17 +1,18 @@
 # frozen_string_literal: true
 
 class God
-  extend AutoLogger
+  include AutoLogger
   include Singleton
 
   attr_reader :drainers
 
   class << self
-    delegate :universes, :markets, :upstreams, :drainers, to: :instance
+    delegate :universes, :markets, :upstreams, :drainers, :logger, to: :instance
   end
 
   def initialize
     @drainers = Set.new
+    trap_signals!
   end
 
   def universes
@@ -31,6 +32,15 @@ class God
   end
 
   private
+
+  def trap_signals!
+    handler = proc do |signal|
+      puts "Received #{Signal.signame(signal)}"
+      exit
+    end
+
+    %w(INT QUIT TERM).each { |signal| Signal.trap(signal, handler) }
+  end
 
   def build_upstreams
     Settings.upstreams.map do |key, config|

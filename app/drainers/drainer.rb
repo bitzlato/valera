@@ -38,6 +38,7 @@ class Drainer
 
   def update!(data)
     upstream_market.update_attributes! data
+    write_to_influx data
   end
 
   def simple_map(data, mapping)
@@ -46,17 +47,6 @@ class Drainer
     data.each_with_object({}) do |p, a|
       key, value = p
       a[mapping[key]] = value.to_d if mapping.key? key
-    end
-  end
-
-  def bump!(data)
-    return if data.blank?
-
-    write_to_influx data
-    market.universes.each do |universe|
-      universe.bump!(
-        data.transform_keys { |key| [upstream_tag, key].join('_') }
-      )
     end
   end
 

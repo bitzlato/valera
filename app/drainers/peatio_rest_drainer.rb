@@ -6,9 +6,9 @@ class PeatioRestDrainer < Drainer
   KEYS = %i{asksVolume bidsVolume}.freeze
 
   def attach
-    logger.info("add periotic timer #{FETCH_PERIOD}")
+    logger.info("Add periotic timer for #{FETCH_PERIOD} sec")
     EM.add_periodic_timer FETCH_PERIOD do # sec
-      logger.info("periotic timer")
+      # logger.debug("Timer executed")
       fetch_and_update_market_depth!
       # TODO fetch and update balance
     end

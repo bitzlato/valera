@@ -9,8 +9,8 @@ class Universe
   extend UniverseFinders
 
   attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason, :upstream_markets
-
   delegate :description, :settings_class, :state_class, to: :class
+  delegate :active?, to: :settings
 
   def self.description
     raise 'undefined strategy'
@@ -70,12 +70,6 @@ class Universe
   def start!
     logger.info 'Start'
     settings.start!
-    bump!
-  end
-
-  def notify_changes!
-    # TODO compare with current state and bump if need
-    bump!
   end
 
   # Change state

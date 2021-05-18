@@ -7,6 +7,8 @@ SdNotify.ready
 God.instance
 SdNotify.status("God was born!")
 
+God.universes.each &:start!
+
 loop do
   God.universes.each do |universe|
     universe.bump!

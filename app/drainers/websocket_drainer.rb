@@ -11,8 +11,6 @@ class WebsocketDrainer < Drainer
   def open(event)
     SdNotify.status('Drainer open')
     dump_headers event
-    logger.info "Open connection, start universes #{market.universes.map(&:to_s)}"
-    market.universes.each(&:start!)
   end
 
   def error(event)
@@ -26,24 +24,19 @@ class WebsocketDrainer < Drainer
     if event.message == Errno::ECONNRESET
       logger.warn 'Reattach'
       attach
-    elsif Rails.env.development?
-      binding.pry # rubocop:disable Lint/Debugger
     end
   end
 
   def close(event = nil)
     dump_headers event
     logger.warn "Closed connection with code #{event.code}, stop universes #{market.universes.map(&:to_s)}"
-    market.universes.each do |universes|
-      universes.stop! 'due closed connection'
-    end
   end
 
   def message(event)
     SdNotify.status('Drainer message')
     dump_headers event
     data = JSON.parse(event.data)
-    logger.debug data
+    logger.debug data if ENV.true? 'DEBUG_WEBSOCKET_MESSAGE'
 
     catch :ignoreMessage do
       update! map data

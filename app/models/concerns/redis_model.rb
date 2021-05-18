@@ -66,6 +66,7 @@ module RedisModel
   end
 
   def clear!
+    binding.pry
     set_default_attributes!
     validate!
     save!
