@@ -14,15 +14,18 @@ class PeatioBalanceDrainer < Drainer
     end
   end
 
-  private
 
   def update!
-    fetch_and_update_market_depth!
+    fetch_and_update_balances!
   end
 
+  private
+
   def fetch_and_update_balances!
-    balances = peatio_client.account_balances
-    binding.pry
+    balances = account
+      .client
+      .account_balances
+      .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) { |r, a| a[r['currency']]=r['balance'] }
     account.update_attributes! balances: balances
   end
 

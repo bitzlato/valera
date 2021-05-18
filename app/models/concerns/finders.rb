@@ -2,6 +2,10 @@
 
 module Finders
   def all
+    scope.each &:reload
+  end
+
+  def scope
     set = God.instance.send(name.underscore.pluralize)
     set.is_a?(Hash) ? set.values : set
   end
@@ -17,7 +21,7 @@ module Finders
   end
 
   def find_by(attrs)
-    all.find do |record|
+    scope.find do |record|
       attrs.map { |key, value| record.send(key).to_param == value.to_param }.all? true
     end.try &:reload
   end
