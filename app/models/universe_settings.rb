@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UniverseSettings
+class StrategySettings
   include RedisModel
 
   UNSCOPED_ATTRIBUTES = %i[id updated_at status stop_reason enabled].freeze
@@ -27,7 +27,7 @@ class UniverseSettings
   end
 
   def self.model_name
-    ActiveModel::Name.new(UniverseSettings)
+    ActiveModel::Name.new(StrategySettings)
   end
 
   def leveled_attributes_unsuffixed
@@ -66,6 +66,6 @@ class UniverseSettings
   private
 
   def after_save
-    UniverseChannel.update Universe.find id
+    StrategyChannel.update Strategy.find id
   end
 end

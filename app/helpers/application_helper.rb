@@ -7,8 +7,8 @@ module ApplicationHelper
     content_tag :div, '&middot;'.html_safe, class: 'text-muted'
   end
 
-  def a(universe)
-    link_to universe.name, universe_path(universe)
+  def a(strategy)
+    link_to strategy.name, strategy_path(strategy)
   end
 
   def app_title
@@ -21,7 +21,7 @@ module ApplicationHelper
 
   def grafana_iframe_src(resource, panel_id = GRAFANA_DEFAULT_PANEL_ID)
     case resource
-    when Universe
+    when Strategy
       GRAFANA_URL + "&var-market=#{resource.market.id}&var-bot=#{resource.name}&panelId=#{panel_id}"
     when Market
       GRAFANA_URL + "&var-market=#{resource.id}&var-bot=All&panelId=#{panel_id}"

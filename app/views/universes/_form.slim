@@ -1,9 +1,9 @@
 table.table.table-condensed
   thead.thead-light
     tr
-      - universe.settings.scopes.each do |scope|
+      - strategy.settings.scopes.each do |scope|
         th.text-right width='300px' #{scope} settings
   tbody
     tr
-      - universe.settings.scopes.each do |scope|
-        td.text-right= render 'universe_settings_form', universe: universe, scope: scope
+      - strategy.settings.scopes.each do |scope|
+        td.text-right= render 'strategy_settings_form', strategy: strategy, scope: scope

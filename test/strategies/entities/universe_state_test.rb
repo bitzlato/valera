@@ -2,8 +2,8 @@
 
 require 'test_helper'
 
-class UniverseStateTest < ActiveSupport::TestCase
+class StrategyStateTest < ActiveSupport::TestCase
   test 'build new settings' do
-    assert UniverseState.new(id: 1)
+    assert StrategyState.new(id: 1)
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class StoneStrategy < Universe
-  class Settings < UniverseSettings
+class StoneStrategy < Strategy
+  class Settings < StrategySettings
     attribute :ask_place_threshold, BigDecimal, default: 5
     attribute :ask_volume, BigDecimal, default: 0.001
     attribute :bid_place_threshold, BigDecimal, default: -5

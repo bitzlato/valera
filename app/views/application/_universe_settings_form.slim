@@ -1,20 +1,20 @@
-- attributes = universe.settings.class.scope_attributes(scope)
+- attributes = strategy.settings.class.scope_attributes(scope)
 .row
   - attributes.reject { |a| a.to_s.split('_').last.to_i.to_s == a.to_s.split('_').last }.each do |attribute|
     .col-md-3.form-group style='min-width: 160px'
-      .md-2= render 'settings_field', universe: universe, attribute: attribute
+      .md-2= render 'settings_field', strategy: strategy, attribute: attribute
 
-- if universe.settings.levels.positive?
+- if strategy.settings.levels.positive?
   table.table.table-condensed.table-narrow
     thead.thead-light
       tr
         th Level
-        - universe.settings.leveled_attributes_unsuffixed.each do |attribute|
+        - strategy.settings.leveled_attributes_unsuffixed.each do |attribute|
           th= t attribute, default: default_settings_attribute(attribute)
     tbody
-      - universe.settings.levels.times.each do |level|
+      - strategy.settings.levels.times.each do |level|
         tr
           th.text-nowrap width="70px"= level.to_s
-          - universe.settings.leveled_attributes_unsuffixed.each do |attribute|
+          - strategy.settings.leveled_attributes_unsuffixed.each do |attribute|
             td
-              = universe_settings_attribute_input universe,  attribute.to_s+'_'+level.to_s
+              = strategy_settings_attribute_input strategy,  attribute.to_s+'_'+level.to_s

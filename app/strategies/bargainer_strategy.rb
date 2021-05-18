@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class BargainerStrategy < Universe
+class BargainerStrategy < Strategy
   # Настройки стратегии проторговщика
   #
-  class Settings < UniverseSettings
+  class Settings < StrategySettings
     attribute :base_volume, BigDecimal, default: 0.0001
     attribute :base_threshold, BigDecimal, default: 0.01
     attribute :base_max_upstream_threshold, BigDecimal, default: 0.2

@@ -1,30 +1,30 @@
 .container-fluid
-  = link_to t('.back'), universes_path
+  = link_to t('.back'), strategies_path
   .row
     .col-md-4
-      h1= "#{universe.class}##{universe.id}"
-      = render 'universe_enabler', universe: universe
-      = universe_status universe
-      .mb-2.text-small.text-muted= universe.comment
-      div.mb-2= universe.description
+      h1= "#{strategy.class}##{strategy.id}"
+      = render 'strategy_enabler', strategy: strategy
+      = strategy_status strategy
+      .mb-2.text-small.text-muted= strategy.comment
+      div.mb-2= strategy.description
     .col-md-4
-      = render 'form', universe: universe
+      = render 'form', strategy: strategy
     .col-md-4
-      h3= t('.universe_state')
-      div.mb-2 data-cable-broadcast=UniverseChannel.broadcasting_for(universe) data-cable-field='update_date'
+      h3= t('.strategy_state')
+      div.mb-2 data-cable-broadcast=StrategyChannel.broadcasting_for(strategy) data-cable-field='update_date'
         = Time.zone.now
       code.text-small style='max-height: 420px; overflow: scroll; display: block'
-        pre data-cable-broadcast=UniverseChannel.broadcasting_for(universe) data-cable-field='pretty_state' style='columns: 250px'
-          = JSON.pretty_generate universe.state.as_json
-      - universe.upstream_markets.each do |upstream_market|
+        pre data-cable-broadcast=StrategyChannel.broadcasting_for(strategy) data-cable-field='pretty_state' style='columns: 250px'
+          = JSON.pretty_generate strategy.state.as_json
+      - strategy.upstream_markets.each do |upstream_market|
         h3= upstream_market.upstream
         code.text-small style='max-height: 420px; overflow: scroll; display: block'
-          pre data-cable-broadcast=UniverseChannel.broadcasting_for(upstream_market) data-cable-field='pretty_state' style='columns: 250px'
+          pre data-cable-broadcast=StrategyChannel.broadcasting_for(upstream_market) data-cable-field='pretty_state' style='columns: 250px'
             = JSON.pretty_generate upstream_market.as_json
-  -# = render 'universes', universes: [universe]
+  -# = render 'strategies', strategys: [strategy]
 
   h2 Grafana
-  iframe[src=grafana_iframe_src(universe) width="100%" height=500 frameborder=0]
+  iframe[src=grafana_iframe_src(strategy) width="100%" height=500 frameborder=0]
 
   javascript:
-    window.subscribeToUniverse(#{raw universe.id.to_json});
+    window.subscribeToStrategy(#{raw strategy.id.to_json});

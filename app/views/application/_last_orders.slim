@@ -1,4 +1,4 @@
-- created_orders = universe.state.created_orders.select { |order| order['side'] == OrdersUpdater::SIDES_MAP[side] }
+- created_orders = strategy.state.created_orders.select { |order| order['side'] == OrdersUpdater::SIDES_MAP[side] }
 - if created_orders.any?
   table.table.table-condensed
     thead
@@ -11,8 +11,8 @@
         tr
           td
             .text-monospace.text-muted= '#' + order['id'].to_s
-          td= format_money(order['origin_volume'], universe.market.base)
-          td= format_money(order['price'], universe.market.quote)
+          td= format_money(order['origin_volume'], strategy.market.base)
+          td= format_money(order['price'], strategy.market.quote)
 
 - else
   .text-center.mt-2= middot

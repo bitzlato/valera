@@ -8,7 +8,7 @@ defaults: &defaults
     peatio:
       websocket: PeatioWebsocketDrainer
       rest: PeatioRestDrainer
-  universes:
+  strategies:
     deep_stoner:
       class: DeepStonerStrategy
       comment: Глубокий наполнятель стакана (danil@orionet.ru)

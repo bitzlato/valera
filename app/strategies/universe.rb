@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-# Bot universe for specific market
+# Bot strategy for specific market
 # Rename to Strategy
 #
-class Universe
+class Strategy
   include AutoLogger
   # include UpdatePeatioBalance
-  extend UniverseFinders
+  extend StrategyFinders
 
   attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason, :upstream_markets
   delegate :description, :settings_class, :state_class, to: :class
@@ -19,13 +19,13 @@ class Universe
   def self.settings_class
     return [name, 'Settings'].join('::').constantize if constants.include? :Settings
 
-    UniverseSettings
+    StrategySettings
   end
 
   def self.state_class
     return [name, 'State'].join('::').constantize if constants.include? :State
 
-    UniverseState
+    StrategyState
   end
 
   # @param name [String] key of bot from Rails credentials
@@ -78,7 +78,7 @@ class Universe
     reload
     logger.info "Bump with #{changes}"
 
-    if settings.enabled && settings.status == UniverseSettings::ACTIVE_STATUS
+    if settings.enabled && settings.status == StrategySettings::ACTIVE_STATUS
       created_orders, current_orders = updater.update! build_orders
       state.update_attributes! created_orders: created_orders, current_orders: current_orders
     else
@@ -87,7 +87,7 @@ class Universe
       state.update_attributes! created_orders: [], current_orders: []
     end
 
-    UniverseChannel.update self
+    StrategyChannel.update self
   rescue StandardError => e
     report_exception e
     logger.error "#{self} #{e}"

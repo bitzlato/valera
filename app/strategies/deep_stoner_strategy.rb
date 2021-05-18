@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class DeepStonerStrategy < Universe
-  class Settings < UniverseSettings
+class DeepStonerStrategy < Strategy
+  class Settings < StrategySettings
     attribute :base_min_volume, BigDecimal, default: 0.001
     validates :base_min_volume, presence: true, numericality: { greater_than: 0 }
 

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-class UniversesController < ApplicationController
+class StrategiesController < ApplicationController
   def index
-    universes = god.universes
-    universes.each(&:reload)
-    render locals: { universes: universes }
+    strategies = god.strategys
+    strategies.each(&:reload)
+    render locals: { strategies: strategys }
   end
 
   def show
-    universe = Universe.find params[:id]
-    render locals: { universe: universe }
+    strategy = Strategy.find params[:id]
+    render locals: { strategy: strategy }
   end
 end

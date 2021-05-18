@@ -30,11 +30,11 @@ class Market
   end
 
   def notify_changes!
-    universes.each &:notify_changes!
+    strategies.each &:notify_changes!
   end
 
-  def universes
-    God.universes.select { |u| u.market == self }
+  def strategies
+    God.strategies.select { |u| u.market == self }
   end
 
   def ==(other)

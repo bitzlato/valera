@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module UniversesHelper
+module StrategiesHelper
   PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part].freeze
 
-  def universe_settings_attribute_input(universe, attribute)
+  def strategy_settings_attribute_input(strategy, attribute)
     side = attribute.to_s.split('_').first
     currency_method = side == 'bid' ? :quote : :base
     if PERCENTAGE_SUFFIXES.find { |suffix| attribute.to_s.include? suffix }
@@ -13,12 +13,12 @@ module UniversesHelper
     end
     if attribute.to_s.include? '_volume'
       display_with = lambda { |value|
-        format_money value, universe.market.send(currency_method)
+        format_money value, strategy.market.send(currency_method)
       }
     end
     type = attribute.to_s.include?('enabled') ? :checkbox : :input
     collection = %w[Disabled Enabled] if attribute.to_s == 'enabled'
-    best_in_place universe.settings, attribute, as: type, display_with: display_with, collection: collection
+    best_in_place strategy.settings, attribute, as: type, display_with: display_with, collection: collection
   end
 
   STATUS_LABELS = {
@@ -27,14 +27,14 @@ module UniversesHelper
     inactive: 'badge-warning'
   }.freeze
 
-  def universe_status(universe)
-    buffer = content_tag :span, class: "badge #{STATUS_LABELS[universe.settings.status]}" do
-      universe.settings.status.to_s
+  def strategy_status(strategy)
+    buffer = content_tag :span, class: "badge #{STATUS_LABELS[strategy.settings.status]}" do
+      strategy.settings.status.to_s
     end
 
-    if universe.settings.status == UniverseSettings::INACTIVE_STATUS
+    if strategy.settings.status == StrategySettings::INACTIVE_STATUS
       buffer << content_tag(:div,
-                            universe.settings.stop_reason)
+                            strategy.settings.stop_reason)
     end
     buffer.html_safe
   end

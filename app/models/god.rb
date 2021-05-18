@@ -7,15 +7,15 @@ class God
   attr_reader :drainers
 
   class << self
-    delegate :universes, :markets, :upstreams, :drainers, :logger, to: :instance
+    delegate :strategies, :markets, :upstreams, :drainers, :logger, to: :instance
   end
 
   def initialize
     @drainers = Set.new
   end
 
-  def universes
-    @universes ||= build_universes
+  def strategies
+    @strategies ||= build_strategys
   end
 
   def markets
@@ -27,7 +27,7 @@ class God
   end
 
   def reset_settings!
-    universes.each(&:reset_settings!)
+    strategies.each(&:reset_settings!)
   end
 
   private
@@ -44,11 +44,11 @@ class God
     end
   end
 
-  def build_universes
-    universes = []
-    Settings.universes.each_pair do |key, options|
+  def build_strategies
+    strategies = []
+    Settings.strategies.each_pair do |key, options|
       markets.map do |market|
-        universe_class = options['class'].constantize
+        strategy_class = options['class'].constantize
         settings = options.fetch('settings', {})
         settings = settings.fetch('global', {}).merge settings.dig('markets', market.id) || {}
 
@@ -58,10 +58,10 @@ class God
           .fetch(options['credentials'].to_sym)
           .merge(name: key)
         )
-        universes << universe_class.new(name: key, market: market, peatio_client: peatio_client,
+        strategies << strategy_class.new(name: key, market: market, peatio_client: peatio_client,
                                         default_settings: settings, comment: options['comment'])
       end
     end
-    universes
+    strategies
   end
 end

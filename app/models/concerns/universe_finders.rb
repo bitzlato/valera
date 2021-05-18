@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module UniverseFinders
+module StrategyFinders
   def all
-    God.instance.universes
+    God.instance.strategies
   end
 
   def find(id)

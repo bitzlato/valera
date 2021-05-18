@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class OrderBookStrategy < Universe
-  class Settings < UniverseSettings
+class OrderBookStrategy < Strategy
+  class Settings < StrategySettings
     MAX_THRESHOLD = 5
     attribute :base_volume, BigDecimal, default: 0.001
     attribute :base_depth, Integer, default: 5
@@ -17,7 +17,7 @@ class OrderBookStrategy < Universe
                                    numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_THRESHOLD }
   end
 
-  class State < UniverseState
+  class State < StrategyState
     def to_hash
       super.merge avgPrice: avgPrice
     end

@@ -2,7 +2,7 @@ class UpstreamMarketDecorator < ApplicationDecorator
   delegate_all
 
   def self.table_columns
-    super + %i[market upstream universes]
+    super + %i[market upstream strategies]
   end
 
   def market
@@ -14,9 +14,9 @@ class UpstreamMarketDecorator < ApplicationDecorator
     object.open
   end
 
-  def universes
-    object.market.universes.map do |u|
-      h.link_to u.class_and_name, h.universe_path(u)
+  def strategies
+    object.market.strategies.map do |u|
+      h.link_to u.class_and_name, h.strategy_path(u)
     end.join(', ').html_safe
   end
 end
