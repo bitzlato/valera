@@ -2,9 +2,9 @@
 
 class StrategiesController < ApplicationController
   def index
-    strategies = god.strategys
+    strategies = god.strategies
     strategies.each(&:reload)
-    render locals: { strategies: strategys }
+    render locals: { strategies: strategies }
   end
 
   def show

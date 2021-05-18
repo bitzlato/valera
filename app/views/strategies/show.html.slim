@@ -21,7 +21,7 @@
         code.text-small style='max-height: 420px; overflow: scroll; display: block'
           pre data-cable-broadcast=StrategyChannel.broadcasting_for(upstream_market) data-cable-field='pretty_state' style='columns: 250px'
             = JSON.pretty_generate upstream_market.as_json
-  -# = render 'strategies', strategys: [strategy]
+  -# = render 'strategies', strategies: [strategy]
 
   h2 Grafana
   iframe[src=grafana_iframe_src(strategy) width="100%" height=500 frameborder=0]

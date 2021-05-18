@@ -15,7 +15,7 @@ class God
   end
 
   def strategies
-    @strategies ||= build_strategys
+    @strategies ||= build_strategies
   end
 
   def markets
