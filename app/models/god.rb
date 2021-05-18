@@ -4,8 +4,14 @@ class God
   extend AutoLogger
   include Singleton
 
+  attr_reader :drainers
+
   class << self
-    delegate :universes, :markets, :upstreams, to: :instance
+    delegate :universes, :markets, :upstreams, :drainers, to: :instance
+  end
+
+  def initialize
+    @drainers = Set.new
   end
 
   def universes

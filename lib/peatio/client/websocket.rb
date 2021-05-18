@@ -46,7 +46,7 @@ module Peatio
       #   :error   - The Proc called when a stream receives an error (optional)
       #   :close   - The Proc called when a stream is closed (optional)
       def create_stream(url, methods:)
-        Faye::WebSocket::Client.new(url)
+        Faye::WebSocket::Client.new(url, '', ping: 1000)
                                .tap { |ws| attach_methods(ws, methods) }
       end
 

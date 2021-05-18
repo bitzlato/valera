@@ -35,7 +35,9 @@ class OrdersUpdater
   # Cancel all orders when bot stops
   def cancel!
     logger.debug 'Cancel all orders'
-    peatio_client.cancel_orders
+    Async do
+      peatio_client.cancel_orders
+    end
   end
 
   def update_by_side!(side, orders)
@@ -53,13 +55,16 @@ class OrdersUpdater
     end
 
     orders_to_create = filter_orders_to_create(orders, persisted_orders - outdated_orders)
-    return [] if orders_to_create.blank?
+    if orders_to_create.present?
 
-    logger.debug "[#{side}] Create orders #{orders_to_create}"
-    created_orders = create_orders! orders_to_create
-    logger.debug "[#{side}] Created orders #{created_orders}"
+      logger.debug "[#{side}] Create orders #{orders_to_create}"
+      created_orders = create_orders! orders_to_create
+      logger.debug "[#{side}] Created orders #{created_orders}"
 
-    created_orders
+      created_orders
+    else
+      []
+    end
   end
 
   private
@@ -67,16 +72,16 @@ class OrdersUpdater
   def filter_orders_to_create(orders, persisted_orders)
     orders.reject do |order|
       persisted_orders.find do |persisted_order|
-        persisted_order.price == order.price && persisted_order.origin_volume = order.volume
+        persisted_order.price == order.price && persisted_order.origin_volume == order.volume
       end
     end
   end
 
   # TODO Move to drainer
   def fetch_active_orders(side)
-    peatio_client
-      .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
-      .map { |data| build_persisted_order data }
+      peatio_client
+        .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
+        .map { |data| build_persisted_order data }
   end
 
   # "id"=>1085518,
@@ -103,8 +108,10 @@ class OrdersUpdater
   end
 
   def cancel_orders!(orders)
-    orders.each do |order|
-      peatio_client.cancel_order order.id
+    Async do
+      orders.each do |order|
+        peatio_client.cancel_order order.id
+      end
     end
   end
 

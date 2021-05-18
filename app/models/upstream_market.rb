@@ -41,6 +41,6 @@ class UpstreamMarket
   private
 
   def after_save
-    market.notify_changes!
+    # market.notify_changes!
   end
 end

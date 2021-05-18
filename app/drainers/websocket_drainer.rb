@@ -71,6 +71,6 @@ class WebsocketDrainer < Drainer
   end
 
   def dump_headers(event)
-    logger.debug event.target.headers.inspect
+    logger.debug event.target.headers.inspect if ENV.true? 'DUMP_WEBSOCKET_HEADERS'
   end
 end

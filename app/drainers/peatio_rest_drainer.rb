@@ -17,7 +17,9 @@ class PeatioRestDrainer < Drainer
   private
 
   def fetch_and_update_market_depth!
-    update_market_depth! client.market_depth market.peatio_symbol
+    Async do
+      update_market_depth! client.market_depth market.peatio_symbol
+    end
   end
 
   def update_market_depth! data

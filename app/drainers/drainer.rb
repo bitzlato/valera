@@ -31,7 +31,7 @@ class Drainer
   end
 
   def upstream_market
-    market.upstream_markets.find_by_upstream! upstream
+    @upstream_market ||= market.upstream_markets.find_by_upstream! upstream
   end
 
   private

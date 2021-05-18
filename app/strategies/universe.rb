@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 # Bot universe for specific market
+# Rename to Strategy
+#
 class Universe
   include AutoLogger
   # include UpdatePeatioBalance
@@ -86,8 +88,9 @@ class Universe
       created_orders, current_orders = updater.update! build_orders
       state.update_attributes! created_orders: created_orders, current_orders: current_orders
     else
-      logger.info 'Does not update bot orders because bot is disabled or inactive'
-      state.update_attributes! created_orders: []
+      updater.cancel! if state.created_orders.present? || state.current_orders.present?
+      logger.info 'Does not update bot orders because bot is disabled or inactive. Cancel all orders'
+      state.update_attributes! created_orders: [], current_orders: []
     end
 
     UniverseChannel.update self
