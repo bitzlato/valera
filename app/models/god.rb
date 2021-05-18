@@ -12,7 +12,6 @@ class God
 
   def initialize
     @drainers = Set.new
-    trap_signals!
   end
 
   def universes
@@ -32,15 +31,6 @@ class God
   end
 
   private
-
-  def trap_signals!
-    handler = proc do |signal|
-      puts "Received #{Signal.signame(signal)}"
-      exit
-    end
-
-    %w(INT QUIT TERM).each { |signal| Signal.trap(signal, handler) }
-  end
 
   def build_upstreams
     Settings.upstreams.map do |key, config|
