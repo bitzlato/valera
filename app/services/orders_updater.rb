@@ -2,6 +2,7 @@
 
 # Smartly updates private order book for market/account and logs changes.
 #
+# rubocop:disable Metrics/ClassLength
 class OrdersUpdater
   include AutoLogger
 
@@ -77,11 +78,11 @@ class OrdersUpdater
     end
   end
 
-  # TODO Move to drainer
+  # TODO: Move to drainer
   def fetch_active_orders(side)
-      peatio_client
-        .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
-        .map { |data| build_persisted_order data }
+    peatio_client
+      .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
+      .map { |data| build_persisted_order data }
   end
 
   # "id"=>1085518,
@@ -124,8 +125,9 @@ class OrdersUpdater
   def create_orders!(orders)
     orders.map do |order|
       create_order! order
+    rescue Errno::ECONNREFUSED => e
+      logger.error e
     end
-    # Errno::ECONNREFUSED
   end
 
   # @param order <Order>
@@ -155,3 +157,4 @@ class OrdersUpdater
                     )
   end
 end
+# rubocop:enable Metrics/ClassLength

@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 # Periodicaly fetch data from upstream and save it in MarketUpsteamState
 #
 class PeatioRestDrainer < Drainer
   FETCH_PERIOD = 1 # sec
 
-  KEYS = %i{asksVolume bidsVolume}.freeze
+  KEYS = %i[asksVolume bidsVolume].freeze
 
   def attach
     logger.info("Add periotic timer for #{FETCH_PERIOD} sec")
     EM.add_periodic_timer FETCH_PERIOD do # sec
       # logger.debug("Timer executed")
       fetch_and_update_market_depth!
-      # TODO fetch and update balance
+      # TODO: fetch and update balance
     end
   end
 
@@ -22,8 +24,8 @@ class PeatioRestDrainer < Drainer
     end
   end
 
-  def update_market_depth! data
-    # TODO You can save market depth if you want
+  def update_market_depth!(data)
+    # TODO: You can save market depth if you want
     #
     asks = depth_volume data['asks']
     bids = depth_volume data['bids']

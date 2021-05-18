@@ -21,10 +21,10 @@ class WebsocketDrainer < Drainer
     end
     logger.error "Error (#{event.type}) with message #{event.message}"
 
-    if event.message == Errno::ECONNRESET
-      logger.warn 'Reattach'
-      attach
-    end
+    return unless event.message == Errno::ECONNRESET
+
+    logger.warn 'Reattach'
+    attach
   end
 
   def close(event = nil)

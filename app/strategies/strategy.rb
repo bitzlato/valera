@@ -3,12 +3,14 @@
 # Bot strategy for specific market
 # Rename to Strategy
 #
+# rubocop:disable Metrics/ClassLength
+#
 class Strategy
   include AutoLogger
-  # include UpdatePeatioBalance
   extend StrategyFinders
 
   attr_reader :peatio_client, :market, :name, :state, :comment, :logger, :updater, :stop_reason, :upstream_markets
+
   delegate :description, :settings_class, :state_class, to: :class
   delegate :active?, to: :settings
 
@@ -39,7 +41,7 @@ class Strategy
     @comment = comment
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged([self.class, id].join(' '))
     @updater = OrdersUpdater.new(market: market, peatio_client: peatio_client, name: name)
-    # TODO customize used upstreams
+    # TODO: customize used upstreams
     @upstreams = Upstream.all
     @upstream_markets = market.upstream_markets
   end
@@ -51,7 +53,7 @@ class Strategy
   def reload
     settings.reload
     state.reload
-    upstream_markets.each &:reload
+    upstream_markets.each(&:reload)
     self
   end
 
@@ -137,3 +139,4 @@ class Strategy
     raise 'not implemented'
   end
 end
+# rubocop:enable Metrics/ClassLength

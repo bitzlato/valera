@@ -66,7 +66,6 @@ module RedisModel
   end
 
   def clear!
-    binding.pry
     set_default_attributes!
     validate!
     save!
@@ -87,7 +86,7 @@ module RedisModel
   def redis_value
     raise 'ID is not defined' if id.nil?
 
-    @redis_value ||= Redis::Value.new( redis_value_id, marshal: true)
+    @redis_value ||= Redis::Value.new(redis_value_id, marshal: true)
   end
 
   def redis_value_id

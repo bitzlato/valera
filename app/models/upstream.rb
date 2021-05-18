@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Upstream
   include RedisModel
 
@@ -12,7 +14,7 @@ class Upstream
     @drainers = config
   end
 
-  # TODO List only using makets
+  # TODO: List only using makets
   #
   def markets
     @markets ||= Market.all

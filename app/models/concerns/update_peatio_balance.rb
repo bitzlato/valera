@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: Move to drainers
+#
 module UpdatePeatioBalance
   private
 

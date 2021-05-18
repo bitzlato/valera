@@ -30,7 +30,7 @@ class Market
   end
 
   def notify_changes!
-    strategies.each &:notify_changes!
+    strategies.each(&:notify_changes!)
   end
 
   def strategies

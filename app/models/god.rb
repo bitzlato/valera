@@ -52,14 +52,14 @@ class God
         settings = options.fetch('settings', {})
         settings = settings.fetch('global', {}).merge settings.dig('markets', market.id) || {}
 
-        # TODO Use clients pool
+        # TODO: Use clients pool
         peatio_client = PeatioClient.new(
           **Rails.application.credentials.bots
           .fetch(options['credentials'].to_sym)
           .merge(name: key)
         )
         strategies << strategy_class.new(name: key, market: market, peatio_client: peatio_client,
-                                        default_settings: settings, comment: options['comment'])
+                                         default_settings: settings, comment: options['comment'])
       end
     end
     strategies

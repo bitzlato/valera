@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Drainer
   INFLUX_TABLE = 'upstream'
 
   include AutoLogger
-  attr_reader :market, :logger
+  attr_reader :market, :logger, :upstream
 
   def self.upstream_tag
     name.underscore.split('_').first
@@ -13,8 +15,6 @@ class Drainer
   end
 
   delegate :upstream_tag, to: :class
-
-  attr_reader :upstream
 
   def initialize(market)
     @market = market

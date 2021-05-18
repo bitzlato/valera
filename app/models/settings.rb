@@ -17,8 +17,8 @@ end
 class Settings
   def drainer_classes
     @drainer_classes ||= upstreams
-      .values
-      .map { |drainers| drainers.values.map &:constantize }
-      .flatten
+                         .values
+                         .map { |drainers| drainers.values.map(&:constantize) }
+                         .flatten
   end
 end

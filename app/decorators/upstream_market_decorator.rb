@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpstreamMarketDecorator < ApplicationDecorator
   delegate_all
 
