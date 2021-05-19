@@ -44,7 +44,7 @@ class OrdersUpdater
   def update_by_side!(side, orders)
     logger.debug "[#{side}] Update by side #{side} #{orders}"
 
-    persisted_orders = fetch_active_orders(side)
+    persisted_orders = account.active_orders.filter { |o| o.side == side }
     logger.debug "[#{side}] Persisted orders #{persisted_orders}" if persisted_orders.any?
 
     outdated_orders = find_outdated_orders(persisted_orders, orders)
@@ -79,12 +79,6 @@ class OrdersUpdater
   end
 
   # TODO: Move to drainer
-  def fetch_active_orders(side)
-    client
-      .orders(market: market.peatio_symbol, type: SIDES_MAP.fetch(side), state: :wait)
-      .map { |data| build_persisted_order data }
-  end
-
   # "id"=>1085518,
   # "uuid"=>"eefb9c4e-ca2a-464c-b22d-520176c30637",
   # "side"=>"sell",

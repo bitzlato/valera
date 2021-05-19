@@ -7,9 +7,9 @@ class Drainer
   include RedisModel
   extend Finders
 
-  attr_reader :market, :logger, :upstream, :account, :upstream_market, :id
+  attr_reader :market, :logger, :account, :upstream_market, :id
 
-  delegate :client, to: :account
+  delegate :client, :upstream, to: :account
 
   def self.keys
     self::KEYS
@@ -19,7 +19,6 @@ class Drainer
     @id = id
     @market = market
     @account = account
-    @upstream = account.upstream
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(to_s)
     @upstream_market = market.upstream_markets.find_by_upstream! upstream
   end

@@ -66,7 +66,7 @@ class Strategy
     settings.stop! reason
     logger.info "Stop with #{reason}"
     updater.cancel!
-    state.update_attributes!(created_orders: [], current_orders: [])
+    state.update_attributes!(created_orders: [])
   end
 
   def start!
@@ -81,12 +81,11 @@ class Strategy
     logger.info "Bump with #{changes}"
 
     if settings.enabled && settings.status == StrategySettings::ACTIVE_STATUS
-      created_orders, current_orders = updater.update! build_orders
-      state.update_attributes! created_orders: created_orders, current_orders: current_orders
+      state.update_attributes! created_orders: updater.update!(build_orders)
     else
-      updater.cancel! if state.created_orders.present? || state.current_orders.present?
+      updater.cancel! if state.created_orders.present? || account.current_orders.present?
       logger.info 'Does not update bot orders because bot is disabled or inactive. Cancel all orders'
-      state.update_attributes! created_orders: [], current_orders: []
+      state.update_attributes! created_orders: []
     end
 
     StrategyChannel.update self

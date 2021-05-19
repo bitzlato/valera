@@ -9,6 +9,7 @@ class Account
   attr_reader :upstream, :client
 
   attribute :balances, Hash
+  attribute :active_orders, Array[PersistedOrder]
 
   def initialize(id:, upstream:, client:)
     super id: id

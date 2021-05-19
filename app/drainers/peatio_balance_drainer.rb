@@ -14,24 +14,33 @@ class PeatioBalanceDrainer < Drainer
     end
   end
 
-
   def update!
-    fetch_and_update_balances!
+    account.update_attributes!(
+      balances: fetch_balances,
+      active_orders: fetch_active_orders
+    )
   end
 
   private
 
-  def fetch_and_update_balances!
-    balances = account
+  def build_persisted_order(data)
+    PersistedOrder.new(
+      data.symbolize_keys.slice(*PersistedOrder.attribute_set.map(&:name))
+    )
+  end
+
+  def fetch_active_orders
+    # Collect by side
+    client
+      #.orders(market: market.peatio_symbol, type: OrdersUpdater::SIDES_MAP.fetch(side), state: :wait)
+      .orders(market: market.peatio_symbol, state: :wait)
+      .map { |data| build_persisted_order data }
+  end
+
+  def fetch_balances
+    account
       .client
       .account_balances
       .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) { |r, a| a[r['currency']]=r['balance'] }
-    account.update_attributes! balances: balances
-  end
-
-  def fetch_and_update_market_depth!
-    Async do
-      update_market_depth! client.market_depth market.peatio_symbol
-    end
   end
 end
