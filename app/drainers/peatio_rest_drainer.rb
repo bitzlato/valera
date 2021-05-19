@@ -28,7 +28,7 @@ class PeatioRestDrainer < Drainer
       .market_depth(market.peatio_symbol)
       .slice('asks', 'bids')
       .transform_values { |v| depth_volume v }
-      .transform_keys { |k| k+'Volume' }
+      .transform_keys { |k| "#{k}Volume" }
   end
 
   def depth_volume(grouped_orders)

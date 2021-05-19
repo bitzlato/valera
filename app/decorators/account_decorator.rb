@@ -13,6 +13,7 @@ class AccountDecorator < ApplicationDecorator
 
   def client
     return h.middot if object.client.nil?
+
     object.client.class
   end
 end

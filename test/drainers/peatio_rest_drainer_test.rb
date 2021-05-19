@@ -2,18 +2,12 @@
 
 class PeatioRestDrainerTest < ActiveSupport::TestCase
   setup do
-    @drainer = PeatioRestDrainer.new Market.all.first
+    account = Account.new(id: 1, upstream: Upstream.all.first, client: Peatio::Client::REST.new)
+    @drainer = PeatioRestDrainer.new id: 1, market: Market.all.first, account: account
   end
 
-  test 'update_market_depth!' do
-    data = {
-      'timestamp' => 1_621_231_184,
-      'asks' => [['44364.8968', '0.001'], ['44452.3497', '0.001'], ['44548.548', '0.001'], ['44670.9822', '0.001'],
-                 ['44959.577', '0.001']],
-      'bids' => [['42965.6491', '0.001'], ['42904.432', '0.001'], ['42747.0166', '0.001'], ['42633.3278', '0.001'],
-                 ['42423.4406', '0.001']]
-    }
-
-    @drainer.send :update_market_depth!, data
+  test 'fetch_market_depth' do
+    assert_equal @drainer.send(:fetch_market_depth),
+                 { 'asksVolume' => 0.1300904919156e5, 'bidsVolume' => 0.111089629579e5 }
   end
 end

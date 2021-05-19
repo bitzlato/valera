@@ -5,8 +5,8 @@ require 'test_helper'
 class OrdersUpdaterTest < ActiveSupport::TestCase
   setup do
     @market = Market.all.first
-    @client = PeatioClient.new
-    @updater = OrdersUpdater.new(client: @client, market: @market, name: 'test')
+    @account = Account.new(id: 1, upstream: Upstream.all.first, client: Peatio::Client::REST.new)
+    @updater = OrdersUpdater.new(account: @account, market: @market, name: 'test')
   end
   test 'update!' do
     orders = Set[

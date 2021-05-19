@@ -2,7 +2,7 @@
 
 module Finders
   def all
-    scope.each &:reload
+    scope.each(&:reload)
   end
 
   def scope
@@ -12,18 +12,20 @@ module Finders
 
   def find(id)
     raise 'ID must present' if id.blank?
+
     find_by id: id
   end
 
   def find!(id)
     raise 'ID must present' if id.blank?
+
     find_by! id: id
   end
 
   def find_by(attrs)
     scope.find do |record|
       attrs.map { |key, value| record.send(key).to_param == value.to_param }.all? true
-    end.try &:reload
+    end.try(&:reload)
   end
 
   def find_by!(attrs)

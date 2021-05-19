@@ -34,7 +34,7 @@ class PeatioBalanceDrainer < Drainer
   def fetch_active_orders
     # Collect by side
     client
-      #.orders(market: market.peatio_symbol, type: OrdersUpdater::SIDES_MAP.fetch(side), state: :wait)
+      # .orders(market: market.peatio_symbol, type: OrdersUpdater::SIDES_MAP.fetch(side), state: :wait)
       .orders(market: market.peatio_symbol, state: :wait)
       .map { |data| build_persisted_order data }
   end
@@ -43,6 +43,6 @@ class PeatioBalanceDrainer < Drainer
     account
       .client
       .account_balances
-      .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) { |r, a| a[r['currency']]=r['balance'] }
+      .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) { |r, a| a[r['currency']] = r['balance'] }
   end
 end

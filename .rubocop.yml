@@ -13,6 +13,9 @@ AllCops:
     - db/schema.rb
     - Guardfile
 
+Style/ExponentialNotation:
+  Enabled: false
+
 Layout/LineLength:
   Exclude: 
     - 'app/strategies/*'

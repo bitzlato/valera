@@ -12,11 +12,13 @@ class OrdersUpdater
   AVAILABLE_DIVERGENCE = 0.01
   SIDES_MAP = { bid: 'buy', ask: 'sell' }.freeze
 
-  attr_reader :client, :market, :logger, :name
+  attr_reader :account, :market, :logger, :name
 
-  def initialize(client:, market:, name:)
+  delegate :client, to: :account
+
+  def initialize(account:, market:, name:)
     @market = market || raise('No market')
-    @client =  client || raise('Nitneilc peatio client')
+    @account = account || raise('No account')
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger)
                                           .tagged([self.class.name, market, client.name].join(' '))
     @name = name
