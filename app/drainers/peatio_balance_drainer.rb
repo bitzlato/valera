@@ -2,6 +2,7 @@
 
 # Periodicaly fetch data from upstream and save it in MarketUpsteamState
 #
+# TODO Rename to PeatioAccountDrainer
 class PeatioBalanceDrainer < Drainer
   FETCH_PERIOD = 1 # sec
 
@@ -15,6 +16,7 @@ class PeatioBalanceDrainer < Drainer
   end
 
   def update!
+    logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
     account.update_attributes!(
       balances: fetch_balances,
       active_orders: fetch_active_orders

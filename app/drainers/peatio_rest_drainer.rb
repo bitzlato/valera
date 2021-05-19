@@ -10,26 +10,25 @@ class PeatioRestDrainer < Drainer
   def attach
     logger.info("Add periotic timer for #{FETCH_PERIOD} sec")
     EM.add_periodic_timer FETCH_PERIOD do # sec
-      logger.debug('Timer executed')
-      fetch_and_update_market_depth!
+      update!
     end
+  end
+
+  def update!
+    logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
+    super(
+      fetch_market_depth
+    )
   end
 
   private
 
-  def fetch_and_update_market_depth!
-    Async do
-      update_market_depth! client.market_depth market.peatio_symbol
-    end
-  end
-
-  def update_market_depth!(data)
-    # TODO: You can save market depth if you want
-    #
-    asks = depth_volume data['asks']
-    bids = depth_volume data['bids']
-
-    update! asksVolume: asks, bidsVolume: bids
+  def fetch_market_depth
+    client
+      .market_depth(market.peatio_symbol)
+      .slice('asks', 'bids')
+      .transform_values { |v| depth_volume v }
+      .transform_keys { |k| k+'Volume' }
   end
 
   def depth_volume(grouped_orders)
