@@ -15,6 +15,14 @@ class Upstream
     @drainers ||= God.drainers.filter { |d| d.upstream == self }
   end
 
+  def accounts
+    Account.all.filter { |a| a.upstream == self }
+  end
+
+  def active_orders
+    accounts.map(&:active_orders).flatten
+  end
+
   # TODO: List only using makets
   #
   def markets

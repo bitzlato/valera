@@ -4,7 +4,13 @@ class UpstreamDecorator < ApplicationDecorator
   delegate_all
 
   def self.table_columns
-    %i[id markets upstream_markets]
+    %i[id markets accounts upstream_markets]
+  end
+
+  def accounts
+    object.accounts.map do |account|
+      h.link_to account, h.account_path(account)
+    end.join(', ').html_safe
   end
 
   def markets

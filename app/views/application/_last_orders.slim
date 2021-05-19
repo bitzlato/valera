@@ -1,4 +1,4 @@
-- created_orders = strategy.state.created_orders.select { |order| order['side'] == OrdersUpdater::SIDES_MAP[side] }
+- created_orders = strategy.state.created_orders.select { |order| order['side'] == side }
 - if created_orders.any?
   table.table.table-condensed
     thead

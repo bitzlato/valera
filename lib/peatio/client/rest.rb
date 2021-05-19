@@ -10,6 +10,9 @@ module Peatio
       class Error < StandardError; end
       WrongResponse = Class.new Error
 
+      # Map valera sides to clients sides
+      SIDES_MAP = { bid: 'buy', ask: 'sell' }.freeze
+
       attr_reader :name
 
       def initialize(name: nil,
@@ -46,7 +49,9 @@ module Peatio
       # side = [sell, buy] (OrderAsk, OrderBid)
       # volume
       def create_order(order)
-        post '/market/orders', order
+        build_persisted_order(
+          post('/market/orders', order.symbolize_keys.merge(side: SIDES_MAP.fetch(order.side)))
+        )
       end
 
       # optional :market,
@@ -61,7 +66,8 @@ module Peatio
       # optional :time_from,
       # optional :time_to,
       def orders(params = {})
-        get '/market/orders', params
+        get('/market/orders', params)
+          .map { |data| build_persisted_order data }
       end
 
       def cancel_order(order_id)
@@ -126,6 +132,31 @@ module Peatio
         end
 
         JSON.parse response.body
+      end
+
+      # "id"=>1085518,
+      # "uuid"=>"eefb9c4e-ca2a-464c-b22d-520176c30637",
+      # "side"=>"sell",
+      # "ord_type"=>"limit",
+      # "price"=>"50377.1418",
+      # "avg_price"=>"0.0",
+      # "state"=>"pending",
+      # "market"=>"btcusdt",
+      # "market_type"=>"spot",
+      # "created_at"=>"2021-05-13T08:15:30Z",
+      # "updated_at"=>"2021-05-13T08:15:30Z",
+      # "origin_volume"=>"0.0001",
+      # "remaining_volume"=>"0.0001",
+      # "executed_volume"=>"0.0",
+      # "maker_fee"=>"0.0",
+      # "taker_fee"=>"0.0",
+      # "trades_count"=>0
+      def build_persisted_order(data)
+        data = data
+               .symbolize_keys
+               .slice(*PersistedOrder.attribute_set.map(&:name))
+        data[:side] = SIDES_MAP.reverse.fetch data.fetch(:side)
+        PersistedOrder.new data.merge(meta: data)
       end
 
       def logger

@@ -2,7 +2,6 @@
 
 # Smartly updates private order book for market/account and logs changes.
 #
-# rubocop:disable Metrics/ClassLength
 class OrdersUpdater
   include AutoLogger
 
@@ -10,7 +9,6 @@ class OrdersUpdater
 
   # If volume*price of order is changed on less then this percentage the order will not be changed
   AVAILABLE_DIVERGENCE = 0.01
-  SIDES_MAP = { bid: 'buy', ask: 'sell' }.freeze
 
   attr_reader :account, :market, :logger, :name
 
@@ -80,30 +78,6 @@ class OrdersUpdater
     end
   end
 
-  # TODO: Move to drainer
-  # "id"=>1085518,
-  # "uuid"=>"eefb9c4e-ca2a-464c-b22d-520176c30637",
-  # "side"=>"sell",
-  # "ord_type"=>"limit",
-  # "price"=>"50377.1418",
-  # "avg_price"=>"0.0",
-  # "state"=>"pending",
-  # "market"=>"btcusdt",
-  # "market_type"=>"spot",
-  # "created_at"=>"2021-05-13T08:15:30Z",
-  # "updated_at"=>"2021-05-13T08:15:30Z",
-  # "origin_volume"=>"0.0001",
-  # "remaining_volume"=>"0.0001",
-  # "executed_volume"=>"0.0",
-  # "maker_fee"=>"0.0",
-  # "taker_fee"=>"0.0",
-  # "trades_count"=>0
-  def build_persisted_order(data)
-    PersistedOrder.new(
-      data.symbolize_keys.slice(*PersistedOrder.attribute_set.map(&:name))
-    )
-  end
-
   def cancel_orders!(orders)
     Async do
       orders.each do |order|
@@ -128,14 +102,13 @@ class OrdersUpdater
 
   # @param order <Order>
   def create_order!(order)
-    result = client.create_order(
+    created_order = client.create_order(
       market: market.peatio_symbol,
       ord_type: :limit,
       price: order.price,
       volume: order.volume,
-      side: SIDES_MAP.fetch(order.side)
+      side: order.side
     )
-    created_order = build_persisted_order result
     write_to_influx(created_order, level: order.level)
     created_order
   rescue StandardError => e
@@ -144,13 +117,12 @@ class OrdersUpdater
   end
 
   def write_to_influx(order, level: 0)
-    side = SIDES_MAP.invert.fetch(order.side)
     Valera::InfluxDB.client
                     .write_point(
                       INFLUX_TABLE,
-                      values: { "#{side}_volume": order.origin_volume, "#{side}_price": order.price },
+                      values: { "#{order.valera_side}_volume": order.origin_volume,
+                                "#{order.valera_side}_price": order.price },
                       tags: { market: market.id, bot: name, level: level }
                     )
   end
 end
-# rubocop:enable Metrics/ClassLength

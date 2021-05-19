@@ -25,18 +25,11 @@ class PeatioBalanceDrainer < Drainer
 
   private
 
-  def build_persisted_order(data)
-    PersistedOrder.new(
-      data.symbolize_keys.slice(*PersistedOrder.attribute_set.map(&:name))
-    )
-  end
-
   def fetch_active_orders
     # Collect by side
     client
       # .orders(market: market.peatio_symbol, type: OrdersUpdater::SIDES_MAP.fetch(side), state: :wait)
       .orders(market: market.peatio_symbol, state: :wait)
-      .map { |data| build_persisted_order data }
   end
 
   def fetch_balances

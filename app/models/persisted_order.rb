@@ -29,10 +29,11 @@ class PersistedOrder
   attribute :id, Integer
   attribute :meta, Hash
 
-  attribute :side, String
+  attribute :side, String # one of Order::SIDES
   attribute :origin_volume, BigDecimal
   attribute :remaining_volume, BigDecimal
   attribute :price, BigDecimal
+  attribute :market, String
 
   def initialize(attrs)
     super(attrs).freeze
