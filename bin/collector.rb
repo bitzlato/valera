@@ -18,7 +18,7 @@ rescue => err
   if SAFE_ERRORS.include? err
     God.logger.warn "Catch #{err} retry after 1 second"
     sleep 1
-    retry
+    err.skip
   else
     report_exception err
   end
