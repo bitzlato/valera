@@ -20,6 +20,9 @@ class PeatioAccountDrainer < Drainer
       balances: fetch_balances,
       active_orders: fetch_active_orders
     )
+  rescue Peatio::Client::REST::Error => err
+    logger.error err
+    report_exception err
   end
 
   private
