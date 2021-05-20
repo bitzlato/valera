@@ -46,12 +46,12 @@ Run first bot only
 * [x] Cancel all orders on stop
 * [x] Cancel all orders if socket is closed
 * [x] Manage trade values
-* [ ] Контроллировать чтобы заявки от тейкера/мейкера не пересекались
-* [ ] Согласованности по заявками между ботами.
 * [ ] Automaticalyy cancel all orders if there are no fresh data from more then
   N msecs
-* [ ] Throw order book through websocket in peatio
-* [ ] Move active orders fetching to separate drainer
+* [x] Throw order book through websocket in peatio
+* [x] Move active orders fetching to separate drainer
+* [ ] Check maker/collector oneness
+
 # Deployment
 
 ## Setup

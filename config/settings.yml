@@ -35,12 +35,12 @@ defaults: &defaults
       upstream: peatio
 
     peatio_balance_orionet:
-      class: PeatioBalanceDrainer
+      class: PeatioAccountDrainer
       upstream: peatio
       account: peatio_danil_orionet_ru
 
     peatio_balance_onelec:
-      class: PeatioBalanceDrainer
+      class: PeatioAccountDrainer
       upstream: peatio
       account: peatio_danil_onelec_ru
 

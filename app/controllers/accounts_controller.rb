@@ -5,4 +5,8 @@ class AccountsController < ApplicationController
     accounts = Account.all
     render locals: { accounts: accounts }
   end
+
+  def show
+    redirect_to accounts_path
+  end
 end

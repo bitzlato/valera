@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-# Periodicaly fetch data from upstream and save it in MarketUpsteamState
+# Periodicaly fetch data from upstream and save it to account
 #
-# TODO Rename to PeatioAccountDrainer
-class PeatioBalanceDrainer < Drainer
+class PeatioAccountDrainer < Drainer
   FETCH_PERIOD = 1 # sec
 
   KEYS = %i[balance].freeze

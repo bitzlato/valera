@@ -37,9 +37,7 @@ class OrdersUpdater
   # Cancel all orders when bot stops
   def cancel!
     logger.debug 'Cancel all orders'
-    Thread.new do
-      client.cancel_orders
-    end
+    client.cancel_orders
   end
 
   def update_by_side!(side, orders)
@@ -81,9 +79,7 @@ class OrdersUpdater
 
   def cancel_orders!(orders)
     orders.each do |order|
-      Thread.new do
-        client.cancel_order order.id
-      end
+      client.cancel_order order.id
     end
   end
 
