@@ -53,6 +53,7 @@ class Strategy
   def reload
     settings.reload
     state.reload
+    account.reload
     upstream_markets.each(&:reload)
     self
   end
@@ -83,9 +84,13 @@ class Strategy
     if settings.enabled && settings.status == StrategySettings::ACTIVE_STATUS
       state.update_attributes! created_orders: updater.update!(build_orders)
     else
-      updater.cancel! if state.created_orders.present? || account.current_orders.present?
-      logger.info 'Does not update bot orders because bot is disabled or inactive. Cancel all orders'
-      state.update_attributes! created_orders: []
+      if state.created_orders.present? || account.active_orders.present?
+        updater.cancel!
+        logger.info 'Does not update bot orders because bot is disabled or inactive. Cancel all orders'
+        state.update_attributes! created_orders: []
+      else
+        logger.info "Strategy is disabled"
+      end
     end
 
     StrategyChannel.update self

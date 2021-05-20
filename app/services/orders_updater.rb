@@ -6,6 +6,7 @@ class OrdersUpdater
   include AutoLogger
 
   INFLUX_TABLE = 'processor'
+  THREADS = 8
 
   # If volume*price of order is changed on less then this percentage the order will not be changed
   AVAILABLE_DIVERGENCE = 0.01
@@ -36,7 +37,7 @@ class OrdersUpdater
   # Cancel all orders when bot stops
   def cancel!
     logger.debug 'Cancel all orders'
-    Async do
+    Thread.new do
       client.cancel_orders
     end
   end
@@ -44,7 +45,7 @@ class OrdersUpdater
   def update_by_side!(side, orders)
     logger.debug "[#{side}] Update by side #{side} #{orders}"
 
-    persisted_orders = account.active_orders.filter { |o| o.side == side }
+    persisted_orders = account.active_orders.filter { |o| o.side.to_sym == side.to_sym }
     logger.debug "[#{side}] Persisted orders #{persisted_orders}" if persisted_orders.any?
 
     outdated_orders = find_outdated_orders(persisted_orders, orders)
@@ -79,8 +80,8 @@ class OrdersUpdater
   end
 
   def cancel_orders!(orders)
-    Async do
-      orders.each do |order|
+    orders.each do |order|
+      Thread.new do
         client.cancel_order order.id
       end
     end
@@ -93,10 +94,11 @@ class OrdersUpdater
   end
 
   def create_orders!(orders)
-    orders.map do |order|
+    Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
-    rescue Errno::ECONNREFUSED => e
+    rescue Errno::ECONNREFUSED, Peatio::Client::REST::Error => e
       logger.error e
+      []
     end
   end
 
@@ -120,8 +122,8 @@ class OrdersUpdater
     Valera::InfluxDB.client
                     .write_point(
                       INFLUX_TABLE,
-                      values: { "#{order.valera_side}_volume": order.origin_volume,
-                                "#{order.valera_side}_price": order.price },
+                      values: { "#{order.side}_volume": order.origin_volume,
+                                "#{order.side}_price": order.price },
                       tags: { market: market.id, bot: name, level: level }
                     )
   end

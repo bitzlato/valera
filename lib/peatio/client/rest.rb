@@ -50,7 +50,7 @@ module Peatio
       # volume
       def create_order(order)
         build_persisted_order(
-          post('/market/orders', order.symbolize_keys.merge(side: SIDES_MAP.fetch(order.side)))
+          post('/market/orders', order.symbolize_keys.merge(side: SIDES_MAP.fetch(order.fetch(:side))))
         )
       end
 
@@ -155,7 +155,7 @@ module Peatio
         data = data
                .symbolize_keys
                .slice(*PersistedOrder.attribute_set.map(&:name))
-        data[:side] = SIDES_MAP.reverse.fetch data.fetch(:side)
+        data[:side] = SIDES_MAP.invert.fetch data.fetch(:side)
         PersistedOrder.new data.merge(meta: data)
       end
 

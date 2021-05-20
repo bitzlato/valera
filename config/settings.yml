@@ -9,10 +9,10 @@ defaults: &defaults
       credential_client: Peatio::Client::REST
 
   accounts:
-    peatio_danil_orionet_ru:
+    peatio_danil_onelec_ru:
       upstream: peatio
       credentials: danil_onelec_ru
-    peatio_danil_onelec_ru:
+    peatio_danil_orionet_ru:
       upstream: peatio
       credentials: danil_orionet_ru
     binance:
