@@ -11,6 +11,7 @@ SAFE_ERRORS = [ Faraday::ConnectionFailed, Peatio::Client::REST::Error ]
 loop do
   God.polling_collectors.each do |collector|
     collector.update!
+    sleep Settings.polling_sleep
   end
 rescue StandardError => err
   if SAFE_ERRORS.include? err

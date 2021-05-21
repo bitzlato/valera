@@ -22,19 +22,24 @@ module StrategiesHelper
   end
 
   STATUS_LABELS = {
-    init: 'badge-info',
-    active: 'badge-success',
-    inactive: 'badge-warning'
+    true => 'badge-success',
+    false => 'badge-warning',
+    idle:  'badge-info',
   }.freeze
 
   def strategy_status(strategy)
-    buffer = content_tag :span, class: "badge #{STATUS_LABELS[strategy.settings.status]}" do
-      strategy.settings.status.to_s
+    state = strategy.state.is_active
+    title = strategy.state.is_active? ? 'active' : 'inactive'
+    if state && !strategy.settings.enabled?
+      state = :idle
+      title = 'idle'
     end
+    buffer = content_tag :span, title, class: "badge #{STATUS_LABELS[state]}"
 
-    if strategy.settings.status == StrategySettings::INACTIVE_STATUS
+    unless strategy.state.is_active
       buffer << content_tag(:div,
-                            strategy.settings.stop_reason)
+                            strategy.state.inactivation_reason.presence || 'No inactivation reason',
+                            class: 'mt-2 alert alert-warning')
     end
     buffer.html_safe
   end

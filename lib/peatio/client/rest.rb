@@ -9,6 +9,7 @@ module Peatio
     class REST
       class Error < StandardError; end
       WrongResponse = Class.new Error
+      Failure = Class.new Error
 
       # Map valera sides to clients sides
       SIDES_MAP = { bid: 'buy', ask: 'sell' }.freeze
@@ -102,7 +103,7 @@ module Peatio
       def connection
         nonce = (Time.now.to_f * 1000).to_i.to_s
         Faraday.new url: endpoint do |c|
-          # c.adapter Faraday.default_adapter
+          c.adapter Faraday.default_adapter
           # c.adapter :async_http
           c.headers = {
             'Content-Type' => 'application/json',
@@ -121,12 +122,13 @@ module Peatio
 
       def parse_response(response)
         unless response.success?
-          raise WrongResponse,
-                "Wrong response status (#{response.status}) with body '#{response.body}' for #{name}"
+          raise Failure,
+                "Failed response status (#{response.status}) with body '#{response.body}' for #{name}"
         end
         return nil if response.body.empty?
 
         if response['content-type'] != 'application/json'
+          binding.pry
           raise WrongResponse,
                 "Wrong content type (#{response['content-type']}) for #{name}"
         end

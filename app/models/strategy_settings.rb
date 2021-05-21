@@ -3,19 +3,13 @@
 class StrategySettings
   include RedisModel
 
-  UNSCOPED_ATTRIBUTES = %i[id updated_at status stop_reason enabled].freeze
-
-  INACTIVE_STATUS = :inactive
-  ACTIVE_STATUS = :active
-  INIT_STATUS = :init
-  STATUSES = [INACTIVE_STATUS, ACTIVE_STATUS, INIT_STATUS].freeze
+  UNSCOPED_ATTRIBUTES = %i[id updated_at enabled].freeze
 
   # Manualy enable/disable
   attribute :enabled, Boolean, default: false
-  attribute :status, Symbol, default: INIT_STATUS
-  attribute :stop_reason, String
 
-  validates :status, presence: true, inclusion: { in: STATUSES }
+  # Latency to update. Required to not update too often (seconds)
+  attribute :latency, BigDecimal, default: 0.3
 
   def self.attributes_for_level(level)
     level = level.to_s
@@ -49,18 +43,6 @@ class StrategySettings
       .map { |i| i.to_s.split('_').first }
       .uniq
       .map(&:to_sym)
-  end
-
-  def stop!(reason)
-    update_attributes! status: INACTIVE_STATUS, stop_reason: reason
-  end
-
-  def start!
-    update_attributes! status: ACTIVE_STATUS, stop_reason: nil
-  end
-
-  def active?
-    status == ACTIVE_STATUS
   end
 
   private

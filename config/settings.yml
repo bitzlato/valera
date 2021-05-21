@@ -3,6 +3,9 @@ defaults: &defaults
   # markets_ ["BTC_USDT", "BTC_MCR", "ETH_BTC", "ETH_USDT", "ETH_MCR", "USDT_MCR"]
   markets: ["BTC_USDT"]
 
+  polling_sleep: 0.1
+  maker_sleep: 0.1
+
   upstreams: 
     binance: {}
     peatio:
@@ -57,6 +60,8 @@ defaults: &defaults
 
 development:
   <<: *defaults
+  polling_sleep: 1
+  maker_sleep: 1
 staging:
   <<: *defaults
 production:

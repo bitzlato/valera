@@ -79,7 +79,6 @@ class DeepStonerStrategy < Strategy
   end
 
   def user_orders_volume(side)
-    binding.pry
     @user_orders_volumes = {
       ask: target_upstream.user_orders_volume(market: market, side: :ask),
       bid: target_upstream.user_orders_volume(market: market, side: :bid)

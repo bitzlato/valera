@@ -31,7 +31,7 @@ class OrdersUpdater
     logger.info "Update with #{orders.to_a.join(',')}"
     Order::SIDES.map do |side|
       update_by_side!(side, orders.filter { |o| o.side == side })
-    end.flatten
+    end.flatten.compact
   end
 
   # Cancel all orders when bot stops

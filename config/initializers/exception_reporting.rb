@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-$debug_on_exception = Rails.env.development?
+$debug_on_exception = ENV.true? 'DEBUG_ON_EXCEPTION'
 
 def catch_and_report_exception(options = {})
   yield

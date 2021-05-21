@@ -11,13 +11,18 @@ God.strategies.each &:start!
 
 loop do
   God.strategies.each do |strategy|
-    strategy.bump!
+    strategy.perform
+    sleep Settings.maker_sleep
   end
-rescue => err
-  binding.pry
+rescue Interrupt => exception
+  God.logger.info exception
   God.strategies.each do |strategy|
-    strategy.stop! err.message
+    strategy.stop! exception.message.presence || exception.inspect
   end
+  raise exception
+rescue err
+  God.logger.error err
+  err.skip
 end
 
 SdNotify.stopping

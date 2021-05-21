@@ -9,10 +9,12 @@ class Strategy
   include AutoLogger
   extend Finders
 
-  attr_reader :account, :market, :name, :state, :comment, :logger, :updater, :stop_reason, :upstream_markets
+  UPDATE_PERIOD_SEC = Rails.env.production? ? 0.3 : 1
+
+  attr_reader :account, :market, :name, :state, :comment, :logger, :updater, :upstream_markets
 
   delegate :description, :settings_class, :state_class, to: :class
-  delegate :active?, to: :settings
+  delegate :is_active, to: :settings
 
   def self.description
     raise 'undefined strategy'
@@ -64,33 +66,36 @@ class Strategy
   alias to_s title
 
   def stop!(reason = 'No reason')
-    settings.stop! reason
+    state.stop! reason
     logger.info "Stop with #{reason}"
     updater.cancel!
-    state.update_attributes!(created_orders: [])
+    state.update_attributes! created_orders: []
   end
 
   def start!
     logger.info 'Start'
-    settings.start!
+    state.start!
+  end
+
+  def perform
+    reload
+    bump! if state.updated_at.nil? || Time.zone.now - state.updated_at > settings.latency
   end
 
   # Change state
   # @param changes [Hash]
   def bump!(changes = {})
-    reload
-    logger.info "Bump with #{changes}"
+    logger.debug "Bump with #{changes}"
 
-    if settings.enabled && settings.status == StrategySettings::ACTIVE_STATUS
+    if settings.enabled && state.is_active?
       state.update_attributes! created_orders: updater.update!(build_orders)
+    elsif state.created_orders.present? || account.active_orders.present?
+      logger.info 'Does not update bot orders because bot is disabled or inactive. Cancel all orders'
+      updater.cancel!
+      state.update_attributes! created_orders: []
     else
-      if state.created_orders.present? || account.active_orders.present?
-        updater.cancel!
-        logger.info 'Does not update bot orders because bot is disabled or inactive. Cancel all orders'
-        state.update_attributes! created_orders: []
-      else
-        logger.info "Strategy is disabled"
-      end
+      logger.debug "Strategy is disabled. Do nothing"
+      state.touch!
     end
 
     StrategyChannel.update self
