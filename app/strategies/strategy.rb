@@ -80,7 +80,7 @@ class Strategy
 
   def perform
     reload
-    bump! if state.updated_at.nil? || Time.zone.now - state.updated_at > settings.latency
+    bump! if state.updated_at.nil? || Time.zone.now - state.updated_at > settings.base_latency
   end
 
   # Change state

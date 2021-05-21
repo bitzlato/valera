@@ -20,7 +20,8 @@ rescue Interrupt => exception
     strategy.stop! exception.message.presence || exception.inspect
   end
   raise exception
-rescue err
+rescue StandardError => err
+  report_exception err
   God.logger.error err
   err.skip
 end

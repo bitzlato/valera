@@ -41,6 +41,7 @@ class DeepStonerStrategy < Strategy
     Set.new(
       %i[ask bid].map do |side|
         @user_orders_volumes = nil
+        @best_price = upstream_markets.find_by_upstream!(:binance).send "#{side}Price"
         settings.levels.times.map do |level|
           volume = calculate_volume(side, level)
           if volume.zero?
@@ -55,21 +56,21 @@ class DeepStonerStrategy < Strategy
   end
 
   def calculate_price(side, level)
-    deviation = settings.send "base_best_price_deviation_#{level}"
-    best_price = upstream_markets.find_by_upstream!(:binance).send "#{side}Price"
+    source_deviation = settings.send "base_best_price_deviation_#{level}"
 
-    if best_price.blank?
+    if @best_price.blank?
       logger.debug('Up upstream data')
       return nil
     end
 
     threshold = settings.base_threshold * rand(100) / 100
-    deviation += deviation * threshold / 100
+
+    deviation = source_deviation + source_deviation * threshold / 100
     deviation = -deviation if side == :bid
 
-    price = best_price + best_price * deviation / 100
+    price = @best_price + @best_price * deviation / 100
 
-    logger.debug("Calculated price for #{side} level #{level} threshold=#{threshold}% deviation=#{deviation}%, best_price=#{best_price} price=#{price}")
+    logger.debug("Calculated price for #{side} level #{level} threshold=#{threshold}% source_deviation=#{source_deviation} deviation=#{deviation}%, best_price=#{@best_price} price=#{price}")
 
     price
   end

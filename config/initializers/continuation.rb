@@ -7,7 +7,7 @@ class Exception
   attr_accessor :continuation
 
   def skip
-    continuation.call
+    continuation.try :call
   end
 end
 
