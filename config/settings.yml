@@ -62,4 +62,20 @@ staging:
 production:
   <<: *defaults
 test:
-  <<: *defaults
+  root_prefix: /valera
+  markets: ["BTC_USDT"]
+
+  upstreams: 
+    binance: {}
+    peatio: {}
+
+  accounts:
+    peatio1:
+      upstream: peatio
+    peatio2:
+      upstream: peatio
+    binance:
+      upstream: binance
+
+  drainers: []
+  strategies: []

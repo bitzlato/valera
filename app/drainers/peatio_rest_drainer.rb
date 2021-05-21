@@ -1,24 +1,21 @@
 # frozen_string_literal: true
 
-# Periodicaly fetch data from upstream and save it in MarketUpsteamState
+# TODO: Rename to PatioMarketDrainer
 #
-class PeatioRestDrainer < Drainer
+class PeatioRestDrainer < MarketDrainer
   FETCH_PERIOD = 1 # sec
 
   KEYS = %i[asksVolume bidsVolume].freeze
 
-  def attach
-    logger.info("Add periotic timer for #{FETCH_PERIOD} sec")
-    EM.add_periodic_timer FETCH_PERIOD do # sec
-      update!
-    end
-  end
+  def self.type; POLLING_TYPE; end
 
   def update!
     logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
     super(
       fetch_market_depth
     )
+  rescue Peatio::Client::REST::Error => err
+    logger.error err
   end
 
   private

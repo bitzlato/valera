@@ -13,6 +13,11 @@ loop do
   God.strategies.each do |strategy|
     strategy.bump!
   end
+rescue => err
+  binding.pry
+  God.strategies.each do |strategy|
+    strategy.stop! err.message
+  end
 end
 
 SdNotify.stopping

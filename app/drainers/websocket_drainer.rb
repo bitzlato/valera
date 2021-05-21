@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-class WebsocketDrainer < Drainer
+class WebsocketDrainer < MarketDrainer
+
+  def self.type; WEBSOCKET_TYPE; end
+
   # Attach to web sockets
   def attach
     logger.info "Attach streams #{streams}"

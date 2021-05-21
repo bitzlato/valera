@@ -94,6 +94,6 @@ module RedisModel
   end
 
   def redis_value_id
-    [VERSION, self.class.name, id].join(':')
+    [VERSION, Rails.env, self.class.name, id].join(':')
   end
 end

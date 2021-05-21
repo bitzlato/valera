@@ -94,6 +94,8 @@ class Strategy
     end
 
     StrategyChannel.update self
+  rescue Peatio::Client::REST => e
+    logger.error "#{self} #{e}"
   rescue StandardError => e
     report_exception e
     logger.error "#{self} #{e}"

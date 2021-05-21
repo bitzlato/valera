@@ -103,7 +103,7 @@ module Peatio
         nonce = (Time.now.to_f * 1000).to_i.to_s
         Faraday.new url: endpoint do |c|
           # c.adapter Faraday.default_adapter
-          c.adapter :async_http
+          # c.adapter :async_http
           c.headers = {
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
@@ -151,12 +151,13 @@ module Peatio
       # "maker_fee"=>"0.0",
       # "taker_fee"=>"0.0",
       # "trades_count"=>0
-      def build_persisted_order(data)
-        data = data
+      def build_persisted_order(raw)
+        data = raw
                .symbolize_keys
                .slice(*PersistedOrder.attribute_set.map(&:name))
         data[:side] = SIDES_MAP.invert.fetch data.fetch(:side)
-        PersistedOrder.new data.merge(meta: data)
+        data[:market_id] = Market.find_by!(peatio_symbol: raw.fetch('market')).id
+        PersistedOrder.new data.merge(raw: raw)
       end
 
       def logger

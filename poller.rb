@@ -3,18 +3,16 @@
 APP_PATH = File.expand_path('./config/application', __dir__)
 require_relative './config/environment'
 
-SdNotify.ready
 God.instance
-SdNotify.status("God was born!")
+SdNotify.ready
 
-SAFE_ERRORS = [ Faraday::ConnectionFailed ]
+SAFE_ERRORS = [ Faraday::ConnectionFailed, Peatio::Client::REST::Error ]
 
-EM.run do
-  God.drainers.each do |drainer|
-    God.logger.info "Attach #{drainer}"
-    drainer.attach
+loop do
+  God.polling_collectors.each do |collector|
+    collector.update!
   end
-rescue => err
+rescue StandardError => err
   if SAFE_ERRORS.include? err
     God.logger.warn "Catch #{err} retry after 1 second"
     sleep 1

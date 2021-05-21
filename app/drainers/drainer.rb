@@ -1,26 +1,30 @@
-# frozen_string_literal: true
-
 class Drainer
   INFLUX_TABLE = 'upstream'
+
+  WEBSOCKET_TYPE = :websocket
+  POLLING_TYPE = :polling
+
 
   include AutoLogger
   include RedisModel
   extend Finders
 
-  attr_reader :market, :logger, :account, :upstream_market, :id
+  attr_reader :logger, :account, :id
 
   delegate :client, :upstream, to: :account
 
-  def self.keys
-    self::KEYS
-  end
-
-  def initialize(id:, market:, account:)
+  def initialize(id:, account:)
     @id = id
-    @market = market
     @account = account
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(to_s)
-    @upstream_market = market.upstream_markets.find_by_upstream! upstream
+  end
+
+  def self.type
+    raise :undefined
+  end
+
+  def self.keys
+    self::KEYS
   end
 
   def self.model_name
@@ -29,15 +33,6 @@ class Drainer
 
   def attach
     raise 'not implemented'
-  end
-
-  private
-
-  def update!(data)
-    logger.debug data if ENV.true? 'DEBUG_DRAINER_UPDATE'
-    upstream_market.update_attributes! data
-    touch!
-    write_to_influx data
   end
 
   def simple_map(data, mapping)
@@ -49,9 +44,4 @@ class Drainer
     end
   end
 
-  def write_to_influx(data)
-    Valera::InfluxDB.client
-                    .write_point(INFLUX_TABLE, values: data, tags: { market: market.id,
-                                                                     upstream: upstream.id })
-  end
 end

@@ -5,7 +5,15 @@ class God
   include Singleton
 
   class << self
-    delegate :drainer_classes, :strategies, :markets, :upstreams, :drainers, :logger, :accounts, to: :instance
+    def method_missing(method, *args)
+      return instance.send(method, *args) if instance.respond_to? method
+      super
+    end
+  end
+
+  def initialize
+    SdNotify.status("God was born!")
+    logger.info("God was born!")
   end
 
   def accounts
@@ -26,6 +34,14 @@ class God
 
   def drainers
     @drainers ||= build_drainers.freeze
+  end
+
+  def websocket_collectors
+    drainers.filter { |d| d.class.type == Drainer::WEBSOCKET_TYPE }
+  end
+
+  def polling_collectors
+    drainers.filter { |d| d.class.type == Drainer::POLLING_TYPE }
   end
 
   def reset_settings!
@@ -52,11 +68,18 @@ class God
     Settings.drainers.map do |key, config|
       drainer_class = config['class'].constantize
 
-      # TODO: Use available for drainers markets only config[:markets]
-      Market.all.map do |market|
+      if drainer_class.ancestors.include? MarketDrainer
+        # TODO: Use available for drainers markets only config[:markets]
+        Market.all.map do |market|
+          drainer_class.new(
+            id: key,
+            market: market,
+            account: Account.find(config['account'])
+          )
+        end
+      else
         drainer_class.new(
           id: key,
-          market: market,
           account: Account.find(config['account'])
         )
       end

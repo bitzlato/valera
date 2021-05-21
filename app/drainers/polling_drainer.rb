@@ -1,0 +1,2 @@
+class PollingDrainer < Drainer
+end

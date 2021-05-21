@@ -12,7 +12,6 @@ class OrdersUpdaterTest < ActiveSupport::TestCase
     orders = Set[
       Order.new(side: :ask, volume: 2, price: 1)
     ]
-    @updater.update! orders
-    assert true
+    assert @updater.update! orders
   end
 end

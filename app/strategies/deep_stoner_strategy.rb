@@ -40,6 +40,7 @@ class DeepStonerStrategy < Strategy
   def build_orders
     Set.new(
       %i[ask bid].map do |side|
+        @user_orders_volumes = nil
         settings.levels.times.map do |level|
           volume = calculate_volume(side, level)
           if volume.zero?
@@ -73,15 +74,28 @@ class DeepStonerStrategy < Strategy
     price
   end
 
-  def calculate_volume(_side, level)
-    volume = settings.base_min_volume
+  def target_upstream
+    @target_upstream = Upstream.find :peatio
+  end
+
+  def user_orders_volume(side)
+    binding.pry
+    @user_orders_volumes = {
+      ask: target_upstream.user_orders_volume(market: market, side: :ask),
+      bid: target_upstream.user_orders_volume(market: market, side: :bid)
+    } if @user_orders_volumes.nil?
+
+    @user_orders_volumes.fetch(side)
+  end
+
+  def calculate_volume(side, level)
     liquidity_part = settings.send "base_liquidity_part_#{level}"
 
     return 0 if liquidity_part.zero?
 
-    # TODO: calculate volume from users_liquidity
-    return volume if volume < settings.base_max_volume
-
-    settings.base_max_volume
+    [
+      [user_orders_volume(side) * liquidity_part / 100, settings.base_min_volume].max,
+      settings.base_max_volume
+    ].min
   end
 end

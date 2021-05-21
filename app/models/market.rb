@@ -17,6 +17,14 @@ class Market
     )
   end
 
+  def active_orders
+    Account
+      .all
+      .active_orders
+      .filter { |o| o.market == market }
+      .flatten
+  end
+
   def reload
     self
   end

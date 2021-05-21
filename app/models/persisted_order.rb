@@ -27,13 +27,13 @@ class PersistedOrder
   include Virtus.model
 
   attribute :id, Integer
-  attribute :meta, Hash
+  attribute :raw, Hash
 
-  attribute :side, String # one of Order::SIDES
+  attribute :side, String # One of Order::SIDES
   attribute :origin_volume, BigDecimal
   attribute :remaining_volume, BigDecimal
   attribute :price, BigDecimal
-  attribute :market, String
+  attribute :market_id, String # Our market_id
 
   def initialize(attrs)
     super(attrs).freeze
@@ -41,6 +41,10 @@ class PersistedOrder
 
   def inspect
     to_s
+  end
+
+  def market
+    @market ||= Market.find market_id
   end
 
   def to_s
