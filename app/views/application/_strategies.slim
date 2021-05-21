@@ -1,4 +1,4 @@
-table.table.table-condensed.table-bordered2.table-narrow style='border-right: 1px solid #eee; border-left: 1px solid #eee'
+table.table.table-condensed.table-narrow style='border-right: 1px solid #eee; border-left: 1px solid #eee'
   thead.thead-dark
     tr
       th width='320px' Strategy
@@ -6,7 +6,8 @@ table.table.table-condensed.table-bordered2.table-narrow style='border-right: 1p
       th.text-center Settings
       th.text-right Side
       th.text-right Binance ask/bid
-      th.text-center Latest orders
+      th.text-center Last created orders
+      th.text-center Active orders
 
   tbody
     - strategies.each do |strategy|
@@ -18,7 +19,7 @@ table.table.table-condensed.table-bordered2.table-narrow style='border-right: 1p
           .text-small.text-muted= strategy.comment
           = strategy_status strategy
           .text-small.text-muted.mt-2= t strategy.settings.updated_at, format: :default
-          = strategy.account
+          = account_link strategy.account
         td rowspan=2
           = link_to strategy.market, market_path(strategy.market.id)
 
@@ -29,11 +30,15 @@ table.table.table-condensed.table-bordered2.table-narrow style='border-right: 1p
         td.text-right
           -# TODO = format_money strategy.state.binance_askPrice, strategy.market.quote
         td.text-right style='padding: 0; border-left: 1px solid #eee'
-          = render 'last_orders', strategy: strategy, side: :ask
+          = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side == 'ask' }, side: :ask, strategy: strategy
+        td.text-right style='padding: 0; border-left: 1px solid #eee'
+          = render 'persisted_orders', orders: strategy.active_orders.filter { |o| o.side == 'ask' }, side: :ask, strategy: strategy
 
       tr
         td.text-right BID
         td.text-right
           -# TODO = format_money strategy.state.binance_bidPrice, strategy.market.quote
         td.text-right style='padding: 0; border-left: 1px solid #eee'
-          = render 'last_orders', strategy: strategy, side: :bid
+          = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side == 'bid' }, side: :bid, strategy: strategy
+        td.text-right style='padding: 0; border-left: 1px solid #eee'
+          = render 'persisted_orders', orders: strategy.active_orders.filter { |o| o.side == 'bid' }, side: :bid, strategy: strategy

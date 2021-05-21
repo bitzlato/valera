@@ -7,7 +7,9 @@
       = strategy_status strategy
       .mb-2.text-small.text-muted= strategy.comment
       div.mb-2= strategy.description
-      div= "Account: #{strategy.account}"
+      = account_link strategy.account
+      hr
+      = render 'orders_table', strategy: strategy
     .col-md-4
       = render 'form', strategy: strategy
     .col-md-4

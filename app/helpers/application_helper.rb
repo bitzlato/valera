@@ -7,6 +7,10 @@ module ApplicationHelper
     content_tag :div, '&middot;'.html_safe, class: 'text-muted'
   end
 
+  def account_link(account)
+    link_to '@' + account.to_s, account_path(account)
+  end
+
   def a(strategy)
     link_to strategy.name, strategy_path(strategy)
   end

@@ -1,0 +1,17 @@
+- if orders.any?
+  table.table.table-condensed.table-striped.table-sm
+    thead.thead-light
+      tr
+        th.text-small ID
+        th.text-small Volume
+        th.text-small Price
+    tbody
+      - orders.sort_by(&:id).each do |order|
+        tr
+          td
+            .text-small.text-monospace.text-muted= '#' + order['id'].to_s
+          td.text-small= format_money(order['origin_volume'], strategy.market.base)
+          td.text-small= format_money(order['price'], strategy.market.quote)
+
+- else
+  .text-center.mt-2= middot
