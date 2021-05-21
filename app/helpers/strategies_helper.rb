@@ -15,6 +15,8 @@ module StrategiesHelper
       display_with = lambda { |value|
         format_money value, strategy.market.send(currency_method)
       }
+    elsif attribute.to_s.include? 'latency'
+      display_with = lambda { |value| value.to_s + ' sec' }
     end
     type = attribute.to_s.include?('enabled') ? :checkbox : :input
     collection = %w[Disabled Enabled] if attribute.to_s == 'enabled'

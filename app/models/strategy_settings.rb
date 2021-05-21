@@ -9,7 +9,7 @@ class StrategySettings
   attribute :enabled, Boolean, default: false
 
   # Latency to update. Required to not update too often (seconds)
-  attribute :latency, BigDecimal, default: 0.3
+  attribute :base_latency, BigDecimal, default: 0.3
 
   def self.attributes_for_level(level)
     level = level.to_s

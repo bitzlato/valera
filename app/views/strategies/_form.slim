@@ -6,4 +6,5 @@ table.table.table-condensed
   tbody
     tr
       - strategy.settings.scopes.each do |scope|
-        td.text-right= render 'strategy_settings_form', strategy: strategy, scope: scope
+        td.text-right
+          = render 'strategy_settings_form', strategy: strategy, scope: scope
