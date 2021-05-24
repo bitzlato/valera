@@ -8,7 +8,7 @@ module ApplicationHelper
   end
 
   def account_link(account)
-    link_to '@' + account.to_s, account_path(account)
+    link_to "@#{account}", account_path(account)
   end
 
   def a(strategy)

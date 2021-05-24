@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class God
   include AutoLogger
   include Singleton
@@ -7,13 +8,18 @@ class God
   class << self
     def method_missing(method, *args)
       return instance.send(method, *args) if instance.respond_to? method
+
       super
+    end
+
+    def respond_to_missing?(method)
+      instance.respond_to?(method) || super(method)
     end
   end
 
   def initialize
-    SdNotify.status("God was born!")
-    logger.info("God was born!")
+    SdNotify.status('God was born!')
+    logger.info('God was born!')
   end
 
   def accounts
@@ -55,7 +61,9 @@ class God
       key, config = pair
       credentials = Rails.application.credentials.bots.fetch(config['credentials'].to_sym) if config.key?('credentials')
       upstream = upstreams.fetch config['upstream']
-      client = upstream.credential_client_class.new(**credentials.merge(name: config['credentials'].to_sym)) if upstream.credential_client_class.present?
+      if upstream.credential_client_class.present?
+        client = upstream.credential_client_class.new(**credentials.merge(name: config['credentials'].to_sym))
+      end
       hash[key] = Account.new(
         id: key,
         upstream: upstream,
@@ -121,3 +129,4 @@ class God
     strategies
   end
 end
+# rubocop:enable Metrics/ClassLength

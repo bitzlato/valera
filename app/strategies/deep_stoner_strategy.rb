@@ -80,10 +80,12 @@ class DeepStonerStrategy < Strategy
   end
 
   def user_orders_volume(side)
-    @user_orders_volumes = {
-      ask: target_upstream.user_orders_volume(market: market, side: :ask),
-      bid: target_upstream.user_orders_volume(market: market, side: :bid)
-    } if @user_orders_volumes.nil?
+    if @user_orders_volumes.nil?
+      @user_orders_volumes = {
+        ask: target_upstream.user_orders_volume(market: market, side: :ask),
+        bid: target_upstream.user_orders_volume(market: market, side: :bid)
+      }
+    end
 
     @user_orders_volumes.fetch(side)
   end

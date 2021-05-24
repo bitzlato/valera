@@ -16,7 +16,7 @@ module StrategiesHelper
         format_money value, strategy.market.send(currency_method)
       }
     elsif attribute.to_s.include? 'latency'
-      display_with = lambda { |value| value.to_s + ' sec' }
+      display_with = ->(value) { "#{value} sec" }
     end
     type = attribute.to_s.include?('enabled') ? :checkbox : :input
     collection = %w[Disabled Enabled] if attribute.to_s == 'enabled'
@@ -26,7 +26,7 @@ module StrategiesHelper
   STATUS_LABELS = {
     true => 'badge-success',
     false => 'badge-warning',
-    idle:  'badge-info',
+    idle: 'badge-info'
   }.freeze
 
   def strategy_status(strategy)

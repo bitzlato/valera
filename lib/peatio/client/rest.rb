@@ -128,7 +128,6 @@ module Peatio
         return nil if response.body.empty?
 
         if response['content-type'] != 'application/json'
-          binding.pry
           raise WrongResponse,
                 "Wrong content type (#{response['content-type']}) for #{name}"
         end

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class WebsocketDrainer < MarketDrainer
-
-  def self.type; WEBSOCKET_TYPE; end
+  def self.type
+    WEBSOCKET_TYPE
+  end
 
   # Attach to web sockets
   def attach

@@ -23,10 +23,10 @@ class Upstream
     accounts.map(&:active_orders).flatten
   end
 
-  def user_orders_volume(market:, side: )
+  def user_orders_volume(market:, side:)
     active_orders
       .filter { |o| o.market == market && o.side == side }
-      .sum &:remaining_volume
+      .sum(&:remaining_volume)
   end
 
   # TODO: List only using makets

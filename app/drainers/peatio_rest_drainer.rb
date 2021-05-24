@@ -7,15 +7,17 @@ class PeatioRestDrainer < MarketDrainer
 
   KEYS = %i[asksVolume bidsVolume].freeze
 
-  def self.type; POLLING_TYPE; end
+  def self.type
+    POLLING_TYPE
+  end
 
   def update!
     logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
     super(
       fetch_market_depth
     )
-  rescue Peatio::Client::REST::Error => err
-    logger.error err
+  rescue Peatio::Client::REST::Error => e
+    logger.error e
   end
 
   private

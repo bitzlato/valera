@@ -20,8 +20,7 @@ class DeepStonerStrategyTest < ActiveSupport::TestCase
   end
 
   test 'user_orders_volume' do
-    binding.pry
-    askVolume = @strategy.send :user_orders_volume, :ask
-    assert_equal 1, askVolume
+    ask_volume = @strategy.send :user_orders_volume, :ask
+    assert_equal 1, ask_volume
   end
 end

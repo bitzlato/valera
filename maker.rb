@@ -1,29 +1,30 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+
 APP_PATH = File.expand_path('./config/application', __dir__)
 require_relative './config/environment'
 
 SdNotify.ready
 God.instance
-SdNotify.status("God was born!")
+SdNotify.status('God was born!')
 
-God.strategies.each &:start!
+God.strategies.each(&:start!)
 
 loop do
   God.strategies.each do |strategy|
     strategy.perform
     sleep Settings.maker_sleep
   end
-rescue Interrupt => exception
-  God.logger.info exception
+rescue Interrupt => e
+  God.logger.info e
   God.strategies.each do |strategy|
-    strategy.stop! exception.message.presence || exception.inspect
+    strategy.stop! e.message.presence || e.inspect
   end
-  raise exception
-rescue StandardError => err
-  report_exception err
-  God.logger.error err
-  err.skip
+  raise e
+rescue StandardError => e
+  report_exception e
+  God.logger.error e
+  e.skip
 end
 
 SdNotify.stopping

@@ -1,9 +1,8 @@
-class Drainer
-  INFLUX_TABLE = 'upstream'
+# frozen_string_literal: true
 
+class Drainer
   WEBSOCKET_TYPE = :websocket
   POLLING_TYPE = :polling
-
 
   include AutoLogger
   include RedisModel
@@ -43,5 +42,4 @@ class Drainer
       a[mapping[key]] = value.to_d if mapping.key? key
     end
   end
-
 end

@@ -2,9 +2,12 @@ defaults: &defaults
   root_prefix: /valera
   # markets_ ["BTC_USDT", "BTC_MCR", "ETH_BTC", "ETH_USDT", "ETH_MCR", "USDT_MCR"]
   markets: ["BTC_USDT"]
-
   polling_sleep: 0.1
   maker_sleep: 0.1
+
+  influx:
+    collectors: 'upstream'
+    orders_updater: 'processor'
 
   upstreams: 
     binance: {}

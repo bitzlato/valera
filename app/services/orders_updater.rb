@@ -5,7 +5,6 @@
 class OrdersUpdater
   include AutoLogger
 
-  INFLUX_TABLE = 'processor'
   THREADS = 8
 
   # If volume*price of order is changed on less then this percentage the order will not be changed
@@ -117,7 +116,7 @@ class OrdersUpdater
   def write_to_influx(order, level: 0)
     Valera::InfluxDB.client
                     .write_point(
-                      INFLUX_TABLE,
+                      Settings.influx.orders_updater,
                       values: { "#{order.side}_volume": order.origin_volume,
                                 "#{order.side}_price": order.price },
                       tags: { market: market.id, bot: name, level: level }

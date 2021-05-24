@@ -95,7 +95,7 @@ class Strategy
       updater.cancel!
       state.update_attributes! created_orders: []
     else
-      logger.debug "Strategy is disabled. Do nothing"
+      logger.debug 'Strategy is disabled. Do nothing'
       state.touch!
     end
 
