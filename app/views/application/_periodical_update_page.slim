@@ -1,0 +1,33 @@
+javascript:
+  if(!window.reloadTimer) {
+    var SECONDS = 3;
+    window.reloadTimer=setTimeout(function(){
+      console.log("Reload!");
+      window.reloadTimer=undefined;
+        Turbolinks.visit(location.toString(),{action: "advance"});
+    }, SECONDS * 1000);
+    document.addEventListener("turbolinks:visit",function() {clearTimeout(window.reloadTimer);window.reloadTimer=undefined;});
+  }
+
+  window.lastFocusedId = null;
+
+  document.addEventListener("turbolinks:request-start", function () {
+    const element = document.querySelector(
+      ":focus"
+    );
+
+    if (element) {
+      window.lastFocusedId = element.id;
+    }
+  });
+
+  document.addEventListener("turbolinks:load", function () {
+    if (!window.lastFocusedId) return;
+
+    const element = document.getElementById(window.lastFocusedId);
+    window.lastFocusedId = null;
+
+    if (!element) return;
+
+    element.focus();
+  });
