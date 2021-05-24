@@ -5,7 +5,8 @@ ru:
     base_max_volume: Максимальный объём ордера
     base_day_limit: Дневной лимит (объём сделок)
     base_threshold: Случайные отклонения от целевой цены
-    base_best_price_deviation: Отклонение от цены
+    base_best_price_deviation_from: Отклонение от цены (от)
+    base_best_price_deviation_to: Отклонение от цены (до)
     base_liquidity_part: Часть ликвидности
     base_volume: Объём заявки
     base_max_upstream_threshold: Максимальное допустимое отклонение от целевой цены

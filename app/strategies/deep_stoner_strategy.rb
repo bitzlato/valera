@@ -8,16 +8,12 @@ class DeepStonerStrategy < Strategy
     attribute :base_max_volume, BigDecimal, default: 0.002
     validates :base_max_volume, presence: true, numericality: { greater_than: 0 }
 
-    #attribute :base_day_limit, BigDecimal, default: 0.1
-    #validates :base_day_limit, presence: true, numericality: { greater_than: 0 }
-
-    attribute :base_threshold, Float, default: 5
-    validates :base_threshold, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
-
     LEVELS = 5
     LEVELS.times.each do |i|
-      attribute "base_best_price_deviation_#{i}", Float, default: 10
-      validates "base_best_price_deviation_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+      attribute "base_best_price_deviation_from_#{i}", Float, default: 10
+      validates "base_best_price_deviation_from_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+      attribute "base_best_price_deviation_to_#{i}", Float, default: 10
+      validates "base_best_price_deviation_to_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
       attribute "base_liquidity_part_#{i}", Float, default: 10
       validates "base_liquidity_part_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
     end
@@ -56,21 +52,22 @@ class DeepStonerStrategy < Strategy
   end
 
   def calculate_price(side, level)
-    source_deviation = settings.send "base_best_price_deviation_#{level}"
-
     if @best_price.blank?
       logger.debug('Up upstream data')
       return nil
     end
 
-    threshold = settings.base_threshold * rand(100) / 100
+    deviation_from, deviation_to = [
+      settings.send("base_best_price_deviation_from_#{level}"),
+      settings.send("base_best_price_deviation_to_#{level}")
+    ].sort
 
-    deviation = source_deviation + source_deviation * threshold / 100
+    deviation = rand(deviation_from..deviation_to)
     deviation = -deviation if side == :bid
 
     price = @best_price + @best_price * deviation / 100
 
-    logger.debug("Calculated price for #{side} level #{level} threshold=#{threshold}% source_deviation=#{source_deviation} deviation=#{deviation}%, best_price=#{@best_price} price=#{price}")
+    logger.debug("Calculated price for #{side} level #{level} deviation=#{deviation}% deviation_from=#{deviation_from} deviation_to=#{deviation_to}%, best_price=#{@best_price} price=#{price}")
 
     price
   end
@@ -88,8 +85,8 @@ class DeepStonerStrategy < Strategy
   def user_orders_volume(side)
     if @user_orders_volumes.nil?
       @user_orders_volumes = {
-        ask: target_upstream_market.usersAsksVolume,
-        bid: target_upstream_market.usersBidsVolume,
+        ask: target_upstream_market.usersAsksVolume.to_d,
+        bid: target_upstream_market.usersBidsVolume.to_d,
       }
     end
 

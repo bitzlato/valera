@@ -51,8 +51,9 @@ Run first bot only
 * [x] Throw order book through websocket in peatio
 * [x] Move active orders fetching to separate drainer
 * [ ] Check maker/collector oneness
-* [ ] Вместо base_threshold два отклонения от цены
+* [x] Вместо base_threshold два отклонения от цены
 * [ ] Максимальный объём торговли в сутки для проторговщика
+* [ ] Не делать и не отменять заявки если они в пределах допустимого
 
 # Deployment
 
