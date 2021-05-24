@@ -1,0 +1,98 @@
+ru:
+  number:
+    currency:
+      format:
+        delimiter: " "
+        separator: ","
+  date:
+    order: [day, month, year]
+    day_names: [Воскресенье, Понедельник, Вторник, Среда, Четверг, Пятница, Суббота]
+    incline_month_names: [~, января, февраля, марта, апреля, мая, июня, июля, августа, сентября, октября, ноября, декабря]
+    # Названия дней недели -- контекстные и отдельностоящие
+    common_day_names: [воскресенье, понедельник, вторник, среда, четверг, пятница, суббота]
+    standalone_day_names: [Воскресенье, Понедельник, Вторник, Среда, Четверг, Пятница, Суббота]
+    common_abbr_day_names: [Вс, Пн, Вт, Ср, Чт, Пт, Сб]
+    standalone_abbr_day_names: [вс, пн, вт, ср, чт, пт, сб]
+    # Названия месяцев -- сокращенные и полные, плюс отдельностоящие.
+    # Не забудьте nil в начале массиве (~)
+    #
+    #
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    common_month_names: [~, января, февраля, марта, апреля, мая, июня, июля, августа, сентября, октября, ноября, декабря]
+    standalone_month_names: [~, Январь, Февраль, Март, Апрель, Май, Июнь, Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь]
+    common_abbr_month_names: [~, янв., февр., марта, апр., мая, июня, июля, авг., сент., окт., нояб., дек.]
+    standalone_abbr_month_names: [~, янв., февр., март, апр., май, июнь, июль, авг., сент., окт., нояб., дек.]
+    formats:
+      short_human: '%e %B'
+      short_human_with_wday: '%e %B (%a)'
+      week_name: '%A'
+      human: '%e %B %Y'
+      input: '%e/%m/%Y'
+      default: '%e %B %Y'
+
+    # Порядок компонентов даты для хелперов
+    #
+    #
+    # Used in date_select and datime_select.
+    order:
+      - :day
+      - :month
+      - :year
+
+
+
+  enumeration: [~, Первый, Второй, Третий, Четвертый, Пятый, Шестой, Седьмой, Восьмой, Девятый, Десятый]
+  time:
+    formats:
+      time: "%H:%M"
+      default: "%e %B %Y %H:%M"
+      today: 'today at %H:%M'
+      this_year: '%e %B at %H:%M'
+      yesterday: 'yesterday at %H:%M'
+      csv: '%Y-%m-%d %H:%M:%S'
+      file: '%Y-%m-%d_%H:%M:%S'
+      human: '%e %B %Y в %H:%M'
+      rss_pub_date: "%a, %d %b %Y %H:%M:%S %z"
+      short: "%e %B %Y %H:%M"
+      short_human: '%e %B'
+      input: '%e/%m/%Y'
+  form_objects:
+    errors:
+      messages:
+        invalid_range: Дата окончания периода должна быть больше даты начала
+        intersection: Период пересекается с другим
+  source:
+    status_waiting: Ожидание
+    status_importing: Импортирование
+    status_empty: Отсутствует
+    status_error: Ошибка
+    status_queue: В очереди на запуск
+  property:
+    type_numeric: Число
+    type_string: Строка
+    type_range: Интервал
+    type_dimensions: Размеры
+  product:
+    operations:
+      equal: Совпадает
+      greater_than: Больше
+      lower_than: Меньше
+  views:
+    pagination:
+      first: "&laquo; Первая"
+      last: "Последняя &raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "..."
+    errors:
+      title: Что-то пошло не так
+      text: "Эта страница не может быть показана — возможно, из-за неактуальной ссылки или опечатки. <a href='%{link}'>Вернитесь на главную страницу</a> и попробуйте найти нужную страницу снова."
+    filters:
+      title: Фильтры
+      apply: Применить фильтры
+    error_infos:
+      '404': 'ОЙ! Данной страницы не существует.'
+      '500': 'Что-то пошло не так, попробуйте снова'
+  errors:
+    messages:
+      extension_white_list_error: "Вы не можете загружать %{extension} файлы, разрешенный форматы: %{allowed_types}"

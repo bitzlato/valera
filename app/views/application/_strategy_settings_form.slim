@@ -10,7 +10,7 @@
       tr
         th Level
         - strategy.settings.leveled_attributes_unsuffixed.each do |attribute|
-          th.text-small= t attribute, default: default_settings_attribute(attribute)
+          th.text-small= settings_attribute_title attribute
     tbody
       - strategy.settings.levels.times.each do |level|
         tr

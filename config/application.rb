@@ -14,6 +14,7 @@ module Exbot
 
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
+    config.i18n.default_locale = :ru
 
     config.generators do |g|
       g.template_engine :slim

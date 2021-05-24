@@ -1,0 +1,11 @@
+ru:
+  settings_attributes:
+    base_latency: Периодичность обновления ордеров
+    base_min_volume: Минимальный объём ордера
+    base_max_volume: Максимальный объём ордера
+    base_day_limit: Дневной лимит (объём сделок)
+    base_threshold: Случайные отклонения от целевой цены
+    base_best_price_deviation: Отклонение от цены
+    base_liquidity_part: Часть ликвидности
+    base_volume: Объём заявки
+    base_max_upstream_threshold: Максимальное допустимое отклонение от целевой цены

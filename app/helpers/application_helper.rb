@@ -50,4 +50,10 @@ module ApplicationHelper
       "#{value}%"
     end
   end
+
+  def settings_attribute_title(attribute)
+    content_tag :span, title: attribute do
+      t attribute, default: default_settings_attribute(attribute), scope: :settings_attributes
+    end
+  end
 end

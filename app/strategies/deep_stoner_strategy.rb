@@ -8,8 +8,8 @@ class DeepStonerStrategy < Strategy
     attribute :base_max_volume, BigDecimal, default: 0.002
     validates :base_max_volume, presence: true, numericality: { greater_than: 0 }
 
-    attribute :base_day_limit, BigDecimal, default: 0.1
-    validates :base_day_limit, presence: true, numericality: { greater_than: 0 }
+    #attribute :base_day_limit, BigDecimal, default: 0.1
+    #validates :base_day_limit, presence: true, numericality: { greater_than: 0 }
 
     attribute :base_threshold, Float, default: 5
     validates :base_threshold, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }

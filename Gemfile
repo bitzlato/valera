@@ -38,6 +38,8 @@ gem 'env-tweaks', '~> 1.0.0'
 # Alternative: https://github.com/soveran/ohm
 gem 'redis-objects'
 
+gem 'rails-i18n'
+
 gem 'safe_yaml', '~> 1.0.5', require: 'safe_yaml/load'
 gem 'semver2'
 gem 'settingslogic'

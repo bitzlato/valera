@@ -51,6 +51,8 @@ Run first bot only
 * [x] Throw order book through websocket in peatio
 * [x] Move active orders fetching to separate drainer
 * [ ] Check maker/collector oneness
+* [ ] Вместо base_threshold два отклонения от цены
+* [ ] Максимальный объём торговли в сутки для проторговщика
 
 # Deployment
 
@@ -72,3 +74,4 @@ Run first bot only
 ## Regular deploy
 
 > bundle exec cap $STAGE deploy
+
