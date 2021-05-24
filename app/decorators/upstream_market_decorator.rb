@@ -4,7 +4,19 @@ class UpstreamMarketDecorator < ApplicationDecorator
   delegate_all
 
   def self.table_columns
-    %i[market upstream strategies] + super
+    %i[market upstream strategies active_orders_count my_asks_orders_volume my_bids_orders_volume] + super
+  end
+
+  def active_orders_count
+    active_orders.count
+  end
+
+  def my_asks_orders_volume
+    my_orders_volume(:ask)
+  end
+
+  def my_bids_orders_volume
+    my_orders_volume(:bid)
   end
 
   def market

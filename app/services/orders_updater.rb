@@ -29,7 +29,7 @@ class OrdersUpdater
 
     logger.info "Update with #{orders.to_a.join(',')}"
     Order::SIDES.map do |side|
-      update_by_side!(side, orders.filter { |o| o.side == side })
+      update_by_side!(side, orders.filter { |o| o.side.to_s == side.to_s })
     end.flatten.compact
   end
 
@@ -42,7 +42,7 @@ class OrdersUpdater
   def update_by_side!(side, orders)
     logger.debug "[#{side}] Update by side #{side} #{orders}"
 
-    persisted_orders = account.active_orders.filter { |o| o.side.to_sym == side.to_sym }
+    persisted_orders = account.active_orders.filter { |o| o.side? side }
     logger.debug "[#{side}] Persisted orders #{persisted_orders}" if persisted_orders.any?
 
     outdated_orders = find_outdated_orders(persisted_orders, orders)

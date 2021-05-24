@@ -30,7 +30,7 @@ class Upstream
 
   def user_orders_volume(market:, side:)
     active_orders
-      .filter { |o| o.market == market && o.side == side }
+      .filter { |o| o.market == market && o.side?(side) }
       .sum(&:remaining_volume)
   end
 
