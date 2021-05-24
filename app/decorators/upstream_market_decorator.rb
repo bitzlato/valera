@@ -4,7 +4,7 @@ class UpstreamMarketDecorator < ApplicationDecorator
   delegate_all
 
   def self.table_columns
-    super + %i[market upstream strategies]
+    %i[market upstream strategies] + super
   end
 
   def market

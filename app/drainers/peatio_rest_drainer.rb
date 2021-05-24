@@ -14,8 +14,9 @@ class PeatioRestDrainer < MarketDrainer
   def update!
     logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
     super(
-      fetch_market_depth
+      fetch_market_depth # updates askVolume and bidVolume fields
     )
+    write_to_influx upstream_market.attributes.slice(:usersAsksVolume, :usersBidsVolume)
   rescue Peatio::Client::REST::Error => e
     logger.error e
   end
@@ -31,6 +32,7 @@ class PeatioRestDrainer < MarketDrainer
   end
 
   def depth_volume(grouped_orders)
-    grouped_orders.inject(0.0) { |sum, row| sum + row.first.to_d * row.second.to_d }
+    grouped_orders
+      .inject(0.0) { |sum, row| sum + row.first.to_d * row.second.to_d }
   end
 end

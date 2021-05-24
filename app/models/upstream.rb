@@ -6,6 +6,11 @@ class Upstream
 
   attr_reader :credential_client_class
 
+  Market.all.each do |market|
+    attribute "bid_orders_volume_#{market.id}", BigDecimal
+    attribute "ask_orders_volume_#{market.id}", BigDecimal
+  end
+
   def initialize(id:, credential_client_class:)
     @credential_client_class = credential_client_class
     super id: id

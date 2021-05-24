@@ -13,14 +13,15 @@ loop do
   God.polling_collectors.each do |collector|
     collector.update!
     sleep Settings.polling_sleep
-  end
-rescue StandardError => e
-  if SAFE_ERRORS.include? e
-    God.logger.warn "Catch #{e} retry after 1 second"
-    sleep 1
-    e.skip
-  else
-    report_exception e
+  rescue StandardError => e
+    God.logger.error e
+    if SAFE_ERRORS.include? e
+      God.logger.warn "Catch #{e} retry after 1 second"
+      sleep 1
+      e.skip
+    else
+      report_exception e
+    end
   end
 end
 SdNotify.stopping

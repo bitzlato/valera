@@ -12,4 +12,5 @@ if ENV.true? 'COLLAPSE_AUTO_LOGGER'
       .new(logger)
       .tagged(tag)
   }
+  Rails.logger = logger
 end

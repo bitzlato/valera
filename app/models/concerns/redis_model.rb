@@ -48,6 +48,7 @@ module RedisModel
   def save!
     validate!
     self.updated_at = Time.zone.now
+    before_save
     redis_value.value = attributes.except(:id)
     after_save
     self
@@ -86,6 +87,8 @@ module RedisModel
   end
 
   def after_save; end
+
+  def before_save; end
 
   def redis_value
     raise 'ID is not defined' if id.nil?
