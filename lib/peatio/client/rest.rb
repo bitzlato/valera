@@ -71,6 +71,10 @@ module Peatio
           .map { |data| build_persisted_order data }
       end
 
+      def trades(params = {})
+        get('/market/trades', params)
+      end
+
       def cancel_order(order_id)
         post "/market/orders/#{order_id}/cancel"
       end
@@ -132,7 +136,9 @@ module Peatio
                 "Wrong content type (#{response['content-type']}) for #{name}"
         end
 
-        JSON.parse response.body
+        results = JSON.parse response.body
+        # attach headers, like 'per', 'per-page'
+        results
       end
 
       # "id"=>1085518,

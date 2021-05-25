@@ -13,9 +13,7 @@ class PeatioRestDrainer < MarketDrainer
 
   def update!
     logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
-    super(
-      fetch_market_depth # updates asksVolume and bidsVolume fields
-    )
+    super( fetch_market_depth)
     write_to_influx upstream_market.attributes.slice(:usersAsksVolume, :usersBidsVolume)
   rescue Peatio::Client::REST::Error => e
     logger.error e
@@ -23,6 +21,7 @@ class PeatioRestDrainer < MarketDrainer
 
   private
 
+  # Returns asksVolume and bidsVolume fields
   def fetch_market_depth
     response = client
       .market_depth(market.peatio_symbol)

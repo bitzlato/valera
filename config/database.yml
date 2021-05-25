@@ -16,7 +16,8 @@
 #
 default: &default
   adapter: sqlite3
-  database: ':memory:'
+  database: ./db/database.sqlite3
+  # ':memory:'
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling

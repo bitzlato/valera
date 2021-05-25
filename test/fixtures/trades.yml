@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  market_id: MyString
+  upstream_id: MyString
+  trade_id: 1
+  side: MyString
+  taker_type: MyString
+  traded_at: 2021-05-25 08:27:59
+  total: 9.99
+  amount: 9.99
+  price: 9.99
+  account_id: MyString
+
+two:
+  market_id: MyString
+  upstream_id: MyString
+  trade_id: 1
+  side: MyString
+  taker_type: MyString
+  traded_at: 2021-05-25 08:27:59
+  total: 9.99
+  amount: 9.99
+  price: 9.99
+  account_id: MyString

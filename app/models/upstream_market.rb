@@ -49,7 +49,7 @@ class UpstreamMarket
   def before_save
     self.usersAsksVolume = calculate_user_orders_volume(:ask)
     self.usersBidsVolume = calculate_user_orders_volume(:bid)
-    God.logger.info "UpstreamMarket[#{id}] before_save #{attributes}, my_asks:#{my_orders_volume(:ask)} my_bids:#{my_orders_volume(:bid)}"
+    God.logger.debug "UpstreamMarket[#{id}] before_save #{attributes}, my_asks:#{my_orders_volume(:ask)} my_bids:#{my_orders_volume(:bid)}"
     super
   end
 

@@ -17,12 +17,30 @@ class PeatioAccountDrainer < Drainer
       balances: fetch_balances,
       active_orders: fetch_active_orders
     )
+    update_trades!
   rescue Peatio::Client::REST::Error => e
     logger.error e
     report_exception e
   end
 
   private
+
+  def update_trades!
+    client.trades.each do |raw_trade|
+      Trade
+        .create_with(
+          raw_trade.slice('price', 'amount', 'total', 'taker_type').merge(
+            side:  Peatio::Client::REST::SIDES_MAP.invert.fetch(raw_trade['side']), # TODO Move to Peatio Client
+            traded_at: raw_trade['created_at']
+          )
+        )
+        .find_or_create_by(
+          trade_id: raw_trade['id'],
+          market_id: Market.find_by!(peatio_symbol: raw_trade['market']), # TODO Move to Peatio Client
+          account_id: account.id
+      )
+    end
+  end
 
   def fetch_active_orders
     # Collect by side
