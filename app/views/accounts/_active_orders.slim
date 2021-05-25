@@ -1,0 +1,5 @@
+- Market.all.each do |market|
+  h4= market
+  - Order::SIDES.each do |side|
+    h5= side
+    = render 'persisted_orders', orders: orders.filter { |o| o.market_id == market.id && o.side?(side)}, market: market

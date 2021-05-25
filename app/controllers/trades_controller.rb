@@ -2,8 +2,8 @@
 
 class TradesController < ApplicationController
   def index
-    trades = Trade.order('traded_at desc')
-    render locals: { trades: trades }
+    @q = Trade.ransack(params[:q])
+    render locals: { trades: @q.result.order('traded_at desc') }
   end
 
   def show

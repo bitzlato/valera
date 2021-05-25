@@ -1,4 +1,23 @@
 .container-fluid
   h2= t '.trades'
   hr
-  = render 'table', scope: trades, decorator: TradeDecorator
+  pre
+    ul
+      - @q.conditions.each do |cond|
+        li= cond.inspect
+  - market = trades.first.market
+  - total_amount = trades.sum(:amount)
+  - total_spent = trades.sum(:total)
+  - # TODO Group by markets
+  = render 'table', scope: trades, decorator: TradeDecorator do
+    tr
+      th.text-right colspan=7
+        = t '.total'
+      th.text-right
+        = format_money total_amount, market.base
+      th.text-right
+        = format_money total_spent/total_amount, market.quote
+      th.text-right
+        = format_money total_spent, market.quote
+
+

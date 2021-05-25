@@ -13,15 +13,15 @@
         tr
           td
             .text-small.text-monospace.text-muted= '#' + order['id'].to_s
-          td.text-small= format_money(order['origin_volume'], strategy.market.base)
-          td.text-small= format_money(order['price'], strategy.market.quote)
+          td.text-small= format_money(order['origin_volume'], market.base)
+          td.text-small= format_money(order['price'], market.quote)
         - total_volume += order['origin_volume']
         - total_price += order['price'] * order['origin_volume']
     tfoot.tfoot-light
       tr
         th.text-small= t '.total'
-        td.text-small.text-monospace= format_money total_volume, strategy.market.base
-        td.text-small.text-monospace= format_money total_price/total_volume, strategy.market.quote
+        td.text-small.text-monospace= format_money total_volume, market.base
+        td.text-small.text-monospace= format_money total_price/total_volume, market.quote
 
 - else
   .text-center.mt-2= middot

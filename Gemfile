@@ -35,6 +35,8 @@ gem 'connection_pool'
 gem 'draper'
 gem 'env-tweaks', '~> 1.0.0'
 
+gem 'ransack'
+
 # Alternative: https://github.com/soveran/ohm
 gem 'redis-objects'
 

@@ -10,4 +10,12 @@ class DrainerDecorator < ApplicationDecorator
   def drainer_class
     object.class
   end
+
+  def market
+    object.try(:upstream_market).try(:market)
+  end
+
+  def upstream_market
+    object.try(:upstream_market)
+  end
 end

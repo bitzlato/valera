@@ -4,7 +4,7 @@ class TradeDecorator < ApplicationDecorator
   delegate_all
 
   def self.table_columns
-    %i[trade_id side taker_type market account upstream amount price total]
+    %i[trade_id traded_at side taker_type market account upstream amount price total]
   end
 
   def amount
@@ -12,11 +12,11 @@ class TradeDecorator < ApplicationDecorator
   end
 
   def price
-    h.format_money object.price, object.market.base
+    h.format_money object.price, object.market.quote
   end
 
   def total
-    h.format_money object.total, object.market.base
+    h.format_money object.total, object.market.quote
   end
 
   def market

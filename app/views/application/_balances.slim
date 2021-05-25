@@ -1,0 +1,5 @@
+table.table.table-sm
+  - balances.each_pair do |currency, amount|
+    tr
+      th.text-right.text-small.text-nowrap= format_currency currency
+      td.text-right.text-small= format_money amount, currency

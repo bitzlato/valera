@@ -18,6 +18,7 @@ class PeatioAccountDrainer < Drainer
       active_orders: fetch_active_orders
     )
     update_trades!
+    account.update_trades_amounts!
   rescue Peatio::Client::REST::Error => e
     logger.error e
     report_exception e

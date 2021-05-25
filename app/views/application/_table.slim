@@ -13,7 +13,7 @@
             - title = decorator.object_class.respond_to?(:human_attribute_name) ? decorator.object_class.human_attribute_name(column) : column
             = decorator.present? && respond_to?(:sort_column) ? sort_column(column, title) : column
     - if block_given?
-      thead
+      thead.thead-light
         = yield
     tbody
       - scope.each do |item|
