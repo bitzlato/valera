@@ -1,5 +1,5 @@
 [Unit]
-Description = <%= fetch(:application) %> (<%= fetch(:stage) %>) daemon
+Description = <%= fetch(:application) %> (<%= fetch(:stage) %>) daemon (%i)
 After=syslog.target network.target
 
 [Service]
@@ -9,7 +9,7 @@ Environment=PWD=<%= current_path %>
 EnvironmentFile=<%= current_path %>/.env
 # Helpful for debugging socket activation, etc.
 WorkingDirectory=<%= current_path %>
-ExecStart=/home/<%= fetch(:user) %>/.rbenv/bin/rbenv exec bundle exec ./bin/daemon.rb
+ExecStart=/home/<%= fetch(:user) %>/.rbenv/bin/rbenv exec bundle exec ./%i.rb
 ExecStop=/bin/kill -TERM $MAINPID
 
 KillMode=mixed
