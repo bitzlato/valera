@@ -520,6 +520,7 @@ DEPENDENCIES
   minitest-around
   money (~> 6.14)
   nokogiri (~> 1.11)
+  parallel
   pg (~> 1.1)
   pry
   pry-byebug

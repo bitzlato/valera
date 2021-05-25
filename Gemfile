@@ -45,6 +45,7 @@ gem 'rails-i18n'
 gem 'safe_yaml', '~> 1.0.5', require: 'safe_yaml/load'
 gem 'semver2'
 gem 'settingslogic'
+gem 'parallel'
 
 group :development, :test do
   gem 'foreman'
