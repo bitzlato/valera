@@ -52,7 +52,7 @@ Run first bot only
 * [x] Move active orders fetching to separate drainer
 * [ ] Check maker/collector oneness
 * [x] Вместо base_threshold два отклонения от цены
-* [ ] Максимальный объём торговли в сутки для проторговщика
+* [x] Максимальный объём торговли в сутки для проторговщика
 * [ ] Не делать и не отменять заявки если они в пределах допустимого
 * [ ] Reconnect websockets
 
