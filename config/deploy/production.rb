@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 set :stage, :production
+set :user, 'ubuntu'
 set :rails_env, :production
 fetch(:default_env)[:rails_env] = :production
 
