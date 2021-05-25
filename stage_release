@@ -4,6 +4,6 @@ semver inc patch && \
 git add .semver && \
 git commit -m `semver` && \
 git tag -a `semver` -m `semver` && \
-git push finfex
+git push origin
 
 bundle exec cap staging deploy
