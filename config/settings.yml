@@ -70,6 +70,7 @@ staging:
 production:
   <<: *defaults
 test:
+  <<: *defaults
   root_prefix: /valera
   markets: ["BTC_USDT"]
 

@@ -36,7 +36,8 @@ class OrdersUpdater
   # Cancel all orders when bot stops
   def cancel!
     logger.debug 'Cancel all orders'
-    client.cancel_orders
+    canceled_orders = client.cancel_orders
+    logger.debug "Orders canceled #{canceled_orders.count}"
   end
 
   def update_by_side!(side, orders)
