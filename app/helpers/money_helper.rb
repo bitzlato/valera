@@ -49,7 +49,7 @@ module MoneyHelper
   end
 
   def money_precission(amount, precision)
-    return middot if amount.nil? || amount == ''
+    return middot if amount.nil? || amount == '' || amount.nan?
 
     amount = amount.to_d if amount.is_a? String
     return '0' if amount.zero?
