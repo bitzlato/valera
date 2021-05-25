@@ -12,9 +12,14 @@
 
 ActiveRecord::Schema.define(version: 2021_05_25_052759) do
 
-  create_table "trades", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
+  enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
+
+  create_table "trades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "market_id", null: false
-    t.integer "trade_id", null: false
+    t.string "trade_id", null: false
     t.string "side", null: false
     t.string "taker_type", null: false
     t.datetime "traded_at", null: false

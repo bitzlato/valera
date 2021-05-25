@@ -1,10 +1,9 @@
 class Trade < ApplicationRecord
+
+  delegate :upstream, to: :account
+
   def market
     Market.find market_id
-  end
-
-  def upstream
-    Upstream.find upstream_id
   end
 
   def account
