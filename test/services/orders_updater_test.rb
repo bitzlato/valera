@@ -8,6 +8,7 @@ class OrdersUpdaterTest < ActiveSupport::TestCase
     @account = Account.new(id: 1, upstream: Upstream.all.first, client: Peatio::Client::REST.new)
     @updater = OrdersUpdater.new(account: @account, market: @market, name: 'test')
   end
+
   test 'update!' do
     orders = Set[
       Order.new(side: :ask, volume: 2, price: 1)

@@ -43,10 +43,10 @@ class OrdersUpdater
     logger.debug "[#{side}] Update by side #{side} #{orders}"
 
     persisted_orders = account.active_orders.filter { |o| o.side? side }
-    logger.debug "[#{side}] Persisted orders #{persisted_orders}" if persisted_orders.any?
+    logger.debug "[#{side}] Persisted orders #{persisted_orders}"
 
     outdated_orders = find_outdated_orders(persisted_orders, orders)
-    logger.debug "[#{side}] Outdated orders #{outdated_orders}" if outdated_orders.any?
+    logger.debug "[#{side}] Outdated orders #{outdated_orders}"
 
     if outdated_orders.any?
       logger.debug "[#{side}] Cancel orders #{outdated_orders}"
@@ -84,7 +84,7 @@ class OrdersUpdater
 
   def find_outdated_orders(persisted_orders, recent_orders)
     persisted_orders.filter do |po|
-      !recent_orders.find { |o| o.price != po.price }.nil?
+      !recent_orders.find { |o| o.price == po.price }
     end
   end
 
