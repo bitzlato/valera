@@ -14,6 +14,9 @@ loop do
   God.strategies.each do |strategy|
     strategy.perform
     sleep Settings.maker_sleep
+  rescue StandardError => e
+    report_exception e
+    God.logger.error e
   end
 rescue Interrupt => e
   God.logger.info e
@@ -21,10 +24,6 @@ rescue Interrupt => e
     strategy.stop! e.message.presence || e.inspect
   end
   raise e
-rescue StandardError => e
-  report_exception e
-  God.logger.error e
-  e.skip
 end
 
 SdNotify.stopping

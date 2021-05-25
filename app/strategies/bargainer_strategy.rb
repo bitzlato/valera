@@ -7,12 +7,16 @@ class BargainerStrategy < Strategy
     attribute :base_volume, BigDecimal, default: 0.0001
     attribute :base_threshold, BigDecimal, default: 0.01
     attribute :base_max_upstream_threshold, BigDecimal, default: 0.2
+    attribute :base_max_day_trading_amount, BigDecimal, default: 1
 
-    validates :base_volume, presence: true, numericality: { greater_than: 0 }
+    validates :base_volume, presence: true,
+      numericality: { greater_than: 0 }
     validates :base_threshold, presence: true,
-                               numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
+      numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
     validates :base_max_upstream_threshold, presence: true,
-                                            numericality: { greater_than: 0, less_than_or_equal_to: 0.5 }
+      numericality: { greater_than: 0, less_than_or_equal_to: 1 }
+    validates :base_max_day_trading_amount, presence: true,
+        numericality: { greater_than: 0 }
   end
 
   def self.description
@@ -35,11 +39,31 @@ class BargainerStrategy < Strategy
     threshold = threshold * rand(100) / 100
     threshold = -threshold if side == :bid
     logger.debug "#{side} threshold = #{threshold}"
-    upstream_markets.find_by_upstream!(:binance).avgPrice + upstream_markets.find_by_upstream!(:binance).avgPrice * threshold / 100
+    binance_average_price = upstream_markets.find_by_upstream!(:binance).avgPrice
+    peatio_upstream = upstream_markets.find_by_upstream!(:peatio)
+    peatio_average_price = (peatio_upstream.high + peatio_upstream.low)/2
+
+    upstream_threshold = (binance_average_price - peatio_average_price).abs / (binance_average_price / 100.0)
+    logger.info "Upstream threshold #{upstream_threshold}"
+    if upstream_threshold > settings.base_max_upstream_threshold
+      logger.warn "Upstream threshold is too much #{upstream_threshold} > #{settings.base_max_upstream_threshold} (binance:#{binance_average_price} ; peatio:#{peatio_average_price})"
+      average_price = binance_average_price
+    else
+      average_price = peatio_average_price
+    end
+
+    average_price + average_price * threshold / 100
     # TODO: Брать среднюю цену стакана из peatio
   end
 
   def calculate_volume(_side)
-    settings.base_volume
+    day_trading_value = account.day_trades_amounts[market.id]
+    return if day_trading_value.nil?
+    if day_trading_value >= settings.base_max_day_trading_amount
+      logger.debug "Skip ordering. Met day trading limit #{day_trading_value} >= #{settings.base_max_day_trading_amount}"
+      nil
+    else
+      settings.base_volume
+    end
   end
 end

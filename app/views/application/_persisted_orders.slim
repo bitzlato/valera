@@ -17,11 +17,12 @@
           td.text-small= format_money(order['price'], market.quote)
         - total_volume += order['origin_volume']
         - total_price += order['price'] * order['origin_volume']
-    tfoot.tfoot-light
-      tr
-        th.text-small= t '.total'
-        td.text-small.text-monospace= format_money total_volume, market.base
-        td.text-small.text-monospace= format_money total_price/total_volume, market.quote
+    - if orders.many?
+      tfoot.tfoot-light
+        tr
+          th.text-small= t '.total'
+          td.text-small.text-monospace= format_money total_volume, market.base
+          td.text-small.text-monospace= format_money total_price/total_volume, market.quote
 
 - else
   .text-center.mt-2= middot

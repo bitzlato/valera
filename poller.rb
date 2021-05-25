@@ -18,9 +18,9 @@ loop do
     if SAFE_ERRORS.include? e
       God.logger.warn "Catch #{e} retry after 1 second"
       sleep 1
-      e.skip
     else
       report_exception e
+      raise e
     end
   end
 end
