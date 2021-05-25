@@ -54,11 +54,13 @@ class UpstreamMarket
   end
 
   def calculate_user_orders_volume(side)
-    total = send(side.to_s + 'sVolume')
+    total = send("#{side}sVolume")
     return if total.nil?
     return unless total.positive?
+
     volume = total - my_orders_volume(side)
     return unless volume.positive?
+
     volume
   end
 end

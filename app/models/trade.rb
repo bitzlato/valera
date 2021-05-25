@@ -1,5 +1,6 @@
-class Trade < ApplicationRecord
+# frozen_string_literal: true
 
+class Trade < ApplicationRecord
   delegate :upstream, to: :account
 
   def market

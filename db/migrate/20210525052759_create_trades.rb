@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class CreateTrades < ActiveRecord::Migration[6.1]
   def change
-    enable_extension "uuid-ossp"
-    enable_extension "pgcrypto"
+    enable_extension 'uuid-ossp'
+    enable_extension 'pgcrypto'
     create_table :trades, id: :uuid do |t|
       t.string :market_id, null: false
       t.string :trade_id, null: false
@@ -16,7 +18,7 @@ class CreateTrades < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
-    add_index :trades, [:account_id, :market_id, :trade_id]
-    add_index :trades, [:account_id, :market_id, :traded_at, :side]
+    add_index :trades, %i[account_id market_id trade_id]
+    add_index :trades, %i[account_id market_id traded_at side]
   end
 end

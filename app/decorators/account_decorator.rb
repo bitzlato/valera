@@ -4,7 +4,8 @@ class AccountDecorator < ApplicationDecorator
   delegate_all
 
   def self.table_columns
-    %i[id updated_at drainers upstream client balances active_orders trades_updated_at trades day_trades_amounts hour_trades_amounts]
+    %i[id updated_at drainers upstream client balances active_orders trades_updated_at trades day_trades_amounts
+       hour_trades_amounts]
   end
 
   def drainers

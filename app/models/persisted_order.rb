@@ -43,6 +43,7 @@ class PersistedOrder
     asked_side = asked_side.to_s
 
     raise "Unknown side #{asked_side}" unless Order::SIDES.map(&:to_s).include? asked_side
+
     asked_side == side
   end
 

@@ -21,6 +21,7 @@ class MarketDrainer < Drainer
   def write_to_influx(data)
     data = data.compact
     return if data.empty?
+
     Valera::InfluxDB.client
                     .write_point(Settings.influx.collectors,
                                  values: data, tags: { market: market.id, upstream: upstream.id })

@@ -31,15 +31,15 @@ class PeatioAccountDrainer < Drainer
       Trade
         .create_with(
           raw_trade.slice('price', 'amount', 'total', 'taker_type').merge(
-            side:  Peatio::Client::REST::SIDES_MAP.invert.fetch(raw_trade['side']), # TODO Move to Peatio Client
+            side: Peatio::Client::REST::SIDES_MAP.invert.fetch(raw_trade['side']), # TODO: Move to Peatio Client
             traded_at: raw_trade['created_at']
           )
         )
         .find_or_create_by(
           trade_id: raw_trade['id'],
-          market_id: Market.find_by!(peatio_symbol: raw_trade['market']), # TODO Move to Peatio Client
+          market_id: Market.find_by!(peatio_symbol: raw_trade['market']), # TODO: Move to Peatio Client
           account_id: account.id
-      )
+        )
     end
   end
 

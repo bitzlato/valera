@@ -136,9 +136,8 @@ module Peatio
                 "Wrong content type (#{response['content-type']}) for #{name}"
         end
 
-        results = JSON.parse response.body
+        JSON.parse response.body
         # attach headers, like 'per', 'per-page'
-        results
       end
 
       # "id"=>1085518,

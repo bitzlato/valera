@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaginationSupport
   extend ActiveSupport::Concern
   included do
@@ -19,8 +21,8 @@ module PaginationSupport
   end
 
   def paginate(scope)
-    scope.
-      page(page).
-      per(per_page || per_page_default)
+    scope
+      .page(page)
+      .per(per_page || per_page_default)
   end
 end

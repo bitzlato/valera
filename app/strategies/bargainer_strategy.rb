@@ -10,13 +10,13 @@ class BargainerStrategy < Strategy
     attribute :base_max_day_trading_amount, BigDecimal, default: 1
 
     validates :base_volume, presence: true,
-      numericality: { greater_than: 0 }
+                            numericality: { greater_than: 0 }
     validates :base_threshold, presence: true,
-      numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
+                               numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
     validates :base_max_upstream_threshold, presence: true,
-      numericality: { greater_than: 0, less_than_or_equal_to: 1 }
+                                            numericality: { greater_than: 0, less_than_or_equal_to: 1 }
     validates :base_max_day_trading_amount, presence: true,
-        numericality: { greater_than: 0 }
+                                            numericality: { greater_than: 0 }
   end
 
   def self.description
@@ -41,7 +41,7 @@ class BargainerStrategy < Strategy
     logger.debug "#{side} threshold = #{threshold}"
     binance_average_price = upstream_markets.find_by_upstream!(:binance).avgPrice
     peatio_upstream = upstream_markets.find_by_upstream!(:peatio)
-    peatio_average_price = (peatio_upstream.high + peatio_upstream.low)/2
+    peatio_average_price = (peatio_upstream.high + peatio_upstream.low) / 2
 
     upstream_threshold = (binance_average_price - peatio_average_price).abs / (binance_average_price / 100.0)
     logger.info "Upstream threshold #{upstream_threshold}"
@@ -59,6 +59,7 @@ class BargainerStrategy < Strategy
   def calculate_volume(_side)
     day_trading_value = account.day_trades_amounts[market.id]
     return if day_trading_value.nil?
+
     if day_trading_value >= settings.base_max_day_trading_amount
       logger.debug "Skip ordering. Met day trading limit #{day_trading_value} >= #{settings.base_max_day_trading_amount}"
       nil
