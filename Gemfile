@@ -132,3 +132,5 @@ gem 'sqlite3'
 gem 'async-http-faraday', '~> 0.9.0'
 
 gem 'kaminari', '~> 1.2'
+
+gem "dotenv-rails", "~> 2.7"
