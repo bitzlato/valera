@@ -22,10 +22,17 @@ class Order
 
   delegate :hash, to: :to_s
 
+  attr_accessor :comparer
+
   def self.build(attrs)
     order = new(attrs)
     order.validate!
     order.freeze
+  end
+
+  def suitable?(other)
+    return false if comparer.nil?
+    comparer.call self, other
   end
 
   def inspect

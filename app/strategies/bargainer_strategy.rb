@@ -39,15 +39,15 @@ class BargainerStrategy < Strategy
     threshold = threshold * rand(100) / 100
     threshold = -threshold if side == :bid
     logger.debug "#{side} threshold = #{threshold}"
-    binance_average_price = upstream_markets.find_by_upstream!(:binance).avgPrice
+    source_average_price = source_upstream_market.avgPrice
     peatio_upstream = upstream_markets.find_by_upstream!(:peatio)
     peatio_average_price = (peatio_upstream.high + peatio_upstream.low) / 2
 
-    upstream_threshold = (binance_average_price - peatio_average_price).abs / (binance_average_price / 100.0)
+    upstream_threshold = (source_average_price - peatio_average_price).abs / (source_average_price / 100.0)
     logger.info "Upstream threshold #{upstream_threshold}"
     if upstream_threshold > settings.base_max_upstream_threshold
-      logger.warn "Upstream threshold is too much #{upstream_threshold} > #{settings.base_max_upstream_threshold} (binance:#{binance_average_price} ; peatio:#{peatio_average_price})"
-      average_price = binance_average_price
+      logger.warn "Upstream threshold is too much #{upstream_threshold} > #{settings.base_max_upstream_threshold} (binance:#{source_average_price} ; peatio:#{peatio_average_price})"
+      average_price = source_average_price
     else
       average_price = peatio_average_price
     end

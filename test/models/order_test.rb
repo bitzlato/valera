@@ -5,6 +5,13 @@ class OrderTest < ActiveSupport::TestCase
     refute Order.new.valid?
   end
 
+  test 'comparing' do
+    origin = Order.new price: 123, comparer: lambda { |current, other| other.price == current.price }
+
+    assert origin.suitable?(Order.new price: origin.price)
+    refute origin.suitable?(Order.new price: 999)
+  end
+
   test 'equal' do
     assert_equal(
       Order.build(side: :ask, price: 1, volume: 1),

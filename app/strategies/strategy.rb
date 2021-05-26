@@ -133,7 +133,7 @@ class Strategy
     )
   end
 
-  def build_order(side, price, volume, level = 0)
+  def build_order(side, price, volume, comparer = nil, level = 0)
     if price.nil? || price.zero?
       logger.warn 'Skip order building for side because price is zero or undefined'
       nil
@@ -142,7 +142,7 @@ class Strategy
       nil
     else
       logger.debug "build_order(#{side}, #{price}, #{volume})"
-      Order.build(side: side, price: price, volume: volume, level: level)
+      Order.build(side: side, price: price, volume: volume, level: level, comparer: comparer)
     end
   end
 
@@ -152,6 +152,29 @@ class Strategy
 
   def calculate_volume(_side)
     raise 'not implemented'
+  end
+
+  def target_upstream
+    @target_upstream ||= Upstream.find :peatio
+  end
+
+  def target_upstream_market
+    @target_upstream_market ||=
+      target_upstream
+      .upstream_markets
+      .find_by_market!(market)
+  end
+
+  def user_orders_volume(side)
+    target_upstream_market.send("users#{side.capitalize}sVolume").to_d
+  end
+
+  def best_price_for(side)
+    source_upstream_market.send "#{side}Price"
+  end
+
+  def source_upstream_market
+    upstream_markets.find_by_upstream!(:binance)
   end
 end
 # rubocop:enable Metrics/ClassLength

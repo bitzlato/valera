@@ -40,52 +40,50 @@ class OrdersUpdater
     logger.debug "Orders canceled #{canceled_orders.count}"
   end
 
-  def update_by_side!(side, orders)
-    logger.debug "[#{side}] Update by side #{side} #{orders}"
+  def update_by_side!(side, required_orders)
+    logger.debug "[#{side}] Update by side #{side} #{required_orders}"
 
     persisted_orders = account.active_orders.filter { |o| o.side? side }
     logger.debug "[#{side}] Persisted orders #{persisted_orders}"
 
-    outdated_orders = find_outdated_orders(persisted_orders, orders)
-    logger.debug "[#{side}] Outdated orders #{outdated_orders}"
+    outdated_orders, orders_to_create = calculate_orders Set.new(persisted_orders), Set.new(required_orders)
+    logger.debug "[#{side}] Outdated orders: #{outdated_orders}, orders to create: #{orders_to_create}"
 
-    if outdated_orders.any?
-      logger.debug "[#{side}] Cancel orders #{outdated_orders}"
-      cancel_orders! outdated_orders
-    end
+    cancel_orders! outdated_orders if outdated_orders.any?
 
-    orders_to_create = filter_orders_to_create(orders, persisted_orders - outdated_orders)
-    if orders_to_create.present?
+    return [] if orders_to_create.empty?
 
-      logger.debug "[#{side}] Create orders #{orders_to_create}"
-      created_orders = create_orders! orders_to_create
-      logger.debug "[#{side}] Created orders #{created_orders}"
-
-      created_orders
-    else
-      []
-    end
+    create_orders! orders_to_create
   end
 
   private
 
-  def filter_orders_to_create(orders, persisted_orders)
-    orders.reject do |order|
-      persisted_orders.find do |persisted_order|
-        persisted_order.price == order.price && persisted_order.origin_volume == order.volume
+  def calculate_orders(persisted_orders, required_orders)
+    persisted_orders_to_skip = Set.new
+    required_orders_to_skip = Set.new
+
+    required_orders.each do |required_order|
+      persisted_orders.each do |persisted_order|
+        if required_order.suitable? persisted_order
+          persisted_orders_to_skip << persisted_order
+          required_orders_to_skip << required_orders
+        end
       end
     end
+
+    orders_to_cancel = persisted_orders - persisted_orders_to_skip
+    orders_to_create = required_orders - required_orders_to_skip
+
+    raise "Too much orders to create #{orders_to_create.count} > #{required_orders.count}" if orders_to_create.count > required_orders.count
+    raise "Too much combined orders #{persisted_orders_to_skip.count}+#{orders_to_create.count} > #{required_orders.count}" if persisted_orders_to_skip.count + orders_to_create.count > required_orders.count
+
+    return orders_to_cancel, orders_to_create
   end
 
   def cancel_orders!(orders)
+    logger.debug "Cancel orders #{orders}"
     orders.each do |order|
       client.cancel_order order.id
-    end
-  end
-
-  def find_outdated_orders(persisted_orders, recent_orders)
-    persisted_orders.filter do |po|
-      !recent_orders.find { |o| o.price == po.price }
     end
   end
 
@@ -95,6 +93,8 @@ class OrdersUpdater
     rescue Errno::ECONNREFUSED, Peatio::Client::REST::Error => e
       logger.error e
       []
+    end.tap do |created_orders|
+      logger.debug "Created orders #{created_orders}"
     end
   end
 

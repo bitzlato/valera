@@ -135,3 +135,5 @@ gem 'sqlite3'
 gem 'kaminari', '~> 1.2'
 
 gem 'dotenv-rails', '~> 2.7'
+
+gem "percentage", "~> 1.4"

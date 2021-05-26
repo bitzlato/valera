@@ -36,55 +36,56 @@ class DeepStonerStrategy < Strategy
   def build_orders
     Set.new(
       %i[ask bid].map do |side|
-        @user_orders_volumes = nil
-        @best_price = upstream_markets.find_by_upstream!(:binance).send "#{side}Price"
+        if best_price_for(side).nil?
+          logger.debug("No upstream data (best price) for #{side}")
+          next
+        end
         settings.levels.times.map do |level|
-          volume = calculate_volume(side, level)
-          if volume.zero?
-            logger.debug("Skip order for #{side} #{level}")
-            nil
-          else
-            build_order(side, calculate_price(side, level), volume, level)
-          end
+          build_order(side, level)
         end
       end.flatten.compact
     )
   end
 
-  def calculate_price(side, level)
-    if @best_price.blank?
-      logger.debug('Up upstream data')
-      return nil
+  def build_comparer(side, level)
+    lambda do |persisted_order, required_order|
+    end
+  end
+
+  def build_order(side, level)
+    price_range = build_price_range side, level
+    price = rand price_range
+    logger.debug("Calculated price for #{side} level #{level} price_range=#{price_range} price=#{price}")
+
+    volume = calculate_volume(side, level)
+    comparer = lambda do |persisted_order|
+      price_range.member?(persisted_order.price) &&
+        volume == persisted_order.origin_volume
     end
 
+    super side, price, volume, comparer, level
+  end
+
+  def build_price_range(side, level)
+    d = price_deviation_range level
+    best_price = best_price_for side
+    d.first.percenage_of(best_price)..d.last.percenage_of(best_price)
+  end
+
+  def price_deviation_range(level)
     deviation_from, deviation_to = [
       settings.send("base_best_price_deviation_from_#{level}"),
       settings.send("base_best_price_deviation_to_#{level}")
     ].sort
 
-    deviation = rand(deviation_from..deviation_to)
-    deviation = -deviation if side == :bid
-
-    price = @best_price + @best_price * deviation / 100
-
-    logger.debug("Calculated price for #{side} level #{level} deviation=#{deviation}% deviation_from=#{deviation_from} deviation_to=#{deviation_to}%, best_price=#{@best_price} price=#{price}")
-
-    price
-  end
-
-  def target_upstream
-    @target_upstream ||= Upstream.find :peatio
-  end
-
-  def target_upstream_market
-    @target_upstream_market ||=
-      target_upstream
-      .upstream_markets
-      .find_by_market!(market)
-  end
-
-  def user_orders_volume(side)
-    target_upstream_market.send("users#{side.capitalize}sVolume").to_d
+    case side
+    when :ask
+      deviation_from..deviation_to
+    when :bid
+      -deviation_to..-deviation_from
+    else
+      raise "WTF #{side}"
+    end
   end
 
   def calculate_volume(side, level)
