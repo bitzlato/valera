@@ -2,7 +2,6 @@
 
 one:
   market_id: MyString
-  upstream_id: MyString
   trade_id: 1
   side: MyString
   taker_type: MyString
@@ -14,7 +13,6 @@ one:
 
 two:
   market_id: MyString
-  upstream_id: MyString
   trade_id: 1
   side: MyString
   taker_type: MyString

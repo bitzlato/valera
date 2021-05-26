@@ -112,24 +112,6 @@ GEM
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
-    async (1.29.0)
-      console (~> 1.10)
-      nio4r (~> 2.3)
-      timers (~> 4.1)
-    async-http (0.56.2)
-      async (~> 1.25)
-      async-io (~> 1.28)
-      async-pool (~> 0.2)
-      protocol-http (~> 0.22.0)
-      protocol-http1 (~> 0.14.0)
-      protocol-http2 (~> 0.14.0)
-    async-http-faraday (0.9.0)
-      async-http (~> 0.42)
-      faraday
-    async-io (1.31.0)
-      async (~> 1.14)
-    async-pool (0.3.6)
-      async (~> 1.25)
     awesome_print (1.8.0)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -192,8 +174,6 @@ GEM
     colorize (0.8.1)
     concurrent-ruby (1.1.8)
     connection_pool (2.2.5)
-    console (1.12.0)
-      fiber-local
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -222,7 +202,6 @@ GEM
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
     ffi (1.15.0)
-    fiber-local (1.0.0)
     foreman (0.87.2)
     formatador (0.2.5)
     globalid (0.4.2)
@@ -300,13 +279,6 @@ GEM
     parser (3.0.1.1)
       ast (~> 2.4.1)
     pg (1.2.3)
-    protocol-hpack (1.4.2)
-    protocol-http (0.22.0)
-    protocol-http1 (0.14.1)
-      protocol-http (~> 0.22)
-    protocol-http2 (0.14.2)
-      protocol-hpack (~> 1.4)
-      protocol-http (~> 0.18)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -437,7 +409,6 @@ GEM
     thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    timers (4.3.3)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -480,7 +451,6 @@ PLATFORMS
 
 DEPENDENCIES
   active_link_to
-  async-http-faraday (~> 0.9.0)
   auto_logger!
   best_in_place!
   binance (~> 1.2)!

@@ -77,20 +77,14 @@ class DeepStonerStrategy < Strategy
   end
 
   def target_upstream_market
-    @upstream_market ||= target_upstream
-                         .upstream_markets
-                         .find_by_market! market
+    @upstream_market ||=
+      target_upstream
+      .upstream_markets
+      .find_by_market!(market)
   end
 
   def user_orders_volume(side)
-    if @user_orders_volumes.nil?
-      @user_orders_volumes = {
-        ask: target_upstream_market.usersAsksVolume.to_d,
-        bid: target_upstream_market.usersBidsVolume.to_d
-      }
-    end
-
-    @user_orders_volumes.fetch(side)
+    target_upstream_market.send("users#{side.capitalize}sVolume").to_d
   end
 
   def calculate_volume(side, level)

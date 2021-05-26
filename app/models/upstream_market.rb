@@ -3,12 +3,16 @@
 class UpstreamMarket
   include RedisModel
 
+  attribute :asksVolume, BigDecimal
+  attribute :bidsVolume, BigDecimal
+  attribute :usersAsksVolume, BigDecimal
+  attribute :usersBidsVolume, BigDecimal
+
+  # TODO Remove existen attributes
+  #
   Settings.upstream_keys.each do |key|
     attribute key, BigDecimal
   end
-
-  attribute :usersAsksVolume, BigDecimal
-  attribute :usersBidsVolume, BigDecimal
 
   attr_reader :market, :upstream
 
@@ -46,9 +50,13 @@ class UpstreamMarket
 
   private
 
-  def before_save
+  def update_users_volumes
     self.usersAsksVolume = calculate_user_orders_volume(:ask)
     self.usersBidsVolume = calculate_user_orders_volume(:bid)
+  end
+
+  def before_save
+    update_users_volumes
     God.logger.debug "UpstreamMarket[#{id}] before_save #{attributes}, my_asks:#{my_orders_volume(:ask)} my_bids:#{my_orders_volume(:bid)}"
     super
   end

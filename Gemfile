@@ -130,7 +130,7 @@ gem 'sqlite3'
 
 # gem 'peatio_client', '~> 0.0.7'
 
-gem 'async-http-faraday', '~> 0.9.0'
+# gem 'async-http-faraday', '~> 0.9.0'
 
 gem 'kaminari', '~> 1.2'
 
