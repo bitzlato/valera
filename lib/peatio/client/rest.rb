@@ -6,6 +6,7 @@ require 'openssl'
 
 module Peatio
   module Client
+    # rubocop:disable Metrics/ClassLength
     class REST
       class Error < StandardError; end
       WrongResponse = Class.new Error
@@ -170,5 +171,6 @@ module Peatio
         Logger.new($stdout)
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end

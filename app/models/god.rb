@@ -60,7 +60,7 @@ class God
     Settings.accounts.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       key, config = pair
       credentials = Rails.application.credentials.bots.fetch(config['credentials'].to_sym) if config.key?('credentials')
-      upstream = upstreams.fetch (config['upstream'].presence || raise("No upstream key in account section (#{key})"))
+      upstream = upstreams.fetch(config['upstream'].presence || raise("No upstream key in account section (#{key})"))
       if upstream.credential_client_class.present?
         client = upstream.credential_client_class.new(**credentials.merge(name: config['credentials'].to_sym))
       end

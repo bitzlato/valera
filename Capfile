@@ -38,5 +38,5 @@ require 'capistrano/master_key'
 require 'capistrano/systemd/multiservice'
 install_plugin Capistrano::Systemd::MultiService.new_service('puma', service_type: 'user')
 install_plugin Capistrano::Systemd::MultiService.new_service('daemon', service_type: 'user')
-#install_plugin Capistrano::Systemd::MultiService.new_service('poller', service_type: 'user')
-#install_plugin Capistrano::Systemd::MultiService.new_service('websocket_collectors', service_type: 'user')
+# install_plugin Capistrano::Systemd::MultiService.new_service('poller', service_type: 'user')
+# install_plugin Capistrano::Systemd::MultiService.new_service('websocket_collectors', service_type: 'user')

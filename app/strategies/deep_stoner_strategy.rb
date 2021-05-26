@@ -77,7 +77,7 @@ class DeepStonerStrategy < Strategy
   end
 
   def target_upstream_market
-    @upstream_market ||=
+    @target_upstream_market ||=
       target_upstream
       .upstream_markets
       .find_by_market!(market)

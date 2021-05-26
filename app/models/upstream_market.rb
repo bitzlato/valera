@@ -8,7 +8,7 @@ class UpstreamMarket
   attribute :usersAsksVolume, BigDecimal
   attribute :usersBidsVolume, BigDecimal
 
-  # TODO Remove existen attributes
+  # TODO: Remove existen attributes
   #
   Settings.upstream_keys.each do |key|
     attribute key, BigDecimal
@@ -57,7 +57,12 @@ class UpstreamMarket
 
   def before_save
     update_users_volumes
-    God.logger.debug "UpstreamMarket[#{id}] before_save #{attributes}, my_asks:#{my_orders_volume(:ask)} my_bids:#{my_orders_volume(:bid)}"
+    God.logger.debug(
+      %q[UpstreamMarket[#{id}]
+      before_save #{attributes}:
+      my_asks:#{my_orders_volume(:ask)}
+      my_bids:#{my_orders_volume(:bid)}]
+    )
     super
   end
 

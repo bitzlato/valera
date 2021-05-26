@@ -42,10 +42,10 @@ gem 'redis-objects'
 
 gem 'rails-i18n'
 
+gem 'parallel'
 gem 'safe_yaml', '~> 1.0.5', require: 'safe_yaml/load'
 gem 'semver2'
 gem 'settingslogic'
-gem 'parallel'
 
 group :development, :test do
   gem 'foreman'
@@ -134,4 +134,4 @@ gem 'sqlite3'
 
 gem 'kaminari', '~> 1.2'
 
-gem "dotenv-rails", "~> 2.7"
+gem 'dotenv-rails', '~> 2.7'
