@@ -42,18 +42,10 @@ Run first bot only
 
 # TODO
 
-* [x] Interactively Enable/Disable strategy
-* [x] Cancel all orders on stop
-* [x] Cancel all orders if socket is closed
-* [x] Manage trade values
+* [ ] Не делать и не отменять заявки если они в пределах допустимого
 * [ ] Automaticalyy cancel all orders if there are no fresh data from more then
   N msecs
-* [x] Throw order book through websocket in peatio
-* [x] Move active orders fetching to separate drainer
-* [ ] Check maker/collector oneness
-* [x] Вместо base_threshold два отклонения от цены
-* [x] Максимальный объём торговли в сутки для проторговщика
-* [ ] Не делать и не отменять заявки если они в пределах допустимого
+* [ ] Check maker/collector oneness (store pid and host name of runners)
 * [ ] Reconnect websockets
 
 # Deployment
