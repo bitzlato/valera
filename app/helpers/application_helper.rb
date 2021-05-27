@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  GRAFANA_URL = 'https://grafana.brandymint.ru/d-solo/ayEuw39Mz/valera?orgId=1&refresh=5s'
-  GRAFANA_DEFAULT_PANEL_ID = 8
   def middot
     content_tag :div, '&middot;'.html_safe, class: 'text-muted'
   end
@@ -32,12 +30,12 @@ module ApplicationHelper
     false
   end
 
-  def grafana_iframe_src(resource, panel_id = GRAFANA_DEFAULT_PANEL_ID)
+  def grafana_iframe_src(resource, panel_id = Settings.grafana.panel_id)
     case resource
     when Strategy
-      GRAFANA_URL + "&var-market=#{resource.market.id}&var-bot=#{resource.name}&panelId=#{panel_id}"
+      Settings.grafana.url + "&var-market=#{resource.market.id}&var-bot=#{resource.name}&panelId=#{panel_id}"
     when Market
-      GRAFANA_URL + "&var-market=#{resource.id}&var-bot=All&panelId=#{panel_id}"
+      Settings.grafana.url + "&var-market=#{resource.id}&var-bot=All&panelId=#{panel_id}"
     else
       raise "Inknown resource #{resource}"
     end

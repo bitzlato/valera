@@ -1,4 +1,7 @@
 defaults: &defaults
+  grafana:
+    url: 'https://grafana.brandymint.ru/d-solo/ayEuw39Mz/valera?orgId=1&refresh=5s'
+    panel_id: 8
   root_prefix: /valera
   # markets_ ["BTC_USDT", "BTC_MCR", "ETH_BTC", "ETH_USDT", "ETH_MCR", "USDT_MCR"]
   markets: ["BTC_USDT"]
