@@ -75,9 +75,9 @@ class DeepStonerStrategy < Strategy
 
     case side
     when :ask
-      (100.0.to_d+deviation_from)..(100.0.to_d+deviation_to)
+      (100.0.to_d + deviation_from)..(100.0.to_d + deviation_to)
     when :bid
-      (100.to_d-deviation_to)..(100.to_d-deviation_from)
+      (100.to_d - deviation_to)..(100.to_d - deviation_from)
     else
       raise "WTF #{side}"
     end

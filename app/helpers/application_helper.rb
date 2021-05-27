@@ -17,7 +17,7 @@ module ApplicationHelper
     orders.to_a.filter { |o| o.side? side }.sort_by { |o| side.to_s == 'ask' ? -o.price : o.price }
   end
 
-  BG_SIDE_COLORS = { 'ask' => '#fee', 'bid' => '#efe' }
+  BG_SIDE_COLORS = { 'ask' => '#fee', 'bid' => '#efe' }.freeze
   def side_bg_color(side)
     BG_SIDE_COLORS[side.to_s]
   end

@@ -65,6 +65,7 @@ class OrdersUpdater
     required_orders.each do |required_order|
       persisted_orders.each do |persisted_order|
         next if required_orders_to_skip.member? required_order
+
         if required_order.suitable? persisted_order
           persisted_orders_to_skip << persisted_order
           required_orders_to_skip << required_order
@@ -75,11 +76,15 @@ class OrdersUpdater
     orders_to_cancel = persisted_orders - persisted_orders_to_skip
     orders_to_create = required_orders - required_orders_to_skip
 
-    raise "Too much orders to create #{orders_to_create.count} > #{required_orders.count}" if orders_to_create.count > required_orders.count
-    binding.pry if persisted_orders_to_skip.count + orders_to_create.count > required_orders.count
-    raise "Too much combined orders #{persisted_orders_to_skip.count}+#{orders_to_create.count} > #{required_orders.count}" if persisted_orders_to_skip.count + orders_to_create.count > required_orders.count
+    if orders_to_create.count > required_orders.count
+      raise "Too much orders to create #{orders_to_create.count} > #{required_orders.count}"
+    end
 
-    return orders_to_cancel, orders_to_create
+    if persisted_orders_to_skip.count + orders_to_create.count > required_orders.count
+      raise "Too much combined orders #{persisted_orders_to_skip.count}+#{orders_to_create.count} > #{required_orders.count}" # rubocop:disable Layout/LineLength
+    end
+
+    [orders_to_cancel, orders_to_create]
   end
 
   def cancel_orders!(orders)
@@ -89,6 +94,7 @@ class OrdersUpdater
     end
   end
 
+  # rubocop:disable Style/MultilineBlockChain
   def create_orders!(orders)
     Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
@@ -99,6 +105,7 @@ class OrdersUpdater
       logger.debug "Created orders #{created_orders}"
     end
   end
+  # rubocop:enable Style/MultilineBlockChain
 
   # @param order <Order>
   def create_order!(order)

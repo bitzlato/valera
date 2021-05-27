@@ -32,6 +32,7 @@ class Order
 
   def suitable?(other)
     return false if comparer.nil?
+
     comparer.call other
   end
 

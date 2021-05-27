@@ -40,7 +40,7 @@ class BargainerStrategy < Strategy
     )
   end
 
-  def build_order side
+  def build_order(side)
     price_range = build_price_range side
     price = rand price_range
     logger.debug("Calculated price for #{side} price_range=#{price_range} price=#{price}")
