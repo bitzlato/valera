@@ -6,7 +6,7 @@ class OrderTest < ActiveSupport::TestCase
   end
 
   test 'comparing' do
-    origin = Order.new price: 123, comparer: lambda { |current, other| other.price == current.price }
+    origin = Order.new price: 123, comparer: lambda { |other| other.price == 123 }
 
     assert origin.suitable?(Order.new price: origin.price)
     refute origin.suitable?(Order.new price: 999)

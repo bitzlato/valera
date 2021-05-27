@@ -64,9 +64,10 @@ class OrdersUpdater
 
     required_orders.each do |required_order|
       persisted_orders.each do |persisted_order|
+        next if required_orders_to_skip.member? required_order
         if required_order.suitable? persisted_order
           persisted_orders_to_skip << persisted_order
-          required_orders_to_skip << required_orders
+          required_orders_to_skip << required_order
         end
       end
     end
@@ -75,6 +76,7 @@ class OrdersUpdater
     orders_to_create = required_orders - required_orders_to_skip
 
     raise "Too much orders to create #{orders_to_create.count} > #{required_orders.count}" if orders_to_create.count > required_orders.count
+    binding.pry if persisted_orders_to_skip.count + orders_to_create.count > required_orders.count
     raise "Too much combined orders #{persisted_orders_to_skip.count}+#{orders_to_create.count} > #{required_orders.count}" if persisted_orders_to_skip.count + orders_to_create.count > required_orders.count
 
     return orders_to_cancel, orders_to_create

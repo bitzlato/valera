@@ -32,31 +32,63 @@ class BargainerStrategy < Strategy
 
   private
 
-  def calculate_price(side)
-    return nil if upstream_markets.find_by_upstream!(:binance).avgPrice.nil?
+  def build_orders
+    Set.new(
+      Order::SIDES.map do |side|
+        build_order side
+      end.compact
+    )
+  end
 
-    threshold = settings.base_threshold
-    threshold = threshold * rand(100) / 100
-    threshold = -threshold if side == :bid
-    logger.debug "#{side} threshold = #{threshold}"
+  def build_order side
+    price_range = build_price_range side
+    price = rand price_range
+    logger.debug("Calculated price for #{side} price_range=#{price_range} price=#{price}")
+
+    volume = calculate_volume
+
+    comparer = lambda do |persisted_order|
+      res = price_range.member?(persisted_order.price) && volume == persisted_order.origin_volume
+      logger.debug "Persisted order #{persisted_order} not suitable to #{price_range}" unless res
+      res
+    end
+
+    super side, price, volume, comparer
+  end
+
+  def average_price
     source_average_price = source_upstream_market.avgPrice
     peatio_upstream = upstream_markets.find_by_upstream!(:peatio)
     peatio_average_price = (peatio_upstream.high + peatio_upstream.low) / 2
 
     upstream_threshold = (source_average_price - peatio_average_price).abs / (source_average_price / 100.0)
     logger.info "Upstream threshold #{upstream_threshold}"
+
+    # TODO: Брать среднюю цену стакана из peatio
     if upstream_threshold > settings.base_max_upstream_threshold
       logger.warn "Upstream threshold is too much #{upstream_threshold} > #{settings.base_max_upstream_threshold} (binance:#{source_average_price} ; peatio:#{peatio_average_price})"
-      average_price = source_average_price
+      source_average_price
     else
-      average_price = peatio_average_price
+      peatio_average_price
     end
-
-    average_price + average_price * threshold / 100
-    # TODO: Брать среднюю цену стакана из peatio
   end
 
-  def calculate_volume(_side)
+  def build_price_range(side)
+    return nil if source_upstream_market.avgPrice.nil?
+
+    threshold = settings.base_threshold
+    logger.debug "#{side} threshold = #{threshold}"
+    case side
+    when :ask
+      average_price..(average_price + threshold.percent_of(average_price))
+    when :bid
+      (average_price - threshold.percent_of(average_price))..average_price
+    else
+      raise "WTF #{side}"
+    end
+  end
+
+  def calculate_volume
     day_trading_value = account.day_trades_amounts[market.id]
     return if day_trading_value.nil?
 

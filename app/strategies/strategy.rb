@@ -126,11 +126,7 @@ class Strategy
   private
 
   def build_orders
-    Set.new(
-      Order::SIDES.map do |side|
-        build_order(side, calculate_price(side), calculate_volume(side))
-      end.compact
-    )
+    raise 'not implemented'
   end
 
   def build_order(side, price, volume, comparer = nil, level = 0)
@@ -144,14 +140,6 @@ class Strategy
       logger.debug "build_order(#{side}, #{price}, #{volume})"
       Order.build(side: side, price: price, volume: volume, level: level, comparer: comparer)
     end
-  end
-
-  def calculate_price(_side)
-    raise 'not implemented'
-  end
-
-  def calculate_volume(_side)
-    raise 'not implemented'
   end
 
   def target_upstream

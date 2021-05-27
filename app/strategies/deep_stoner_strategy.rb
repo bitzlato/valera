@@ -47,11 +47,6 @@ class DeepStonerStrategy < Strategy
     )
   end
 
-  def build_comparer(side, level)
-    lambda do |persisted_order, required_order|
-    end
-  end
-
   def build_order(side, level)
     price_range = build_price_range side, level
     price = rand price_range
@@ -67,12 +62,12 @@ class DeepStonerStrategy < Strategy
   end
 
   def build_price_range(side, level)
-    d = price_deviation_range level
+    d = price_deviation_range side, level
     best_price = best_price_for side
-    d.first.percenage_of(best_price)..d.last.percenage_of(best_price)
+    d.first.percent_of(best_price)..d.last.percent_of(best_price)
   end
 
-  def price_deviation_range(level)
+  def price_deviation_range(side, level)
     deviation_from, deviation_to = [
       settings.send("base_best_price_deviation_from_#{level}"),
       settings.send("base_best_price_deviation_to_#{level}")
@@ -80,9 +75,9 @@ class DeepStonerStrategy < Strategy
 
     case side
     when :ask
-      deviation_from..deviation_to
+      (100.0.to_d+deviation_from)..(100.0.to_d+deviation_to)
     when :bid
-      -deviation_to..-deviation_from
+      (100.to_d-deviation_to)..(100.to_d-deviation_from)
     else
       raise "WTF #{side}"
     end
