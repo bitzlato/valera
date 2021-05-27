@@ -15,6 +15,15 @@ module ApplicationHelper
     link_to strategy.name, strategy_path(strategy)
   end
 
+  def sorted_orders_by_side(orders, side)
+    orders.to_a.filter { |o| o.side? side }.sort_by { |o| side.to_s == 'ask' ? -o.price : o.price }
+  end
+
+  BG_SIDE_COLORS = { 'ask' => '#fee', 'bid' => '#efe' }
+  def side_bg_color(side)
+    BG_SIDE_COLORS[side.to_s]
+  end
+
   def app_title
     'VALERA'
   end

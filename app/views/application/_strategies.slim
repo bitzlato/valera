@@ -25,20 +25,21 @@ table.table.table-condensed.table-narrow style='border-right: 1px solid #eee; bo
 
         td.text-right rowspan=2 style='padding: 0px; border-left: 1px solid #eee; border-right: 1px solid #eee'
           = render 'strategies/form', strategy: strategy
-
-        td.text-right ASK
-        td.text-right
+        - side = 'ask'
+        td.text-right  style="background-color: #{side_bg_color(side)}" ASK
+        td.text-right  style="background-color: #{side_bg_color(side)}" 
           -# TODO = format_money strategy.state.binance_askPrice, strategy.market.quote
-        td.text-right style='padding: 0; border-left: 1px solid #eee'
+        td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
           = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side? :ask }, market: strategy.market
-        td.text-right style='padding: 0; border-left: 1px solid #eee'
+        td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
           = render 'persisted_orders', orders: strategy.active_orders.filter { |o| o.side? :ask }, market: strategy.market
 
       tr
-        td.text-right BID
-        td.text-right
+        - side = 'bid'
+        td.text-right style="background-color: #{side_bg_color(side)}" BID
+        td.text-right style="background-color: #{side_bg_color(side)}"
           -# TODO = format_money strategy.state.binance_bidPrice, strategy.market.quote
-        td.text-right style='padding: 0; border-left: 1px solid #eee'
+        td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
           = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side? :bid }, market: strategy.market
-        td.text-right style='padding: 0; border-left: 1px solid #eee'
+        td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
           = render 'persisted_orders', orders: strategy.active_orders.filter { |o| o.side? :bid }, market: strategy.market

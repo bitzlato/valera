@@ -9,7 +9,7 @@
       - total_volume = 0.0
       - total_price = 0.0
 
-      - orders.sort_by(&:id).each do |order|
+      - orders.each do |order|
         tr
           td
             .text-small.text-monospace.text-muted= '#' + order['id'].to_s
@@ -17,7 +17,7 @@
           td.text-small= format_money(order['price'], market.quote)
         - total_volume += order['origin_volume']
         - total_price += order['price'] * order['origin_volume']
-    - if orders.many?
+    - if orders.many? && params[:show_total]
       tfoot.tfoot-light
         tr
           th.text-small= t '.total'
