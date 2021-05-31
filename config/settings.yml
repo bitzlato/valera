@@ -18,10 +18,10 @@ defaults: &defaults
       credential_client: Peatio::Client::REST
 
   accounts:
-    peatio_danil_onelec_ru:
+    bargainer_bot:
       upstream: peatio
       credentials: danil_onelec_ru
-    peatio_danil_orionet_ru:
+    deep_stoner_bot:
       upstream: peatio
       credentials: danil_orionet_ru
     binance:
@@ -35,34 +35,34 @@ defaults: &defaults
 
     peatio_websocket:
       class: PeatioWebsocketDrainer
-      account: peatio_danil_orionet_ru
+      account: deep_stoner_bot
       upstream: peatio
 
     peatio_rest:
       class: PeatioRestDrainer
-      account: peatio_danil_orionet_ru
+      account: deep_stoner_bot
       upstream: peatio
 
     peatio_balance_orionet:
       class: PeatioAccountDrainer
       upstream: peatio
-      account: peatio_danil_orionet_ru
+      account: deep_stoner_bot
 
     peatio_balance_onelec:
       class: PeatioAccountDrainer
       upstream: peatio
-      account: peatio_danil_onelec_ru
+      account: bargainer_bot
 
   strategies:
     deep_stoner:
       class: DeepStonerStrategy
       comment: Глубокий наполнятель стакана (danil@orionet.ru)
-      account: peatio_danil_orionet_ru
+      account: deep_stoner_bot
 
     bargainer:
       class: BargainerStrategy
       comment: Проторговщик, торгует на малые объёмы но постоянно и сам с собой (danil@onelec.ru)
-      account: peatio_danil_onelec_ru
+      account: bargainer_bot
 
 development:
   <<: *defaults
