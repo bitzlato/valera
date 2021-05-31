@@ -5,19 +5,20 @@
     ul
       - @q.conditions.each do |cond|
         li= cond.inspect
-  - market = all_trades.first.market
-  - total_amount = all_trades.sum(:amount)
-  - total_spent = all_trades.sum(:total)
-  - # TODO Group by markets
-  = render 'table', scope: paginated_trades, decorator: TradeDecorator do
-    tr
-      th.text-right colspan=7
-        = t '.total'
-      th.text-right
-        = format_money total_amount, market.base
-      th.text-right
-        = format_money total_spent/total_amount, market.quote
-      th.text-right
-        = format_money total_spent, market.quote
+  - if all_trades.any?
+    - market = all_trades.first.market
+    - total_amount = all_trades.sum(:amount)
+    - total_spent = all_trades.sum(:total)
+    - # TODO Group by markets
+    = render 'table', scope: paginated_trades, decorator: TradeDecorator do
+      tr
+        th.text-right colspan=7
+          = t '.total'
+        th.text-right
+          = format_money total_amount, market.base
+        th.text-right
+          = format_money total_spent/total_amount, market.quote
+        th.text-right
+          = format_money total_spent, market.quote
 
   = paginate paginated_trades
