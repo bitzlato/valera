@@ -42,13 +42,13 @@ gem 'redis-objects'
 
 gem 'rails-i18n'
 
+gem 'jwt', github: 'jwt/ruby-jwt'
+gem 'jwt-multisig', '~> 1.0.0'
+gem 'jwt-rack', '~> 0.1.0', require: false
 gem 'parallel'
 gem 'safe_yaml', '~> 1.0.5', require: 'safe_yaml/load'
 gem 'semver2'
 gem 'settingslogic'
-gem 'jwt', github: 'jwt/ruby-jwt'
-gem 'jwt-multisig', '~> 1.0.0'
-gem 'jwt-rack', '~> 0.1.0', require: false
 
 group :development, :test do
   gem 'foreman'
