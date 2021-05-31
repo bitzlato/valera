@@ -20,10 +20,10 @@ defaults: &defaults
   accounts:
     bargainer_bot:
       upstream: peatio
-      credentials: danil_onelec_ru
+      credentials: bargainer_bot
     deep_stoner_bot:
       upstream: peatio
-      credentials: danil_orionet_ru
+      credentials: deep_stoner_bot
     binance:
       upstream: binance
 
