@@ -1,3 +1,5 @@
+[![Ruby](https://github.com/finfex/valera/actions/workflows/ruby.yml/badge.svg)](https://github.com/finfex/valera/actions/workflows/ruby.yml)
+
 # Valera
 
 Automated crypto currency trading software for peatio 
