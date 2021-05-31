@@ -11,7 +11,7 @@ module CurrentUser
   private
 
   def authenticate!
-    redirect_to Settings.signin_url unless current_user.present?
+    redirect_to Settings.signin_url.presence || root_url unless current_user.present?
   end
 
   def current_user
@@ -19,8 +19,6 @@ module CurrentUser
   end
 
   def load_current_user
-    return Member.find_by(uid: ENV['FORCED_MEMBER_UID']) if ENV.true? 'FORCED_MEMBER_UID'
-
     unless request.env.key?('jwt.payload') # jwt.payload provided by rack-jwt
       Rails.logger.error 'No JWT payload to authenticate'
       return
@@ -32,6 +30,6 @@ module CurrentUser
       return
     end
 
-    Member.find_by(uid: payload[:uid])
+    OpenStruct.new(uid: payload[:uid])
   end
 end
