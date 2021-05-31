@@ -53,6 +53,7 @@ class BargainerStrategy < Strategy
       res
     end
 
+    logger.debug("Build order #{side}, #{price}, #{volume}")
     super side, price, volume, comparer
   end
 
