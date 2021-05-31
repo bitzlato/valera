@@ -21,6 +21,7 @@ pickle-email-*.html
 # TODO Comment out this rule if you are OK with secrets being uploaded to the repo
 config/initializers/secret_token.rb
 config/master.key
+config/credentials/*.key
 
 # Only include if you have production secrets in this file, which is no longer a Rails default
 # config/secrets.yml
@@ -73,7 +74,6 @@ yarn-debug.log*
 /public/test
 /public/development
 yarn-error.log
-config/master.key
 .vscode
 .envrc
 .powenv
@@ -145,3 +145,5 @@ vendor/bundle
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+/config/credentials/production.key
