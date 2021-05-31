@@ -141,4 +141,4 @@ gem 'dotenv-rails', '~> 2.7'
 
 gem 'percentage', '~> 1.4'
 
-gem "mini_racer", "~> 0.4.0"
+gem 'mini_racer', '~> 0.4.0'

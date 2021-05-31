@@ -53,7 +53,7 @@ class BargainerStrategy < Strategy
       res
     end
 
-    logger.debug("Build order #{side}, #{price}, #{volume}")
+    logger.debug("Build order(#{side}, #{price}, #{volume})")
     super side, price, volume, comparer
   end
 
@@ -91,12 +91,16 @@ class BargainerStrategy < Strategy
 
   def calculate_volume
     day_trading_value = account.day_trades_amounts[market.id]
-    return if day_trading_value.nil?
+    if day_trading_value.nil?
+      logger.warn('No defined day_trading_value, assume it is zero')
+      day_trading_value = 0
+    end
 
     if day_trading_value >= settings.base_max_day_trading_amount
       logger.debug "Skip ordering. Met day trading limit #{day_trading_value} >= #{settings.base_max_day_trading_amount}"
       nil
     else
+      logger.debug("Use base_volume as order volume (#{settings.base_volume})")
       settings.base_volume
     end
   end

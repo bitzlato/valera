@@ -18,6 +18,7 @@ class PeatioAccountDrainer < Drainer
       active_orders: fetch_active_orders
     )
     update_trades!
+    logger.debug 'update_trades_amounts!'
     account.update_trades_amounts!
   rescue Peatio::Client::REST::Error => e
     logger.error e
@@ -27,6 +28,7 @@ class PeatioAccountDrainer < Drainer
   private
 
   def update_trades!
+    logger.debug 'update_trades!'
     client.trades.each do |raw_trade|
       Trade
         .create_with(
