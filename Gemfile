@@ -140,3 +140,5 @@ gem 'kaminari', '~> 1.2'
 gem 'dotenv-rails', '~> 2.7'
 
 gem 'percentage', '~> 1.4'
+
+gem "mini_racer", "~> 0.4.0"
