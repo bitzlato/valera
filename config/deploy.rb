@@ -35,6 +35,7 @@ set :conditionally_migrate, true
 
 # set :assets_roles, %i[webpack] # Give the webpack role to a single server
 # set :assets_prefix, 'packs' # Assets are located in /packs/
+set :assets_prefix, 'valera/assets' # Assets are located in /packs/
 set :assets_dependencies,
     %w[
       app/assets lib/assets vendor/assets app/javascript

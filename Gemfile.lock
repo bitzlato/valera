@@ -16,6 +16,12 @@ GIT
       capistrano (>= 3.7.0, < 3.17.0)
 
 GIT
+  remote: https://github.com/jwt/ruby-jwt.git
+  revision: 9a5bc6451f5e686c783f8860d3f104088823fbd3
+  specs:
+    jwt (2.3.0.dev)
+
+GIT
   remote: https://github.com/mmotherwell/best_in_place
   revision: 88eb3052623a9a6cd346864d2aca05021c2f80d0
   specs:
@@ -232,6 +238,12 @@ GEM
     influxdb (0.8.1)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
+    jwt-multisig (1.0.5)
+      activesupport (>= 4.0)
+      jwt (~> 2.2)
+    jwt-rack (0.1.1)
+      jwt (~> 2.2)
+      rack
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.1)
@@ -486,6 +498,9 @@ DEPENDENCIES
   guard-shell
   influxdb (~> 0.8.1)
   jbuilder (~> 2.7)
+  jwt!
+  jwt-multisig (~> 1.0.0)
+  jwt-rack (~> 0.1.0)
   kaminari (~> 1.2)
   listen (~> 3.3)
   minitest-around

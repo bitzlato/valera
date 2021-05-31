@@ -52,20 +52,15 @@ Run first bot only
 
 ## Setup
 
-1. Add `PRODUCTION_HOST` and `STAGING_HOST` to `.envrc`
-2. Initialize directory and configs structure on the server
-
-> bundle exec cap $STAGE systemd:puma:setup systemd:poller:setup systemd:maker:setup systemd:websocket_collectors:setup master_key:setup
-
-3. Add env varliables to the server .env file
-
-> bundle exec cap $STAGE config:set RAILS_ENV=$STAGE \
-  RAILS_SERVE_STATIC_FILES=true \
-  BUGSNAG_API_KEY=??? \
-  VALERA_REDIS_URL=redis://localhost:6379/4 \
-  JWT_PUBLIC_KEY=??? \
+```
+export PRODUCTION_HOST=<YOUR_SERVER_IP> 
+bundle exec cap production systemd:puma:setup systemd:daemon:setup master_key:setup
+bundle exec cap production config:set RAILS_ENV=production RAILS_SERVE_STATIC_FILES=true BUGSNAG_API_KEY=$BUGSNAG_API_KEY VALERA_REDIS_URL=redis://localhost:6379/4
+```
 
 ## Regular deploy
 
-> bundle exec cap $STAGE deploy
+```
+bundle exec cap production deploy
+```
 
