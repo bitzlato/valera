@@ -49,7 +49,7 @@ class Strategy
   end
 
   def active_orders
-    account.active_orders.fiter { |ao| ao.market == market }
+    account.active_orders.filter { |ao| ao.market == market }
   end
 
   def class_and_name
