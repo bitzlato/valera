@@ -105,7 +105,14 @@ class God
   def build_markets
     Settings.markets
             .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |name, a|
-      a[name] = Market.new(*name.split('_'))
+      market = if name.is_a? String
+                 Market.build_by_id(name)
+               elsif name.is_a? Hash
+                 Market.new(**name.symbolize_keys)
+               else
+                 raise "Uknown market definition type #{name.class} (#{name})"
+               end
+      a[market.id] = market
     end
   end
 

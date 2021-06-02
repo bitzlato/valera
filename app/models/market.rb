@@ -4,11 +4,18 @@ class Market
   extend ActiveModel::Naming
   extend Finders
   include ActiveModel::Conversion
-  attr_reader :quote, :base
+  attr_reader :quote, :base, :peatio_symbol, :binance_symbol
 
-  def initialize(base, quote)
+  def self.build_by_id(symbol)
+    base, quote = *symbol.split('_')
+    new(base: base, quote: quote)
+  end
+
+  def initialize(base:, quote:, peatio_symbol: nil, binance_symbol: nil)
     @base = base
     @quote = quote
+    @peatio_symbol = peatio_symbol || (base + quote).downcase
+    @binance_symbol = binance_symbol || (base + quote).upcase
   end
 
   def upstream_markets
@@ -49,19 +56,7 @@ class Market
     [base, quote].join('_')
   end
 
-  def symbol
-    base + quote
-  end
-
   def to_s
     id.to_s
-  end
-
-  def peatio_symbol
-    symbol.downcase
-  end
-
-  def binance_symbol
-    symbol.upcase.gsub('MCR', 'RUB')
   end
 end

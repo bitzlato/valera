@@ -1,7 +1,13 @@
 defaults: &defaults
   root_prefix: /valera
   # markets_ ["BTC_USDT", "BTC_MCR", "ETH_BTC", "ETH_USDT", "ETH_MCR", "USDT_MCR"]
-  markets: ["BTC_USDT"]
+  # binance_symbol: symbol.upcase.gsub('MCR', 'RUB')
+  markets: 
+    - BTC_USDT
+    - quote: UUU
+      base: BBB
+      binance_symbol: BTCUSDT
+
   polling_sleep: 0.1
   maker_sleep: 0.1
 
@@ -53,12 +59,12 @@ defaults: &defaults
   strategies:
     deep_stoner:
       class: DeepStonerStrategy
-      comment: Глубокий наполнятель стакана (danil@orionet.ru)
+      comment: Глубокий наполнятель стакана
       account: deep_stoner_bot
 
     bargainer:
       class: BargainerStrategy
-      comment: Проторговщик, торгует на малые объёмы но постоянно и сам с собой (danil@onelec.ru)
+      comment: Проторговщик, торгует на малые объёмы но постоянно и сам с собой
       account: bargainer_bot
 
 development:
