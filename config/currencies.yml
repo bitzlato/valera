@@ -36,6 +36,22 @@ usd:
   is_crypto: false
 
 
+bbb:
+  priority: 13
+  iso_code: BBB
+  name: Test Bitcoin
+  symbol: B
+  alternate_symbols: []
+  subunit: Satoshi
+  subunit_to_unit: 100000000
+  symbol_first: false
+  html_entity: "&#x20bf;"
+  decimal_mark: "."
+  thousands_separator: ","
+  iso_numeric: ''
+  smallest_denomination: 1
+  is_crypto: true
+
 btc:
   priority: 3
   iso_code: BTC
@@ -228,6 +244,21 @@ zec:
   alternate_symbols: []
   subunit: Zcash Cent
   subunit_to_unit: 100000000
+  symbol_first: true
+  html_entity: "$"
+  decimal_mark: "."
+  thousands_separator: ","
+  iso_numeric: ''
+  smallest_denomination: 1
+  is_crypto: true
+uuu:
+  priority: 15
+  iso_code: UUU
+  name: Test Tether
+  symbol: T
+  alternate_symbols: []
+  subunit: UUU Cent
+  subunit_to_unit: 100
   symbol_first: true
   html_entity: "$"
   decimal_mark: "."
