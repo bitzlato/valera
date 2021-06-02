@@ -118,6 +118,7 @@ group :deploy do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-db-tasks', require: false
   gem 'capistrano-dotenv-tasks'
+  gem 'capistrano-rails-console', require: false
   gem 'capistrano-faster-assets', require: false
   gem 'capistrano-git-with-submodules'
   gem 'capistrano-master-key', require: false, github: 'virgoproz/capistrano-master-key'
