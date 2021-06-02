@@ -1,11 +1,11 @@
 GIT
-  remote: https://github.com/andyklimczak/binance.git
-  revision: 6307506df51469ffd41c34a38ffb363f8908cf6e
+  remote: https://github.com/finfex/binance.git
+  revision: b3d0acbfd0147b18ca9d72562f388bdfa9d368d1
   branch: immutable-strings-ruby-27
   specs:
     binance (1.2.0)
-      faraday (~> 0.12)
-      faraday_middleware (~> 0.12)
+      faraday (>= 0.12)
+      faraday_middleware (>= 0.12)
       faye-websocket (~> 0.10)
 
 GIT
@@ -129,8 +129,6 @@ GEM
     bindex (0.8.1)
     bootsnap (1.7.5)
       msgpack (~> 1.0)
-    bugsnag (6.20.0)
-      concurrent-ruby (~> 1.0)
     bugsnag-capistrano (2.0.0)
     builder (3.2.4)
     byebug (11.1.3)
@@ -203,11 +201,22 @@ GEM
     equalizer (0.0.11)
     erubi (1.10.0)
     eventmachine (1.2.7)
-    faraday (0.17.4)
+    faraday (1.4.2)
+      faraday-em_http (~> 1.0)
+      faraday-em_synchrony (~> 1.0)
+      faraday-excon (~> 1.1)
+      faraday-net_http (~> 1.0)
+      faraday-net_http_persistent (~> 1.1)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.14.0)
-      faraday (>= 0.7.4, < 1.0)
-    faye-websocket (0.11.0)
+      ruby2_keywords (>= 0.0.4)
+    faraday-em_http (1.0.0)
+    faraday-em_synchrony (1.0.0)
+    faraday-excon (1.1.0)
+    faraday-net_http (1.0.1)
+    faraday-net_http_persistent (1.1.0)
+    faraday_middleware (1.0.0)
+      faraday (~> 1.0)
+    faye-websocket (0.11.1)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
     ffi (1.15.0)
@@ -380,6 +389,7 @@ GEM
       rubocop (>= 1.7.0, < 2.0)
     ruby-prof (1.4.3)
     ruby-progressbar (1.11.0)
+    ruby2_keywords (0.0.4)
     rubyzip (2.3.0)
     safe_yaml (1.0.5)
     sass (3.4.25)
@@ -402,6 +412,16 @@ GEM
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
     semver2 (3.4.2)
+    sentry-rails (4.5.0)
+      railties (>= 5.0)
+      sentry-ruby-core (~> 4.5.0)
+    sentry-ruby (4.5.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      faraday (>= 1.0)
+      sentry-ruby-core (= 4.5.0)
+    sentry-ruby-core (4.5.0)
+      concurrent-ruby
+      faraday
     settingslogic (2.0.9)
     shellany (0.0.1)
     slim (4.1.0)
@@ -460,7 +480,7 @@ GEM
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
-    websocket-driver (0.7.3)
+    websocket-driver (0.7.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     xpath (3.2.0)
@@ -476,7 +496,6 @@ DEPENDENCIES
   best_in_place!
   binance (~> 1.2)!
   bootsnap (>= 1.4.4)
-  bugsnag (~> 6.20)
   bugsnag-capistrano
   byebug
   capistrano
@@ -536,6 +555,8 @@ DEPENDENCIES
   sd_notify
   selenium-webdriver
   semver2
+  sentry-rails
+  sentry-ruby
   settingslogic
   slim-rails
   spring

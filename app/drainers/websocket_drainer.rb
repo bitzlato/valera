@@ -20,9 +20,8 @@ class WebsocketDrainer < MarketDrainer
   def error(event)
     # Possible event.message:
     # Errno::ECONNRESET
-    Bugsnag.notify event.message do |b|
-      b.meta_data = { market_id: market.id }
-    end
+
+    Sentry.capture_message event.messsage
     logger.error "Error (#{event.type}) with message #{event.message}"
 
     return unless event.message == Errno::ECONNRESET

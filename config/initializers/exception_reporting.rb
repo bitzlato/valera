@@ -24,6 +24,7 @@ end
 
 def report_exception_to_ets(exception)
   Bugsnag.notify exception if defined? Bugsnag
+  Sentry.capture_exception exception if defined? Sentry
 rescue StandardError => e
   report_exception(e, false)
 end

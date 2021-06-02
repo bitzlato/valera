@@ -95,7 +95,7 @@ gem 'nokogiri', '~> 1.11'
 
 gem 'auto_logger', path: 'vendor/auto_logger'
 
-gem 'binance', '~> 1.2', github: 'andyklimczak/binance', branch: 'immutable-strings-ruby-27'
+gem 'binance', '~> 1.2', github: 'finfex/binance', branch: 'immutable-strings-ruby-27'
 
 gem 'eventmachine'
 
@@ -103,7 +103,8 @@ gem 'money', '~> 6.14'
 
 gem 'influxdb', '~> 0.8.1'
 
-gem 'bugsnag', '~> 6.20'
+gem "sentry-ruby"
+gem "sentry-rails"
 
 gem 'technical-analysis', '~> 0.2.4'
 
