@@ -60,17 +60,23 @@ class BargainerStrategy < Strategy
   def average_price
     source_average_price = source_upstream_market.avgPrice
     peatio_upstream = upstream_markets.find_by_upstream!(:peatio)
-    peatio_average_price = (peatio_upstream.high + peatio_upstream.low) / 2
 
-    upstream_threshold = (source_average_price - peatio_average_price).abs / (source_average_price / 100.0)
-    logger.info "Upstream threshold #{upstream_threshold}"
-
-    # TODO: Брать среднюю цену стакана из peatio
-    if upstream_threshold > settings.base_max_upstream_threshold
-      logger.warn "Upstream threshold is too much #{upstream_threshold} > #{settings.base_max_upstream_threshold} (binance:#{source_average_price} ; peatio:#{peatio_average_price})"
+    if peatio_upstream.high.to_f.zero?  || peatio_upstream.low.to_f.zero?
+      logger.warn "Peatio high/low prices is zero or undefined. Use source upstream price"
       source_average_price
     else
-      peatio_average_price
+      peatio_average_price = (peatio_upstream.high + peatio_upstream.low) / 2
+
+      upstream_threshold = (source_average_price - peatio_average_price).abs / (source_average_price / 100.0)
+      logger.info "Upstream threshold #{upstream_threshold}"
+
+      # TODO: Брать среднюю цену стакана из peatio
+      if upstream_threshold > settings.base_max_upstream_threshold
+        logger.warn "Upstream threshold is too much #{upstream_threshold} > #{settings.base_max_upstream_threshold} (binance:#{source_average_price} ; peatio:#{peatio_average_price})"
+        source_average_price
+      else
+        peatio_average_price
+      end
     end
   end
 
