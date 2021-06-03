@@ -21,7 +21,7 @@ class WebsocketDrainer < MarketDrainer
     # Possible event.message:
     # Errno::ECONNRESET
 
-    Sentry.capture_message event.messsage
+    Sentry.capture_message event.message
     logger.error "Error (#{event.type}) with message #{event.message}"
 
     return unless event.message == Errno::ECONNRESET
