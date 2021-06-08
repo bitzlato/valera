@@ -15,7 +15,7 @@ ExecStop=/bin/kill -TERM $MAINPID
 KillMode=mixed
 Restart=always
 RestartSec=1
-SyslogIdentifier=daemon
+SyslogIdentifier=<%= fetch(:application) %>-daemon-%i
 
 [Install]
 # Use default.target to autoboot user service
