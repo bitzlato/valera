@@ -10,10 +10,10 @@ module StrategyActivation
   end
 
   def stop!(reason)
-    update_attributes! is_active: false, inactivation_reason: reason, inactivated_at: Time.zone.now
+    update_attributes! is_active: false, inactivation_reason: reason, inactivated_at: Time.now
   end
 
   def start!
-    update_attributes! is_active: true, inactivation_reason: nil, activated_at: Time.zone.now, maker_pid: Process.pid
+    update_attributes! is_active: true, inactivation_reason: nil, activated_at: Time.now, maker_pid: Process.pid
   end
 end

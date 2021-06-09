@@ -47,7 +47,7 @@ module RedisModel
 
   def save!
     validate!
-    self.updated_at = Time.zone.now
+    self.updated_at = Time.now
     before_save
     redis_value.value = attributes.except(:id)
     after_save

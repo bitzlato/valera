@@ -32,7 +32,7 @@ class Account
     update_attributes!(
       day_trades_amounts: trades_amounts_for(1.day.ago),
       hour_trades_amounts: trades_amounts_for(1.hour.ago),
-      trades_updated_at: Time.zone.now
+      trades_updated_at: Time.now
     )
   end
 

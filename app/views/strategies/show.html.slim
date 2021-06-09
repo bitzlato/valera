@@ -16,7 +16,7 @@
   h3= link_to t('.strategy_state'), '#strategyState', data: { toggle: 'collapse' }
   .collapse#strategyState
     div.mb-2 data-cable-broadcast=StrategyChannel.broadcasting_for(strategy) data-cable-field='update_date'
-      = Time.zone.now
+      = Time.now
     code.text-small style='max-height: 420px; overflow: scroll; display: block'
       pre data-cable-broadcast=StrategyChannel.broadcasting_for(strategy) data-cable-field='pretty_state' style='columns: 250px'
         = JSON.pretty_generate strategy.state.as_json
