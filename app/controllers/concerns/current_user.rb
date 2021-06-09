@@ -19,6 +19,7 @@ module CurrentUser
   end
 
   def load_current_user
+    return OpenStruct.new(uid: ENV['FORCED_USER_ID']) if ENV.true? 'FORCED_USER_ID'
     unless request.env.key?('jwt.payload') # jwt.payload provided by rack-jwt
       Rails.logger.error 'No JWT payload to authenticate'
       return
