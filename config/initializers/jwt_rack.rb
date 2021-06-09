@@ -9,6 +9,7 @@ on_error = lambda do |_error|
   body    = { errors: [message] }.to_json
   headers = { 'Content-Type' => 'application/json', 'Content-Length' => body.bytesize.to_s }
 
+  Rails.logger.error _error
   [401, headers, [body]]
 end
 
