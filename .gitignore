@@ -146,4 +146,6 @@ vendor/bundle
 yarn-debug.log*
 .yarn-integrity
 
-/config/credentials/production.key
+/config/credentials/*.key
+
+/config/settings.local.yml
