@@ -39,6 +39,12 @@ class PersistedOrder
     super(attrs).freeze
   end
 
+  def <=>(other)
+    return nil unless side == other.side
+
+    -price <=> -other.price
+  end
+
   def side?(asked_side)
     asked_side = asked_side.to_s
 
