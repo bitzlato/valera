@@ -134,10 +134,10 @@ class Strategy
 
   def build_order(side, price, volume, comparer = nil, level = 0)
     if price.nil? || price.zero?
-      logger.warn "Skip order building for side [#{side}] because price is zero or undefined (volume: #{volume}, level: #{level}"
+      logger.warn "Skip order building for side [#{side}] because price is zero or undefined (volume: #{volume}, level: #{level})"
       nil
     elsif volume.nil? || volume.zero?
-      logger.warn "Skip order building for side [#{side}] because volume is zero or undefined (price: #{price}, level: #{level}"
+      logger.warn "Skip order building for side [#{side}] because volume is zero or undefined (price: #{price}, level: #{level})"
       nil
     else
       logger.debug "build_order(#{side}, #{price}, #{volume})"
