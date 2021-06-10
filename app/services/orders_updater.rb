@@ -43,7 +43,7 @@ class OrdersUpdater
   def update_by_side!(side, required_orders)
     logger.debug "[#{side}] Update by side #{side} #{required_orders}"
 
-    persisted_orders = account.active_orders.filter { |o| o.side? side }
+    persisted_orders = active_orders(side)
     logger.debug "[#{side}] Persisted orders #{persisted_orders}"
 
     outdated_orders, orders_to_create = calculate_orders Set.new(persisted_orders), Set.new(required_orders)
@@ -54,6 +54,10 @@ class OrdersUpdater
     return [] if orders_to_create.empty?
 
     create_orders! orders_to_create
+  end
+
+  def active_orders(side)
+    account.active_orders.filter { |o| o.market == market && o.side?(side) }
   end
 
   private
