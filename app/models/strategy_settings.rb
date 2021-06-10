@@ -3,10 +3,11 @@
 class StrategySettings
   include RedisModel
 
-  UNSCOPED_ATTRIBUTES = %i[id updated_at enabled].freeze
+  UNSCOPED_ATTRIBUTES = %i[id updated_at target_state].freeze
 
-  # Manualy enable/disable
-  attribute :enabled, Boolean, default: false
+  TARGET_STATES = %w[disable enable pause]
+
+  attribute :target_state, String, default: 'disabled'
 
   # Latency to update. Required to not update too often (seconds)
   attribute :base_latency, BigDecimal, default: 0.3
@@ -22,6 +23,14 @@ class StrategySettings
 
   def self.model_name
     ActiveModel::Name.new(StrategySettings)
+  end
+
+  def paused?
+    target_state == 'pause'
+  end
+
+  def enabled?
+    target_state == 'enable'
   end
 
   def leveled_attributes_unsuffixed

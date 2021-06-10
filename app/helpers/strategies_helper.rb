@@ -19,7 +19,12 @@ module StrategiesHelper
       display_with = ->(value) { "#{value} sec" }
     end
     type = attribute.to_s.include?('enabled') ? :checkbox : :input
-    collection = %w[Disabled Enabled] if attribute.to_s == 'enabled'
+    if attribute.to_s == 'enabled'
+      collection = %w[Disabled Enabled]
+    elsif attribute.to_s == 'target_state'
+      collection = StrategySettings::TARGET_STATES.map { |s| [s,s] }
+      type = :select
+    end
     best_in_place strategy.settings, attribute, as: type, display_with: display_with, collection: collection
   end
 

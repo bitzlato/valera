@@ -83,26 +83,35 @@ class Strategy
 
   def perform
     reload
-    bump!  if state.updated_at.nil? || Time.now - state.updated_at > settings.base_latency
+    bump! if (state.updated_at.nil? || Time.now - state.updated_at > settings.base_latency)
   end
 
   # Change state
   # @param changes [Hash]
   def bump!(changes = {})
-    logger.debug "Bump with #{changes}"
+    # logger.debug "Bump with #{changes}"
 
-    if settings.enabled && state.is_active?
-      state.update_attributes! created_orders: updater.update!(build_orders)
-    elsif state.created_orders.present? || account.active_orders.present?
-      logger.info 'Does not update bot orders because bot is disabled or inactive. Cancel all orders'
-      updater.cancel!
-      state.update_attributes! created_orders: []
+    case settings.target_state
+    when 'enable'
+      if state.is_active?
+        state.update_attributes! created_orders: updater.update!(build_orders)
+      else
+        state.touch!
+      end
+    when 'disable'
+      if state.created_orders.present? || account.active_orders.present?
+        logger.info 'Does not update bot orders because bot is disabled or inactive. Cancel all orders'
+        updater.cancel!
+        state.update_attributes! created_orders: []
+      else
+        state.touch!
+      end
     else
-      logger.debug 'Strategy is disabled. Do nothing'
       state.touch!
     end
 
-    StrategyChannel.update self
+    # Временно отключил
+    # StrategyChannel.update self
   rescue Peatio::Client::REST => e
     logger.error "#{self} #{e}"
   rescue StandardError => e
