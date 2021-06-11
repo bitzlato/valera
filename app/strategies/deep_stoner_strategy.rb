@@ -54,7 +54,8 @@ class DeepStonerStrategy < Strategy
 
     volume = calculate_volume(side, level)
     comparer = lambda do |persisted_order|
-      price_range.member?(persisted_order.price)
+
+      !settigs.is_mad_mode && price_range.member?(persisted_order.price)
       # TODO Учитывать диапазон зазрешенного объёма или сбрасывать заявки после изменения объёма в настройках
       # иначе оно слишком часто прыгает
       # volume == persisted_order.origin_volume
