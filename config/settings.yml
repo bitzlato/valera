@@ -46,12 +46,12 @@ defaults: &defaults
       account: deep_stoner_bot
       upstream: peatio
 
-    peatio_balance_orionet:
+    peatio_balance_deep_stoner:
       class: PeatioAccountDrainer
       upstream: peatio
       account: deep_stoner_bot
 
-    peatio_balance_onelec:
+    peatio_balance_bargainer:
       class: PeatioAccountDrainer
       upstream: peatio
       account: bargainer_bot

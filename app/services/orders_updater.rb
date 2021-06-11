@@ -18,7 +18,7 @@ class OrdersUpdater
     @market = market || raise('No market')
     @account = account || raise('No account')
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger)
-                                          .tagged([self.class.name, market, client.name].join(' '))
+      .tagged([self.class.name, market, client.name, client.endpoint].join(' '))
     @name = name
   end
 

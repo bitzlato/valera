@@ -15,7 +15,7 @@ module Peatio
       # Map valera sides to clients sides
       SIDES_MAP = { bid: 'buy', ask: 'sell' }.freeze
 
-      attr_reader :name
+      attr_reader :name, :endpoint, :prefix
 
       def initialize(name: nil,
                      access_key: ENV['PEATIO_API_ACCESS_KEY'],
@@ -30,7 +30,7 @@ module Peatio
       end
 
       def to_s
-        name
+        name.to_s + '->' + endpoint
       end
 
       def account_balances(currency = nil)
@@ -103,7 +103,7 @@ module Peatio
 
       private
 
-      attr_reader :access_key, :secret_key, :endpoint, :prefix
+      attr_reader :access_key, :secret_key
 
       def connection
         nonce = (Time.now.to_f * 1000).to_i.to_s

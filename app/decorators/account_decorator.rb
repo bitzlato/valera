@@ -33,7 +33,7 @@ class AccountDecorator < ApplicationDecorator
   def client
     return h.middot if object.client.nil?
 
-    object.client.class
+    object.client.to_s
   end
 
   def day_trades_amounts

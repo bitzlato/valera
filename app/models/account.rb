@@ -20,6 +20,14 @@ class Account
     @client = client
   end
 
+  def brief
+    if client.present?
+      to_s + ':' + client.endpoint
+    else
+      to_s
+    end
+  end
+
   def drainers
     God.drainers.filter { |d| d.account == self }
   end
