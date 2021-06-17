@@ -1,12 +1,7 @@
 defaults: &defaults
   root_prefix: /valera
-  # markets_ ["BTC_USDT", "BTC_MCR", "ETH_BTC", "ETH_USDT", "ETH_MCR", "USDT_MCR"]
-  # binance_symbol: symbol.upcase.gsub('MCR', 'RUB')
   markets: 
     - BTC_USDT
-    - quote: UUU
-      base: BBB
-      binance_symbol: BTCUSDT
 
   polling_sleep: 0.1
   maker_sleep: 0.1
@@ -61,6 +56,7 @@ defaults: &defaults
       class: DeepStonerStrategy
       comment: Глубокий наполнятель стакана
       account: deep_stoner_bot
+      buyout_account: binance
 
     bargainer:
       class: BargainerStrategy
@@ -81,16 +77,27 @@ test:
   markets: ["BTC_USDT"]
 
   upstreams: 
-    binance: {}
-    peatio: {}
+    binance:
+      credential_client: Valera::BinanceClient
+    peatio:
+      credential_client: Peatio::Client::REST
 
   accounts:
     peatio1:
       upstream: peatio
+      credentials: 
+        access_key: test
+        secret_key: text
     peatio2:
       upstream: peatio
+      credentials: 
+        access_key: test
+        secret_key: text
     binance:
       upstream: binance
+      credentials: 
+        access_key: test
+        secret_key: text
 
   drainers: {}
   strategies: {}
