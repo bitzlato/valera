@@ -5,11 +5,12 @@
 #
 class Order
   PRECISION = 4 # Gets from peatio config. Specific for every currency
+
   include Virtus.model
   include ActiveModel::AttributeAssignment
   include ActiveModel::Validations
   include Comparable
-  SIDES = %i[ask bid].freeze
+  include SideInquirer
 
   attribute :side, Symbol
   attribute :volume, BigDecimal
@@ -18,7 +19,6 @@ class Order
 
   validates :volume, presence: true, numericality: { greater_than: 0 }
   validates :price, presence: true, numericality: { greater_than: 0 }
-  validates :side, presence: true, inclusion: { in: SIDES }
 
   delegate :hash, to: :to_s
 
