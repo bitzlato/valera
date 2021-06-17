@@ -32,6 +32,10 @@ class Strategy
     StrategyState
   end
 
+  def trade_created(trade)
+    logger.debug "Trade created #{trade}"
+  end
+
   # @param name [String] key of bot from Rails credentials
   # @param market [Market]
   def initialize(name:, market:, account:, default_settings: {}, comment: nil)

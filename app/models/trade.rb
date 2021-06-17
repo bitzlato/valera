@@ -3,11 +3,15 @@
 class Trade < ApplicationRecord
   delegate :upstream, to: :account
 
+  after_commit on: :create do
+    account.trade_created self
+  end
+
   def market
-    Market.find market_id
+    @market ||= Market.find market_id
   end
 
   def account
-    Account.find account_id
+    @account ||= Account.find account_id
   end
 end

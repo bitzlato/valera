@@ -28,6 +28,16 @@ class Account
     end
   end
 
+  def trade_created(trade)
+    strategies.each do |s|
+      s.trade_created trade
+    end
+  end
+
+  def strategies
+    Strategy.all.filter { |s| s.account == self }
+  end
+
   def drainers
     God.drainers.filter { |d| d.account == self }
   end
