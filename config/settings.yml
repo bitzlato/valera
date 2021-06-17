@@ -11,9 +11,10 @@ defaults: &defaults
     orders_updater: 'processor'
 
   upstreams: 
-    binance: {}
+    binance: 
+      client: Valera::BinanceClient
     peatio:
-      credential_client: Peatio::Client::REST
+      client: Peatio::Client::REST
 
   accounts:
     bargainer_bot:
@@ -24,6 +25,7 @@ defaults: &defaults
       credentials: deep_stoner_bot
     binance:
       upstream: binance
+      credentials: binance
 
   drainers:
     binance_websocket:
@@ -78,9 +80,9 @@ test:
 
   upstreams: 
     binance:
-      credential_client: Valera::BinanceClient
+      client: Valera::BinanceClient
     peatio:
-      credential_client: Peatio::Client::REST
+      client: Peatio::Client::REST
 
   accounts:
     peatio1:

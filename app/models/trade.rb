@@ -3,6 +3,8 @@
 class Trade < ApplicationRecord
   delegate :upstream, to: :account
 
+  has_one :buyout_order, foreign_key: :original_trade_id
+
   after_commit on: :create do
     account.trade_created self
   end

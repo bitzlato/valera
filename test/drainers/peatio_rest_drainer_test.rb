@@ -2,7 +2,7 @@
 
 class PeatioRestDrainerTest < ActiveSupport::TestCase
   setup do
-    account = Account.new(id: 1, upstream: Upstream.all.first, client: Peatio::Client::REST.new)
+    account = Account.all.first
     @drainer = PeatioRestDrainer.new id: 1, market: Market.all.first, account: account
   end
 

@@ -13,9 +13,6 @@ module RedisModel
     attribute :id, String
     attribute :updated_at, Time
 
-    alias_method :to_s, :id
-    alias_method :to_param, :id
-
     def self.build(**attrs)
       new(**attrs).reload
     end
@@ -35,6 +32,14 @@ module RedisModel
   def update_attributes!(attributes)
     assign_attributes attributes
     save!
+  end
+
+  def to_s
+    id.to_s
+  end
+
+  def to_param
+    id.to_s
   end
 
   def persisted?

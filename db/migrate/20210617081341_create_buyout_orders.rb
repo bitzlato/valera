@@ -7,14 +7,15 @@ class CreateBuyoutOrders < ActiveRecord::Migration[6.1]
       t.decimal :price, null: false
       t.string :side, null: false
       t.string :market_id, null: false
-      t.string :target_account_id, null: false
+      t.string :buyout_account_id, null: false
       t.integer :status, null: false, default: 0
+      t.string :target_order_id
 
       t.timestamps
     end
 
     add_index :buyout_orders, [:trade_account_id, :original_trade_id], unique: true
     add_index :buyout_orders, :market_id
-    add_index :buyout_orders, :target_account_id
+    add_index :buyout_orders, :buyout_account_id
   end
 end

@@ -4,6 +4,7 @@ class DeepStonerStrategy < Strategy
   LEVELS_MULT = ENV.fetch('LEVELS_MULT', 1).to_i
   LEVELS_DECADE = ENV.fetch('LEVELS_DECADE', 10).to_i
 
+  attr_reader :buyout_account
   class Settings < StrategySettings
     attribute :base_min_volume, BigDecimal, default: 0.001
     validates :base_min_volume, presence: true, numericality: { greater_than: 0 }
@@ -32,6 +33,16 @@ class DeepStonerStrategy < Strategy
     <p>Делает заявки на объём <code>base_min_volume</code> базовой валюты по средней цене в стаканe, с разбросом от <code>base_min_threshold</code> до <code>base_max_threshold</code> %.</p>
     <p class="alert alert-warning">Пока в peatio не сформирован стакан цена берется из стакана binance</p>
     ).html_safe
+  end
+
+  def initialize(name:, market:, account:, default_settings: {}, comment: nil, buyout_account: )
+    @buyout_account = buyout_account
+    super name: name, market: market, account: account, default_settings: default_settings, comment: comment
+  end
+
+  def trade_created(trade)
+    BuyoutOrderCreator.call(trade, buyout_account)
+    super
   end
 
   private

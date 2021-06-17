@@ -1,21 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  trade_account_id: MyString
-  trade_id: 
-  amount: 9.99
+  trade_account_id: trade_account
+  original_trade_id: 219f499e-9fd5-43b0-a549-f7ce48698262
+  volume: 9.99
   price: 9.99
-  side: MyString
-  market_id: MyString
-  target_account_id: MyString
+  side: sell
+  market_id: sell
+  buyout_account_id: target_account
   status: 1
 
 two:
-  trade_account_id: MyString
-  trade_id: 
-  amount: 9.99
+  trade_account_id: trade_account
+  original_trade_id: 219f499e-9fd5-43b0-a549-f7ce48698263
+  volume: 9.99
   price: 9.99
-  side: MyString
+  side: buy
   market_id: MyString
-  target_account_id: MyString
+  buyout_account_id: target_account
   status: 1

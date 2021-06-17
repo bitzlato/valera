@@ -1,5 +1,9 @@
+# Buyout order
+#
 class BuyoutOrder < ApplicationRecord
   enum status: %i[initial posted waited done]
+
+  belongs_to :original_trade, class_name: 'Trade'
 
   def market
     @market ||= Market.find market_id
@@ -15,10 +19,6 @@ class BuyoutOrder < ApplicationRecord
 
   def trade_account
     Account.find trade_account_id
-  end
-
-  def original_trade
-    Trade.find original_trade_id
   end
 
   def target_account

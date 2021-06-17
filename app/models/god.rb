@@ -59,16 +59,20 @@ class God
   def build_accounts
     Settings.accounts.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       key, config = pair
-      credentials = Rails.application.credentials.bots.fetch(config['credentials'].to_sym) if config.key?('credentials')
       upstream = upstreams.fetch(config['upstream'].presence || raise("No upstream key in account section (#{key})"))
-      if upstream.credential_client_class.present?
-        client = upstream.credential_client_class.new(**credentials.merge(name: config['credentials'].to_sym))
-      end
+      raise "No upstream client_class for #{upstream}" if upstream.client_class.nil?
+
+      credentials = config.fetch('credentials')
+      credentials = credentials.is_a?(Hash) ? credentials : Rails.application.credentials.accounts.fetch(credentials.to_sym).merge(name: credentials.to_sym)
+      client = upstream.client_class.new(**credentials.symbolize_keys)
+
       hash[key] = Account.new(
         id: key,
         upstream: upstream,
         client: client
       )
+    rescue ArgumentError => err
+      raise "#{err} with #{upstream.client_class}"
     end
   end
 
@@ -97,8 +101,8 @@ class God
   def build_upstreams
     Settings.upstreams.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       id, options = pair
-      client_class = options.key?('credential_client') ? options['credential_client'].constantize : nil
-      hash[id] = Upstream.new id: id, credential_client_class: client_class
+      client_class = options.key?('client') ? options['client'].constantize : nil
+      hash[id] = Upstream.new id: id, client_class: client_class
     end
   end
 
@@ -124,13 +128,15 @@ class God
         settings = options.fetch('settings', {})
         settings = settings.fetch('global', {}).merge settings.dig('markets', market.id) || {}
 
-        strategies << strategy_class.new(
+        attrs = {
           name: key,
           market: market,
           account: accounts.fetch(options['account']),
           default_settings: settings,
           comment: options['comment']
-        )
+        }
+        attrs[:buyout_account] = accounts.fetch(options['buyout_account']) if options.has_key? 'buyout_account'
+        strategies << strategy_class.new(**attrs)
       end
     end
     strategies

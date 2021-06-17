@@ -32,7 +32,7 @@ class PeatioAccountDrainer < Drainer
     client.trades.each do |raw_trade|
       Trade
         .create_with(
-          raw_trade.slice('price', 'amount', 'total', 'taker_type').merge(
+          raw_trade.slice('price', 'amount', 'total', 'taker_type', 'order_id').merge(
             side: Peatio::Client::REST::SIDES_MAP.invert.fetch(raw_trade['side']), # TODO: Move to Peatio Client
             traded_at: raw_trade['created_at']
           )

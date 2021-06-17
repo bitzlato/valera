@@ -17,7 +17,7 @@ class Account
   def initialize(id:, upstream:, client:)
     super id: id
     @upstream = upstream
-    @client = client
+    @client = client || raise("No client for account #{id}")
   end
 
   def brief

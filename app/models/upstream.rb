@@ -4,15 +4,15 @@ class Upstream
   extend Finders
   include RedisModel
 
-  attr_reader :credential_client_class
+  attr_reader :client_class
 
   Market.all.each do |market|
     attribute "bid_orders_volume_#{market.id}", BigDecimal
     attribute "ask_orders_volume_#{market.id}", BigDecimal
   end
 
-  def initialize(id:, credential_client_class:)
-    @credential_client_class = credential_client_class
+  def initialize(id:, client_class:)
+    @client_class = client_class
     super id: id
   end
 
