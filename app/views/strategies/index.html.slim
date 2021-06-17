@@ -1,4 +1,5 @@
 .container-fluid
   h2= t '.strategies'
   hr
+  = render 'markets_select', selected_market: selected_market
   = render 'strategies', strategies: strategies

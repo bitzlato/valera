@@ -49,7 +49,7 @@ class Market
   end
 
   def ==(other)
-    other.id == id
+    other.try(:id) == id
   end
 
   def id

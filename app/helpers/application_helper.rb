@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  def active_class(css_classes, flag)
+    flag ? "#{css_classes} active" : css_classes
+  end
+
   def middot
     content_tag :div, '&middot;'.html_safe, class: 'text-muted'
   end
