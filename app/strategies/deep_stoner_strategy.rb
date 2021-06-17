@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class DeepStonerStrategy < Strategy
+  LEVELS_MULT = ENV.fetch('LEVELS_MULT', 1).to_i
+  LEVELS_DECADE = ENV.fetch('LEVELS_DECADE', 10).to_i
+
   class Settings < StrategySettings
     attribute :base_min_volume, BigDecimal, default: 0.001
     validates :base_min_volume, presence: true, numericality: { greater_than: 0 }
@@ -41,7 +44,9 @@ class DeepStonerStrategy < Strategy
           next
         end
         settings.levels.times.map do |level|
-          build_order(side, level)
+          LEVELS_MULT.times.map do |index|
+            build_order(side, level + index*LEVELS_DECADE)
+          end
         end
       end.flatten.compact
     )
@@ -54,8 +59,7 @@ class DeepStonerStrategy < Strategy
 
     volume = calculate_volume(side, level)
     comparer = lambda do |persisted_order|
-
-      !settigs.is_mad_mode && price_range.member?(persisted_order.price)
+      !settings.is_mad_mode && price_range.member?(persisted_order.price)
       # TODO Учитывать диапазон зазрешенного объёма или сбрасывать заявки после изменения объёма в настройках
       # иначе оно слишком часто прыгает
       # volume == persisted_order.origin_volume
@@ -71,6 +75,7 @@ class DeepStonerStrategy < Strategy
   end
 
   def price_deviation_range(side, level)
+    level = level - level/LEVELS_DECADE*LEVELS_DECADE
     deviation_from, deviation_to = [
       settings.send("base_best_price_deviation_from_#{level}"),
       settings.send("base_best_price_deviation_to_#{level}")
@@ -87,6 +92,7 @@ class DeepStonerStrategy < Strategy
   end
 
   def calculate_volume(side, level)
+    level = level - level/LEVELS_DECADE*LEVELS_DECADE
     liquidity_part = settings.send "base_liquidity_part_#{level}"
 
     return 0 if liquidity_part.zero?
