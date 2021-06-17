@@ -1,10 +1,7 @@
 .container-fluid
   h2= t '.trades'
   hr
-  pre
-    ul
-      - @q.conditions.each do |cond|
-        li= cond.inspect
+  = render 'ransack_conditions', conditions: @q.conditions
   - if all_trades.any?
     - market = all_trades.first.market
     - total_amount = all_trades.sum(:amount)

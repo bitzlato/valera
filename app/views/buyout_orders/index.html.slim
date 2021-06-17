@@ -1,0 +1,11 @@
+.container-fluid
+  h2= t '.buyout_orders'
+  hr
+  = render 'ransack_conditions', conditions: @q.conditions
+  - if all_orders.any?
+    - market = all_orders.first.market
+    - total_amount = all_orders.sum(:amount)
+    - total_spent = all_orders.sum(:total)
+    = render 'table', scope: paginated_orders, decorator: BuyoutOrderDecorator
+
+  = paginate paginated_orders

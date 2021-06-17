@@ -12,5 +12,6 @@ Rails.application.routes.draw do
     resources :accounts, only: %i[index show]
     resources :drainers, only: %i[index show]
     resources :trades, only: %i[index show]
+    resources :buyout_orders, only: %i[index show]
   end
 end

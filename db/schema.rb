@@ -10,12 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_25_052759) do
+ActiveRecord::Schema.define(version: 2021_06_17_081341) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "buyout_orders", force: :cascade do |t|
+    t.string "trade_account_id", null: false
+    t.uuid "original_trade_id", null: false
+    t.decimal "amount", null: false
+    t.decimal "price", null: false
+    t.string "side", null: false
+    t.string "market_id", null: false
+    t.string "target_account_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["market_id"], name: "index_buyout_orders_on_market_id"
+    t.index ["target_account_id"], name: "index_buyout_orders_on_target_account_id"
+    t.index ["trade_account_id", "original_trade_id"], name: "index_buyout_orders_on_trade_account_id_and_original_trade_id", unique: true
+  end
 
   create_table "trades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "market_id", null: false
