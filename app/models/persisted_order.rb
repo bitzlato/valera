@@ -21,15 +21,37 @@
 # "taker_fee"=>"0.0",
 # "trades_count"=>0}
 #
-class PersistedOrder < ApplicationRecord
+class PersistedOrder
+  PRECISION = Order::PRECISION
+
+  include Virtus.model
   include SideInquirer
 
-  PRECISION = Order::PRECISION
+  attribute :id, Integer
+  attribute :raw, Hash
+
+  attribute :side, String # One of Order::SIDES
+  attribute :origin_volume, BigDecimal
+  attribute :remaining_volume, BigDecimal
+  attribute :price, BigDecimal
+  attribute :market_id, String # Our market_id
+
+  def initialize(attrs)
+    super(attrs).freeze
+  end
 
   def <=>(other)
     return nil unless side == other.side
 
     -price <=> -other.price
+  end
+
+  def side?(asked_side)
+    asked_side = asked_side.to_s
+
+    raise "Unknown side #{asked_side}" unless Order::SIDES.map(&:to_s).include? asked_side
+
+    asked_side == side
   end
 
   def inspect
