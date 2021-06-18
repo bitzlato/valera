@@ -30,16 +30,21 @@ class PeatioAccountDrainer < Drainer
   def update_trades!
     logger.debug 'update_trades!'
     client.trades.each do |raw_trade|
+      market = Market.find_by(peatio_symbol: raw_trade['market']) # TODO: Move to Peatio Client
+      if market.nil?
+        logger.warn("Skip unknown market #{raw_trade['market']}")
+        next
+      end
+      raw_trade['side'] = Peatio::Client::REST::SIDES_MAP.invert.fetch(raw_trade['side']) # TODO: Move to Peatio Client
       Trade
         .create_with(
-          raw_trade.slice('price', 'amount', 'total', 'taker_type', 'order_id').merge(
-            side: Peatio::Client::REST::SIDES_MAP.invert.fetch(raw_trade['side']), # TODO: Move to Peatio Client
+          raw_trade.slice('price', 'amount', 'total', 'taker_type', 'side', 'order_id').merge(
             traded_at: raw_trade['created_at']
           )
         )
-        .find_or_create_by(
+        .find_or_create_by!(
           trade_id: raw_trade['id'],
-          market_id: Market.find_by!(peatio_symbol: raw_trade['market']), # TODO: Move to Peatio Client
+          market_id: market.id,
           account_id: account.id
         )
     end

@@ -7,22 +7,28 @@ class BuyoutOrderCreator
     buyout_order = trade.with_lock do
       raise "Trade #{trade.id} already buyouted" if trade.buyout_order.present?
 
-      binding.pry
-      case trade.side.to_s
-      when 'bid'
-        price = trace.price
+      um = UpstreamMarket.all.find { |um| um.upstream.accounts.include?(buyout_account) && um.market == trade.market }
+
+      # Продали дорого, нужно купить дешевле
+      if trade.side? :bid
         side = 'ask'
-      when 'ask'
+        price = um.bidPrice
+        if price >= trade.price
+          logger.warn("Target price (#{price}) is larger than original (#{trade.price}) for trade #{trade.id}. Skip buyout..")
+          return
+        end
+        # Проверять что  цена адекватная
+      else # Купили дешево, нужно продать дороже
         side = 'bid'
-      else
-        raise "Wrong trade side #{trade.side}"
+        price = um.askPrice
+
+        if price <= trade.price
+          logger.warn("Target price (#{price}) is lower than original (#{trade.price}) for trade #{trade.id}. Skip buyout..")
+          return
+        end
+        # Проверять что  цена адекватная
       end
 
-      price = trade.price + 10
-      side = trade.side.to_s == 'bid' ? 'ask' : 'bid'
-      # TODO Пjcxbnfnm
-      #
-      # price
       BuyoutOrder.create!(
         original_trade: trade,
         trade_account_id: trade.account.id,
@@ -30,10 +36,14 @@ class BuyoutOrderCreator
         volume: trade.amount,
         side: side,
         price: price,
-        buyout_account_id: buyout_account.id
+        buyout_account_id: buyout_account.id,
+        meta: {
+          askPrice: um.askPrice,
+          bidPrice: um.bidPrice
+        }
       )
     end
-    post_buyout_order(buyout_order, buyout_account)
+    # post_buyout_order(buyout_order, buyout_account)
     buyout_order
   end
 

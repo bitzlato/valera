@@ -6,6 +6,10 @@ class DeepStonerStrategy < Strategy
 
   attr_reader :buyout_account
   class Settings < StrategySettings
+    attribute :base_enable_buyout, Boolean, default: 0
+    attribute :base_min_buyout_threshold, BigDecimal, default: 1
+    validates :base_min_buyout_threshold, presence: true, numericality: { greater_than: 0.5 }
+
     attribute :base_min_volume, BigDecimal, default: 0.001
     validates :base_min_volume, presence: true, numericality: { greater_than: 0 }
 

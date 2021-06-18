@@ -10,6 +10,7 @@ class CreateBuyoutOrders < ActiveRecord::Migration[6.1]
       t.string :buyout_account_id, null: false
       t.integer :status, null: false, default: 0
       t.string :target_order_id
+      t.jsonb :meta, null: false
 
       t.timestamps
     end

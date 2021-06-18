@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_17_143646) do
+ActiveRecord::Schema.define(version: 2021_06_18_075814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2021_06_17_143646) do
     t.string "buyout_account_id", null: false
     t.integer "status", default: 0, null: false
     t.string "target_order_id"
+    t.jsonb "meta", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["buyout_account_id"], name: "index_buyout_orders_on_buyout_account_id"
@@ -49,7 +50,6 @@ ActiveRecord::Schema.define(version: 2021_06_17_143646) do
     t.bigint "order_id", null: false
     t.index ["account_id", "market_id", "trade_id"], name: "index_trades_on_account_id_and_market_id_and_trade_id"
     t.index ["account_id", "market_id", "traded_at", "side"], name: "index_trades_on_account_id_and_market_id_and_traded_at_and_side"
-    t.index ["order_id"], name: "index_trades_on_order_id"
   end
 
 end

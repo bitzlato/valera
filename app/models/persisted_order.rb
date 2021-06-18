@@ -25,6 +25,7 @@ class PersistedOrder
   PRECISION = Order::PRECISION
 
   include Virtus.model
+  include ActiveModel::Validations
   include SideInquirer
 
   attribute :id, Integer

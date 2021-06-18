@@ -10,7 +10,7 @@ class BuyoutOrder < ApplicationRecord
   end
 
   def revenue
-    original_trade.value_price - value_price
+    original_trade.total - volume_price
   end
 
   def volume_price
@@ -21,7 +21,7 @@ class BuyoutOrder < ApplicationRecord
     Account.find trade_account_id
   end
 
-  def target_account
-    Account.find target_account_id
+  def buyout_account
+    Account.find buyout_account_id
   end
 end

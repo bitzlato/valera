@@ -10,6 +10,7 @@ sell:
   amount: 10
   price: 500
   account_id: peatio1
+  order_id: 1
 
 buy:
   market_id: BTC_USDT
@@ -21,3 +22,4 @@ buy:
   amount: 10
   price: 500
   account_id: peatio2
+  order_id: 2

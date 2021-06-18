@@ -98,8 +98,7 @@ test:
     binance:
       upstream: binance
       credentials: 
-        access_key: test
-        secret_key: text
+        api_key: test
 
   drainers: {}
   strategies: {}
