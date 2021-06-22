@@ -3,7 +3,11 @@
 class BuyoutOrderDecorator < ApplicationDecorator
   delegate_all
   def self.table_columns
-    %i[id created_at updated_at status market trade_account buyout_account original_trade side volume price total revenue]
+    %i[id created_at updated_at status market trade_account buyout_account orders]
+  end
+
+  def orders
+    h.render 'buyout_orders/orders', buyout_order: object
   end
 
   def volume

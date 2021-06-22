@@ -4,6 +4,7 @@ class Trade < ApplicationRecord
   include SideInquirer
 
   delegate :upstream, to: :account
+  delegate :base, :quote, to: :market
 
   has_one :buyout_order, foreign_key: :original_trade_id
 
