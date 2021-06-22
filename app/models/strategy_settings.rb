@@ -7,7 +7,7 @@ class StrategySettings
 
   TARGET_STATES = %w[disable enable pause]
 
-  attribute :target_state, String, default: 'disabled'
+  attribute :target_state, String, default: TARGET_STATES.first
 
   # Latency to update. Required to not update too often (seconds)
   attribute :base_latency, BigDecimal, default: 0.3
