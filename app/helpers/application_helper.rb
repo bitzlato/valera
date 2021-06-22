@@ -67,6 +67,16 @@ module ApplicationHelper
     end
   end
 
+  def humanized_time_ago(time)
+    if time.nil?
+      t('.never')
+    else
+      content_tag :span, title: time do
+        time_ago_in_words time, include_seconds: true
+      end
+    end
+  end
+
   def settings_attribute_title(attribute)
     content_tag :span, title: attribute do
       t attribute, default: default_settings_attribute(attribute), scope: :settings_attributes

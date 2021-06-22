@@ -15,11 +15,11 @@ class AccountDecorator < ApplicationDecorator
   end
 
   def active_orders
-    h.render 'accounts/active_orders', orders: object.active_orders
+    h.render 'accounts/active_orders', account: object
   end
 
-  def balances
-    h.render 'balances', balances: object.balances
+  def balances(currencies = nil)
+    h.render 'balances', account: object, currencies: currencies
   end
 
   def trades

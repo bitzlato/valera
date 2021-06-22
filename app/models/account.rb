@@ -9,7 +9,9 @@ class Account
   attr_reader :upstream, :client
 
   attribute :balances, Hash
+  attribute :balances_updated_at, Time
   attribute :active_orders, Array[PersistedOrder]
+  attribute :active_orders_updated_at, Time
   attribute :day_trades_amounts, Hash # { market_id => amount }
   attribute :hour_trades_amounts, Hash # { market_id => amount }
   attribute :trades_updated_at, Time

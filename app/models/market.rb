@@ -18,6 +18,10 @@ class Market
     @binance_symbol = binance_symbol || (base + quote).upcase
   end
 
+  def currencies
+    [base, quote]
+  end
+
   def upstream_markets
     @upstream_markets ||= UpstreamMarkets.new(
       Upstream.all.map { |u| UpstreamMarket.build upstream: u, market: self }

@@ -12,14 +12,16 @@ class PeatioAccountDrainer < Drainer
   end
 
   def update!
-    logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
+    update_balances!
+    update_active_orders!
+    update_trades!
+  end
+
+  def update_balances!
     account.update_attributes!(
       balances: fetch_balances,
-      active_orders: fetch_active_orders
+      balances_updated_at: Time.now
     )
-    update_trades!
-    logger.debug 'update_trades_amounts!'
-    account.update_trades_amounts!
   rescue Peatio::Client::REST::Error => e
     logger.error e
     report_exception e
@@ -27,14 +29,13 @@ class PeatioAccountDrainer < Drainer
 
   def update_active_orders!
     account.update_attributes!(
-      active_orders: fetch_active_orders
+      active_orders: fetch_active_orders,
+      active_orders_updated_at: Time.now
     )
   rescue Peatio::Client::REST::Error => e
     logger.error e
     report_exception e
   end
-
-  private
 
   def update_trades!
     logger.debug 'update_trades!'
@@ -57,7 +58,13 @@ class PeatioAccountDrainer < Drainer
           account_id: account.id
         )
     end
+    account.update_trades_amounts!
+  rescue Peatio::Client::REST::Error => e
+    logger.error e
+    report_exception e
   end
+
+  private
 
   def fetch_active_orders
     # Collect by side
