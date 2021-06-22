@@ -15,4 +15,5 @@ export const createSubscription = (id) => {
   consumer.subscriptions.create( { channel: "StrategyChannel", id: id }, actions );
 }
 
+console.log('createSubscription');
 window.subscribeToStrategy = createSubscription;

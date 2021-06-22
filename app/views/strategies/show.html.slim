@@ -30,4 +30,6 @@
   iframe[src=grafana_iframe_src(strategy) width="100%" height=500 frameborder=0 data-turbolinks-permanent]
 
   javascript:
-    window.subscribeToStrategy(#{raw strategy.id.to_json});
+    $(function(){
+      window.subscribeToStrategy(#{raw strategy.id.to_json});
+    });
