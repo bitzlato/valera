@@ -86,14 +86,20 @@ class Strategy
   end
 
   def perform
+    logger.debug 'perform'
     reload
-    bump! if (state.updated_at.nil? || Time.now - state.updated_at > settings.base_latency)
+    logger.debug 'reload'
+    if (state.updated_at.nil? || Time.now - state.updated_at > settings.base_latency)
+      bump!
+    else
+      logger.debug("Skip bumping because of base_latency")
+    end
   end
 
   # Change state
   # @param changes [Hash]
   def bump!(changes = {})
-    # logger.debug "Bump with #{changes}"
+    logger.debug "Bump with #{changes}"
 
     case settings.target_state
     when 'enable'
