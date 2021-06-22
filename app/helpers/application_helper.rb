@@ -19,8 +19,8 @@ module ApplicationHelper
 
   def sorted_orders_by_side(orders, side)
     orders.to_a
-      .filter { |o| o.side? side }
-      .sort # sort_by { |o| side.downcase.to_s == 'ask' ? -o.price : o.price }
+          .filter { |o| o.side? side }
+          .sort # sort_by { |o| side.downcase.to_s == 'ask' ? -o.price : o.price }
   end
 
   BG_SIDE_COLORS = { 'ask' => '#fee', 'bid' => '#efe' }.freeze

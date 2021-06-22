@@ -61,8 +61,8 @@ class BargainerStrategy < Strategy
     source_average_price = source_upstream_market.avgPrice
     peatio_upstream = upstream_markets.find_by_upstream!(:peatio)
 
-    if peatio_upstream.high.to_f.zero?  || peatio_upstream.low.to_f.zero?
-      logger.warn "Peatio high/low prices is zero or undefined. Use source upstream price"
+    if peatio_upstream.high.to_f.zero? || peatio_upstream.low.to_f.zero?
+      logger.warn 'Peatio high/low prices is zero or undefined. Use source upstream price'
       source_average_price
     else
       peatio_average_price = (peatio_upstream.high + peatio_upstream.low) / 2

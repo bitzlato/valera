@@ -103,8 +103,8 @@ gem 'money', '~> 6.14'
 
 gem 'influxdb', '~> 0.8.1'
 
-gem "sentry-ruby"
-gem "sentry-rails"
+gem 'sentry-rails'
+gem 'sentry-ruby'
 
 gem 'technical-analysis', '~> 0.2.4'
 
@@ -119,12 +119,12 @@ group :deploy do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-db-tasks', require: false
   gem 'capistrano-dotenv-tasks'
-  gem 'capistrano-rails-console', require: false
   gem 'capistrano-faster-assets', require: false
   gem 'capistrano-git-with-submodules'
   gem 'capistrano-master-key', require: false, github: 'virgoproz/capistrano-master-key'
   gem 'capistrano-nvm', require: false
   gem 'capistrano-rails', require: false
+  gem 'capistrano-rails-console', require: false
   gem 'capistrano-rbenv', require: false
   gem 'capistrano-shell', require: false
   gem 'capistrano-systemd-multiservice', github: 'groovenauts/capistrano-systemd-multiservice', require: false

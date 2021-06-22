@@ -10,7 +10,8 @@ class DeepStonerStrategyTest < ActiveSupport::TestCase
       @upstream.upstream_markets.find_by_market!(@market)
     upstream_market.usersAsksVolume = 123
     @account = Account.find(:peatio1)
-    @account.instance_variable_set '@client', Peatio::Client::REST.new(access_key: 'access_key', secret_key: 'secret_key')
+    @account.instance_variable_set '@client',
+                                   Peatio::Client::REST.new(access_key: 'access_key', secret_key: 'secret_key')
     @strategy = DeepStonerStrategy.new(
       name: 'test',
       market: @market,

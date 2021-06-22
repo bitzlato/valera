@@ -101,7 +101,9 @@ test:
     binance:
       upstream: binance
       credentials: 
+        name: :binance
         api_key: test
+        secret_key: test
 
   drainers: {}
   strategies: {}

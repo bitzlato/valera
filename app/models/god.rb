@@ -69,8 +69,8 @@ class God
         upstream: upstream,
         client: client
       )
-    rescue ArgumentError => err
-      raise "#{err} with #{upstream.client_class}"
+    rescue ArgumentError => e
+      raise "#{e} with #{upstream.client_class}"
     end
   end
 
@@ -107,9 +107,10 @@ class God
   def build_markets
     Settings.markets
             .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |name, a|
-      market = if name.is_a? String
+      market = case name
+               when String
                  Market.build_by_id(name)
-               elsif name.is_a? Hash
+               when Hash
                  Market.new(**name.symbolize_keys)
                else
                  raise "Uknown market definition type #{name.class} (#{name})"
@@ -133,7 +134,7 @@ class God
           default_settings: settings,
           comment: options['comment']
         }
-        attrs[:buyout_account] = accounts.fetch(options['buyout_account']) if options.has_key? 'buyout_account'
+        attrs[:buyout_account] = accounts.fetch(options['buyout_account']) if options.key? 'buyout_account'
         strategies << strategy_class.new(**attrs)
       end
     end

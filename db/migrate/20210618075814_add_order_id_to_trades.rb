@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddOrderIdToTrades < ActiveRecord::Migration[6.1]
   def change
     Trade.delete_all

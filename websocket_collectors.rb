@@ -14,7 +14,7 @@ class WebSocketCollectors
   end
 
   def perform
-    logger.info("Start")
+    logger.info('Start')
     EM.run do
       God.websocket_collectors.each do |drainer|
         logger.debug "Attach #{drainer}"
@@ -30,7 +30,7 @@ class WebSocketCollectors
         report_exception e
       end
     end
-    logger.info("Stop")
+    logger.info('Stop')
     SdNotify.stopping
   end
 end

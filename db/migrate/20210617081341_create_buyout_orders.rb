@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateBuyoutOrders < ActiveRecord::Migration[6.1]
   def change
     create_table :buyout_orders do |t|
@@ -15,7 +17,7 @@ class CreateBuyoutOrders < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
-    add_index :buyout_orders, [:trade_account_id, :original_trade_id], unique: true
+    add_index :buyout_orders, %i[trade_account_id original_trade_id], unique: true
     add_index :buyout_orders, :market_id
     add_index :buyout_orders, :buyout_account_id
   end

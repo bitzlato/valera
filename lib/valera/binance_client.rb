@@ -1,11 +1,13 @@
-class Valera::BinanceClient
-  def initialize(name:, api_key:, secret_key: )
-  end
+# frozen_string_literal: true
 
-  def create_order()
-  end
+module Valera
+  class BinanceClient
+    def initialize(name:, api_key:, secret_key:); end
 
-  def endpoint
-    'binance'
+    def create_order; end
+
+    def endpoint
+      'binance'
+    end
   end
 end

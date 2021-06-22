@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 class BuyoutOrderDecorator < ApplicationDecorator
   delegate_all
   def self.table_columns

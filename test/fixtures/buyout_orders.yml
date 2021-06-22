@@ -9,6 +9,7 @@ one:
   market_id: sell
   buyout_account_id: target_account
   status: 1
+  meta: {}
 
 two:
   trade_account_id: trade_account
@@ -19,3 +20,4 @@ two:
   market_id: MyString
   buyout_account_id: target_account
   status: 1
+  meta: {}

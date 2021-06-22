@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Buyout order
 #
 class BuyoutOrder < ApplicationRecord

@@ -5,14 +5,13 @@ class StrategySettings
 
   UNSCOPED_ATTRIBUTES = %i[id updated_at target_state].freeze
 
-  TARGET_STATES = %w[disable enable pause]
+  TARGET_STATES = %w[disable enable pause].freeze
 
   attribute :target_state, String, default: TARGET_STATES.first
 
   # Latency to update. Required to not update too often (seconds)
   attribute :base_latency, BigDecimal, default: 0.3
 
-  #
   attribute :is_mad_mode, Boolean, default: false
 
   def self.attributes_for_level(level)

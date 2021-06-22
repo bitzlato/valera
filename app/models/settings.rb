@@ -11,7 +11,7 @@ if defined? Rails
 else
   class Settings < Settingslogic
     source './config/settings.yml'
-    source "./config/settings.local.yml"
+    source './config/settings.local.yml'
     namespace 'development'
   end
 end

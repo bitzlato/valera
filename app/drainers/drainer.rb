@@ -15,7 +15,7 @@ class Drainer
   def initialize(id:, account:)
     @id = id
     @account = account
-    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(to_s + '@' + account.try(:brief) || '-')
+    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged("#{self}@#{account.try(:brief)}" || '-')
   end
 
   def self.type

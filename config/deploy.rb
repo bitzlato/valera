@@ -10,7 +10,8 @@ set :keep_releases, 10
 
 set :roles, %w[db web app sentry].freeze
 set :linked_files, %w[.env config/master.key]
-set :linked_dirs, %w[log node_modules tmp/pids tmp/cache tmp/sockets public/valera/assets config/credentials public/packs]
+set :linked_dirs,
+    %w[log node_modules tmp/pids tmp/cache tmp/sockets public/valera/assets config/credentials public/packs]
 
 set :config_files, fetch(:linked_files)
 

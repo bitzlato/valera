@@ -89,10 +89,10 @@ class Strategy
     logger.debug 'perform'
     reload
     logger.debug 'reload'
-    if (state.updated_at.nil? || Time.now - state.updated_at > settings.base_latency)
+    if state.updated_at.nil? || Time.now - state.updated_at > settings.base_latency
       bump!
     else
-      logger.debug("Skip bumping because of base_latency")
+      logger.debug('Skip bumping because of base_latency')
     end
   end
 

@@ -22,7 +22,7 @@ class Account
 
   def brief
     if client.present?
-      to_s + ':' + client.endpoint
+      "#{self}:#{client.endpoint}"
     else
       to_s
     end
