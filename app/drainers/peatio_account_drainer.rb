@@ -7,6 +7,12 @@ class PeatioAccountDrainer < Drainer
 
   KEYS = %i[balance].freeze
 
+  def initialize(id:, account:)
+    raise 'Account must be present' if account.nil?
+
+    super id: id, account: account
+  end
+
   def self.type
     POLLING_TYPE
   end

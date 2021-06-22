@@ -90,23 +90,23 @@ test:
 
     peatio_websocket:
       class: PeatioWebsocketDrainer
-      account: deep_stoner_bot
+      account: peatio1
       upstream: peatio
 
     peatio_rest:
       class: PeatioRestDrainer
-      account: deep_stoner_bot
+      account: peatio1
       upstream: peatio
 
     peatio_balance_deep_stoner:
       class: PeatioAccountDrainer
       upstream: peatio
-      account: deep_stoner_bot
+      account: peatio1
 
     peatio_balance_bargainer:
       class: PeatioAccountDrainer
       upstream: peatio
-      account: bargainer_bot
+      account: binance
 
 
   upstreams: 
@@ -137,10 +137,10 @@ test:
     deep_stoner:
       class: DeepStonerStrategy
       comment: Арбитражник - глубокий наполнятель стакана
-      account: deep_stoner_bot
+      account: peatio1
       buyout_account: binance
 
     bargainer:
       class: BargainerStrategy
       comment: Проторговщик, торгует на малые объёмы, иногда так получается что сделки закрываются на самого себя
-      account: bargainer_bot
+      account: peatio2

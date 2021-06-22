@@ -81,21 +81,15 @@ class God
   def build_drainers
     Settings.drainers.map do |key, config|
       drainer_class = config['class'].constantize
+      account = config['account'].present? ? Account.find!(config['account']) : nil
 
       if drainer_class.ancestors.include? MarketDrainer
         # TODO: Use available for drainers markets only config[:markets]
         Market.all.map do |market|
-          drainer_class.new(
-            id: key,
-            market: market,
-            account: Account.find(config['account'])
-          )
+          drainer_class.new(id: key, market: market, account: account)
         end
       else
-        drainer_class.new(
-          id: key,
-          account: Account.find(config['account'])
-        )
+        drainer_class.new(id: key, account: account)
       end
     end.flatten
   end
