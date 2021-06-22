@@ -60,10 +60,10 @@ defaults: &defaults
       account: deep_stoner_bot
       buyout_account: binance
 
-    bargainer:
-      class: BargainerStrategy
-      comment: Проторговщик, торгует на малые объёмы но постоянно и сам с собой
-      account: bargainer_bot
+    # bargainer:
+    #  class: BargainerStrategy
+    #  comment: Проторговщик, торгует на малые объёмы но постоянно и сам с собой
+    #  account: bargainer_bot
 
 development:
   <<: *defaults

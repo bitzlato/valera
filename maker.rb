@@ -19,7 +19,7 @@ class Maker
       God.strategies.each do |strategy|
         logger.debug "Perform strategy #{strategy}"
         strategy.perform
-        logger.info "Sleep for #{Settings.maker_sleep}"
+        logger.debug "Sleep for #{Settings.maker_sleep}"
         sleep Settings.maker_sleep
       rescue StandardError => e
         report_exception e

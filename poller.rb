@@ -18,7 +18,7 @@ class Poller
       God.polling_collectors.each do |collector|
         logger.debug("Collector #{collector} run update!")
         collector.update!
-        logger.info "Sleep for #{Settings.polling_sleep}"
+        logger.debug "Sleep for #{Settings.polling_sleep}"
         sleep Settings.polling_sleep
       rescue StandardError => e
         if SAFE_ERRORS.include? e
