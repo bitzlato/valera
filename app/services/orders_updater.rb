@@ -50,11 +50,8 @@ class OrdersUpdater
     outdated_orders, orders_to_create = calculate_orders Set.new(persisted_orders), Set.new(required_orders)
     logger.debug "[#{side}] Outdated orders: #{outdated_orders}, orders to create: #{orders_to_create}"
 
+    create_orders! orders_to_create if orders_to_create.any?
     cancel_orders! outdated_orders if outdated_orders.any?
-
-    return [] if orders_to_create.empty?
-
-    create_orders! orders_to_create
   end
 
   def active_orders(side)
