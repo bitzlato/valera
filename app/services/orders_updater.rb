@@ -35,9 +35,9 @@ class OrdersUpdater
 
   # Cancel all orders when bot stops
   def cancel!
-    logger.debug 'Cancel all orders'
+    logger.info 'Cancel all orders'
     canceled_orders = client.cancel_orders
-    logger.debug "Orders canceled #{canceled_orders.count}"
+    logger.info "Orders canceled #{canceled_orders.count}"
   end
 
   def update_by_side!(side, required_orders)
@@ -92,7 +92,7 @@ class OrdersUpdater
   end
 
   def cancel_orders!(orders)
-    logger.debug "Cancel orders #{orders}"
+    logger.info "Cancel orders #{orders}"
     orders.each do |order|
       client.cancel_order order.id
     end
@@ -100,6 +100,7 @@ class OrdersUpdater
 
   # rubocop:disable Style/MultilineBlockChain
   def create_orders!(orders)
+    logger.info "Create orders #{orders}"
     Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
     rescue Errno::ECONNREFUSED, Peatio::Client::REST::Error => e
