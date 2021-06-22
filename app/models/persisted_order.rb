@@ -60,7 +60,7 @@ class PersistedOrder
   end
 
   def market
-     Market.find market_id
+    Market.find market_id
   end
 
   def to_s

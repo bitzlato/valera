@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-# Smartly updates private order book for market/account and logs changes.
+# Smart updates private order book for market/account and logs changes.
 #
+# rubocop:disable Metrics/ClassLength
 class OrdersUpdater
   include AutoLogger
 
@@ -146,3 +147,4 @@ class OrdersUpdater
                     )
   end
 end
+# rubocop:enable Metrics/ClassLength
