@@ -25,6 +25,15 @@ class PeatioAccountDrainer < Drainer
     report_exception e
   end
 
+  def update_active_orders!
+    account.update_attributes!(
+      active_orders: fetch_active_orders
+    )
+  rescue Peatio::Client::REST::Error => e
+    logger.error e
+    report_exception e
+  end
+
   private
 
   def update_trades!

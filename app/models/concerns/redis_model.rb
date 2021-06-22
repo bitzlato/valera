@@ -25,7 +25,8 @@ module RedisModel
   def update_attributes(attributes)
     update_attributes!(attributes)
     true
-  rescue ActiveModel::ValidationError
+  rescue ActiveModel::ValidationError => e
+    report_exception e
     false
   end
 
@@ -65,6 +66,7 @@ module RedisModel
         restore!
         validate!
       rescue ActiveModel::ValidationError, ActiveModel::UnknownAttributeError => e
+        report_exception e
         Rails.logger.error "#{e} restoring #{self}##{id}, reset to defaults"
         clear!
       end
