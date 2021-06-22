@@ -12,8 +12,6 @@ class StrategySettings
   # Latency to update. Required to not update too often (seconds)
   attribute :base_latency, BigDecimal, default: 0.3
 
-  attribute :is_mad_mode, Boolean, default: false
-
   def self.attributes_for_level(level)
     level = level.to_s
     attribute_set.map(&:name).select { |a| a.to_s.split('_').last == level }

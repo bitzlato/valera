@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-sell:
+ask:
   market_id: BTC_USDT
   trade_id: 1
-  side: sell
+  side: ask
   taker_type: taker
   traded_at: 2021-05-25 08:27:59
   total: 5000
@@ -12,10 +12,10 @@ sell:
   account_id: peatio1
   order_id: 1
 
-buy:
+bid:
   market_id: BTC_USDT
   trade_id: 1
-  side: buy
+  side: bid
   taker_type: maker
   traded_at: 2021-05-25 08:27:59
   total: 5000

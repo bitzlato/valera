@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module StrategiesHelper
-  PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part].freeze
+  PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part _percentage].freeze
 
   def strategy_settings_attribute_input(strategy, attribute)
     side = attribute.to_s.split('_').first

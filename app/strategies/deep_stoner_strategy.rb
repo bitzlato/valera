@@ -7,15 +7,22 @@ class DeepStonerStrategy < Strategy
   attr_reader :buyout_account
 
   class Settings < StrategySettings
-    attribute :base_enable_buyout, Boolean, default: 0
-    attribute :base_min_buyout_threshold, BigDecimal, default: 1
-    validates :base_min_buyout_threshold, presence: true, numericality: { greater_than: 0.5 }
-
     attribute :base_min_volume, BigDecimal, default: 0.001
     validates :base_min_volume, presence: true, numericality: { greater_than: 0 }
 
     attribute :base_max_volume, BigDecimal, default: 0.002
     validates :base_max_volume, presence: true, numericality: { greater_than: 0 }
+
+    attribute :buyout_enable, Boolean, default: false
+
+    attribute :buyout_ask_percentage, BigDecimal, default: 0.1
+    validates :buyout_ask_percentage, presence: true, numericality: { greater_than_or_equal_to: 0.1, lower_than: 2 }
+
+    attribute :buyout_bid_percentage, BigDecimal, default: 0.1
+    validates :buyout_bid_percentage, presence: true, numericality: { greater_than_or_equal_to: 0.1, lower_than: 2 }
+
+    attribute :base_mad_mode_enable, Boolean, default: false
+
 
     LEVELS = 5
     LEVELS.times.each do |i|
@@ -46,7 +53,11 @@ class DeepStonerStrategy < Strategy
   end
 
   def trade_created(trade)
-    BuyoutOrderCreator.call(trade, buyout_account)
+    BuyoutOrderCreator
+      .call(trade: trade,
+            buyout_account: buyout_account,
+            ask_percentage: settings.buyout_ask_percentage,
+            bid_percentage: settings.buyout_bid_percentage) if settings.buyout_enable?
     super
   end
 
@@ -75,7 +86,7 @@ class DeepStonerStrategy < Strategy
 
     volume = calculate_volume(side, level)
     comparer = lambda do |persisted_order|
-      !settings.is_mad_mode && price_range.member?(persisted_order.price)
+      !settings.base_mad_mode_enable? && price_range.member?(persisted_order.price)
       # TODO: Учитывать диапазон зазрешенного объёма или сбрасывать заявки после изменения объёма в настройках
       # иначе оно слишком часто прыгает
       # volume == persisted_order.origin_volume

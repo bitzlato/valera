@@ -20,6 +20,15 @@ class UpstreamMarket
     Market.all.map { |m| m.upstream_markets.to_a }.flatten.uniq
   end
 
+  def self.find_by(market:, account:)
+    all.find { |um| um.upstream.accounts.include?(account) && um.market == market }
+  end
+
+  def self.find_by!(market:, account:)
+    find_by(market: market, account: account) ||
+      raise("No upstream market found for account:#{account} and market:#{market}")
+  end
+
   def initialize(market:, upstream:)
     @market = market || raise('No market')
     @upstream = upstream || raise('No upstream')

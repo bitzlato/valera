@@ -1,0 +1,5 @@
+ru:
+  strategies:
+    form:
+      base_settings: Основные настройки
+      buyout_settings: Настройки откупа

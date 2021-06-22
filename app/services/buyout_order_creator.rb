@@ -8,48 +8,54 @@ class BuyoutOrderCreator
 
   self.class.delegate :call, to: :new
 
-  def call(trade, buyout_account)
+  def call(trade:, buyout_account:, ask_percentage: ASK_PERCENTAGE, bid_percentage: BID_PERCENTAGE)
+    buyout_order = nil
     trade.with_lock do
       raise "Trade #{trade.id} already buyouted" if trade.buyout_order.present?
 
-      um = UpstreamMarket.all.find { |um| um.upstream.accounts.include?(buyout_account) && um.market == trade.market }
+      um = UpstreamMarket.find_by!(account: buyout_account, market: trade.market)
 
-      # Продали дорого, нужно купить дешевле
+      # Sold expensive, buy cheaper
       if trade.side? :bid
         side = 'ask'
-        price = (100+ASK_PERCENTAGE).percent_of(um.bidPrice)
+        price = (100 + ask_percentage).percent_of(um.bidPrice)
         if price >= trade.price
-          logger.warn("Target price (#{price}) is larger than original (#{trade.price}) for trade #{trade.id}. Skip buyout..")
-          return
+          ignore_message = "Target price (#{price}) is larger than original (#{trade.price}) for trade #{trade.id}. Skip buyout.."
+          logger.info ignore_message
         end
-        # Проверять что  цена адекватная
-      else # Купили дешево, нужно продать дороже
+      else # Bought cheap, sell expensive
         side = 'bid'
-        price = (100-BID_PERCENTAGE).percent_of(um.askPrice)
+        price = (100 - bid_percentage).percent_of(um.askPrice)
 
         if price <= trade.price
-          logger.warn("Target price (#{price}) is lower than original (#{trade.price}) for trade #{trade.id}. Skip buyout..")
-          return
+          ignore_message = "Target price (#{price}) is lower than original (#{trade.price}) for trade #{trade.id}. Skip buyout.."
+          logger.info ignore_message
         end
-        # Проверять что  цена адекватная
       end
 
-      BuyoutOrder.create!(
+      buyout_order = BuyoutOrder.create!(
+        status: ignore_message.nil? ? :initial : :ignored,
         original_trade: trade,
         trade_account_id: trade.account.id,
         market_id: trade.market_id,
         volume: trade.amount,
         side: side,
         price: price,
+        ignore_message: ignore_message,
         buyout_account_id: buyout_account.id,
         meta: {
+          askPercentage: ask_percentage,
+          bidPercentage: bid_percentage,
           askPrice: um.askPrice,
           bidPrice: um.bidPrice
         }
       )
     end
-    # post_buyout_order(buyout_order, buyout_account)
+    post_buyout_order(buyout_order, buyout_account) if buyout_order.initial?
+    buyout_order
   end
+
+  private
 
   def post_buyout_order(buyout_order, account)
     logger.info "Post buyout_order #{buyout_order.as_json}"
