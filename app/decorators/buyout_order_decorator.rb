@@ -3,7 +3,7 @@
 class BuyoutOrderDecorator < ApplicationDecorator
   delegate_all
   def self.table_columns
-    %i[id created_at updated_at status market trade_account buyout_account original_trade volume price total revenue]
+    %i[id created_at updated_at status market trade_account buyout_account original_trade side volume price total revenue]
   end
 
   def volume
@@ -11,7 +11,7 @@ class BuyoutOrderDecorator < ApplicationDecorator
   end
 
   def price
-    h.format_money object.volume, object.market.quote
+    h.format_money object.price, object.market.quote
   end
 
   def total

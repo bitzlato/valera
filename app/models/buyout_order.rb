@@ -1,6 +1,8 @@
 # Buyout order
 #
 class BuyoutOrder < ApplicationRecord
+  include SideInquirer
+
   enum status: %i[initial posted waited done]
 
   belongs_to :original_trade, class_name: 'Trade'
