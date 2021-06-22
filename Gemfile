@@ -112,6 +112,20 @@ gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
 
 gem 'sd_notify'
 gem 'virtus', '~> 1.0'
+
+gem 'sqlite3'
+
+# gem 'peatio_client', '~> 0.0.7'
+
+# gem 'async-http-faraday', '~> 0.9.0'
+
+gem 'kaminari', '~> 1.2'
+
+gem 'dotenv-rails', '~> 2.7'
+
+gem 'percentage', '~> 1.4'
+
+gem 'mini_racer', '~> 0.4.0'
 group :deploy do
   gem 'bugsnag-capistrano', require: false
   gem 'capistrano', require: false
@@ -130,17 +144,3 @@ group :deploy do
   gem 'capistrano-systemd-multiservice', github: 'groovenauts/capistrano-systemd-multiservice', require: false
   gem 'capistrano-yarn', require: false
 end
-
-gem 'sqlite3'
-
-# gem 'peatio_client', '~> 0.0.7'
-
-# gem 'async-http-faraday', '~> 0.9.0'
-
-gem 'kaminari', '~> 1.2'
-
-gem 'dotenv-rails', '~> 2.7'
-
-gem 'percentage', '~> 1.4'
-
-gem 'mini_racer', '~> 0.4.0'
