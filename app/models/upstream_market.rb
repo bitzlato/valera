@@ -57,12 +57,6 @@ class UpstreamMarket
 
   def before_save
     update_users_volumes
-    God.logger.debug(
-      %q[UpstreamMarket[#{id}]
-      before_save #{attributes}:
-      my_asks:#{my_orders_volume(:ask)}
-      my_bids:#{my_orders_volume(:bid)}]
-    )
     super
   end
 

@@ -2,7 +2,6 @@
 
 # rubocop:disable Metrics/ClassLength
 class God
-  include AutoLogger
   include Singleton
 
   class << self
@@ -19,7 +18,6 @@ class God
 
   def initialize
     SdNotify.status('God was born!')
-    logger.info('God was born!')
   end
 
   def accounts
