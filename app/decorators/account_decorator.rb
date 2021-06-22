@@ -10,7 +10,7 @@ class AccountDecorator < ApplicationDecorator
 
   def drainers
     object.drainers.map do |drainer|
-      h.link_to drainer.to_s, h.drainer_path(drainer)
+      h.link_to drainer.to_s, h.drainer_path(drainer.id || :unknown)
     end.join(', ').html_safe
   end
 
