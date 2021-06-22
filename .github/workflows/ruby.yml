@@ -21,6 +21,9 @@ jobs:
       matrix:
         ruby-version: ['2.7']
 
+    services:
+      postgres:
+        image: postgres
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
@@ -32,6 +35,12 @@ jobs:
       run: bundle install
     - name: Run tests
       run: bundle exec rake
+      env:
+        # The hostname used to communicate with the PostgreSQL service container
+        DATABASE_HOST: postgres
+        DATABASE_USER: postgres
+        DATABASE_PASS: postgres
+        DATABASE_NAME: postgres
   rubocop:
     runs-on: ubuntu-latest
     strategy:
