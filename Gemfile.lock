@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/BrandyMint/auto_logger.git
+  revision: 31cd3024932a08e96b7875364c41eabb2696f224
+  specs:
+    auto_logger (0.1.7)
+      activesupport
+      beautiful-log
+
+GIT
   remote: https://github.com/finfex/binance.git
   revision: b3d0acbfd0147b18ca9d72562f388bdfa9d368d1
   branch: immutable-strings-ruby-27
@@ -36,13 +44,6 @@ GIT
     capistrano-master-key (1.0.2)
       capistrano (~> 3.11)
       sshkit (~> 1.17)
-
-PATH
-  remote: vendor/auto_logger
-  specs:
-    auto_logger (0.1.7)
-      activesupport
-      beautiful-log
 
 GEM
   remote: https://rubygems.org/

@@ -93,7 +93,7 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'nokogiri', '~> 1.11'
 
-gem 'auto_logger', path: 'vendor/auto_logger'
+gem 'auto_logger', github: 'BrandyMint/auto_logger'
 
 gem 'binance', '~> 1.2', github: 'finfex/binance', branch: 'immutable-strings-ruby-27'
 
