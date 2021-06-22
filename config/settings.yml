@@ -2,6 +2,9 @@ defaults: &defaults
   root_prefix: /valera
   markets: 
     - BTC_USDT
+    - quote: UUU
+      base: BBB
+      binance_symbol: BTCUSDT
 
   polling_sleep: 0.1
   maker_sleep: 0.1
