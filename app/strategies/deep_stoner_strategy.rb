@@ -23,7 +23,6 @@ class DeepStonerStrategy < Strategy
 
     attribute :base_mad_mode_enable, Boolean, default: false
 
-
     LEVELS = 5
     LEVELS.times.each do |i|
       attribute "base_best_price_deviation_from_#{i}", Float, default: 10
@@ -47,17 +46,21 @@ class DeepStonerStrategy < Strategy
     ).html_safe
   end
 
+  # rubocop:disable Metrics/ParameterLists
   def initialize(name:, market:, account:, buyout_account:, default_settings: {}, comment: nil)
     @buyout_account = buyout_account
     super name: name, market: market, account: account, default_settings: default_settings, comment: comment
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def trade_created(trade)
-    BuyoutOrderCreator
-      .call(trade: trade,
-            buyout_account: buyout_account,
-            ask_percentage: settings.buyout_ask_percentage,
-            bid_percentage: settings.buyout_bid_percentage) if settings.buyout_enable?
+    if settings.buyout_enable?
+      BuyoutOrderCreator
+        .call(trade: trade,
+              buyout_account: buyout_account,
+              ask_percentage: settings.buyout_ask_percentage,
+              bid_percentage: settings.buyout_bid_percentage)
+    end
     super
   end
 
@@ -87,9 +90,6 @@ class DeepStonerStrategy < Strategy
     volume = calculate_volume(side, level)
     comparer = lambda do |persisted_order|
       !settings.base_mad_mode_enable? && price_range.member?(persisted_order.price)
-      # TODO: Учитывать диапазон зазрешенного объёма или сбрасывать заявки после изменения объёма в настройках
-      # иначе оно слишком часто прыгает
-      # volume == persisted_order.origin_volume
     end
 
     super side, price, volume, comparer, level

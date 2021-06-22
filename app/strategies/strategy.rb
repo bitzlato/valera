@@ -120,7 +120,7 @@ class Strategy
       state.touch!
     end
 
-    # Временно отключил
+    # Temporary turned off
     # StrategyChannel.update self
   rescue Peatio::Client::REST => e
     logger.error "#{self} #{e}"

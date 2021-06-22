@@ -3,6 +3,7 @@
 module StrategiesHelper
   PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part _percentage].freeze
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def strategy_settings_attribute_input(strategy, attribute)
     side = attribute.to_s.split('_').first
     currency_method = side == 'bid' ? :quote : :base
@@ -28,6 +29,7 @@ module StrategiesHelper
     end
     best_in_place strategy.settings, attribute, as: type, display_with: display_with, collection: collection
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   STATUS_LABELS = {
     true => 'badge-success',

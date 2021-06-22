@@ -4,12 +4,12 @@
 require_relative 'jwt'
 require 'jwt/rack'
 
-on_error = lambda do |_error|
+on_error = lambda do |error|
   message = 'jwt.decode_and_verify'
   body    = { errors: [message] }.to_json
   headers = { 'Content-Type' => 'application/json', 'Content-Length' => body.bytesize.to_s }
 
-  Rails.logger.error _error
+  Rails.logger.error error
   [401, headers, [body]]
 end
 

@@ -61,7 +61,7 @@ class God
       raise "No upstream client_class for #{upstream}" if upstream.client_class.nil?
 
       credentials = config.fetch('credentials')
-      credentials = credentials.is_a?(Hash) ? credentials : Rails.application.credentials.accounts.fetch(credentials.to_sym).merge(name: credentials.to_sym)
+      credentials = credentials.is_a?(Hash) ? credentials : fetch_credentials(credentials)
       client = upstream.client_class.new(**credentials.symbolize_keys)
 
       hash[key] = Account.new(
@@ -72,6 +72,10 @@ class God
     rescue ArgumentError => e
       raise "#{e} with #{upstream.client_class}"
     end
+  end
+
+  def fetch_credentials(credentials)
+    Rails.application.credentials.accounts.fetch(credentials.to_sym).merge(name: credentials.to_sym)
   end
 
   def build_drainers
