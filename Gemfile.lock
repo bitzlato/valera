@@ -287,7 +287,6 @@ GEM
     minitest (5.14.4)
     minitest-around (0.5.0)
       minitest (~> 5.0)
-    mocha (1.12.0)
     money (6.16.0)
       i18n (>= 0.6.4, <= 2)
     msgpack (1.4.2)
@@ -534,7 +533,6 @@ DEPENDENCIES
   listen (~> 3.3)
   mini_racer (~> 0.4.0)
   minitest-around
-  mocha
   money (~> 6.14)
   nokogiri (~> 1.11)
   parallel
