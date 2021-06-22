@@ -32,7 +32,7 @@ class OrdersUpdater
     account.update_active_orders! if update_active_orders
 
     @changed = false
-    logger.info "Update with #{orders.to_a.join('; ')}"
+    logger.info "Update request #{orders.to_a.join('; ')}"
     created_orders = Order::SIDES.map do |side|
       update_by_side!(side, orders.filter { |o| o.side.to_s == side.to_s })
     end.flatten.compact
