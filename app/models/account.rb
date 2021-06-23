@@ -9,7 +9,9 @@ class Account
   attr_reader :upstream, :client
 
   attribute :balances, Hash
+  attribute :balances_updated_at, Time
   attribute :active_orders, Array[PersistedOrder]
+  attribute :active_orders_updated_at, Time
   attribute :day_trades_amounts, Hash # { market_id => amount }
   attribute :hour_trades_amounts, Hash # { market_id => amount }
   attribute :trades_updated_at, Time
@@ -17,12 +19,16 @@ class Account
   def initialize(id:, upstream:, client:)
     super id: id
     @upstream = upstream
-    @client = client
+    @client = client || raise("No client for account #{id}")
+  end
+
+  def update_active_orders!
+    drainers.each { |d| d.update_active_orders! if d.respond_to? :update_active_orders! }
   end
 
   def brief
     if client.present?
-      to_s + ':' + client.endpoint
+      "#{self}:#{client.endpoint}"
     else
       to_s
     end

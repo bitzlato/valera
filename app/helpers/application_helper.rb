@@ -19,8 +19,8 @@ module ApplicationHelper
 
   def sorted_orders_by_side(orders, side)
     orders.to_a
-      .filter { |o| o.side? side }
-      .sort # sort_by { |o| side.downcase.to_s == 'ask' ? -o.price : o.price }
+          .filter { |o| o.side? side }
+          .sort # sort_by { |o| side.downcase.to_s == 'ask' ? -o.price : o.price }
   end
 
   BG_SIDE_COLORS = { 'ask' => '#fee', 'bid' => '#efe' }.freeze
@@ -64,6 +64,16 @@ module ApplicationHelper
 
     content_tag :span, class: 'text-monospace' do
       "#{value}%"
+    end
+  end
+
+  def humanized_time_ago(time)
+    if time.nil?
+      t('.never')
+    else
+      content_tag :span, title: time do
+        time_ago_in_words time, include_seconds: true
+      end
     end
   end
 

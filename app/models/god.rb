@@ -2,7 +2,6 @@
 
 # rubocop:disable Metrics/ClassLength
 class God
-  include AutoLogger
   include Singleton
 
   class << self
@@ -19,7 +18,6 @@ class God
 
   def initialize
     SdNotify.status('God was born!')
-    logger.info('God was born!')
   end
 
   def accounts
@@ -59,37 +57,39 @@ class God
   def build_accounts
     Settings.accounts.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       key, config = pair
-      credentials = Rails.application.credentials.bots.fetch(config['credentials'].to_sym) if config.key?('credentials')
       upstream = upstreams.fetch(config['upstream'].presence || raise("No upstream key in account section (#{key})"))
-      if upstream.credential_client_class.present?
-        client = upstream.credential_client_class.new(**credentials.merge(name: config['credentials'].to_sym))
-      end
+      raise "No upstream client_class for #{upstream}" if upstream.client_class.nil?
+
+      credentials = config.fetch('credentials')
+      credentials = credentials.is_a?(Hash) ? credentials : fetch_credentials(credentials)
+      client = upstream.client_class.new(**credentials.symbolize_keys)
+
       hash[key] = Account.new(
         id: key,
         upstream: upstream,
         client: client
       )
+    rescue ArgumentError => e
+      raise "#{e} with #{upstream.client_class}"
     end
+  end
+
+  def fetch_credentials(credentials)
+    Rails.application.credentials.accounts.fetch(credentials.to_sym).merge(name: credentials.to_sym)
   end
 
   def build_drainers
     Settings.drainers.map do |key, config|
       drainer_class = config['class'].constantize
+      account = config['account'].present? ? Account.find!(config['account']) : nil
 
       if drainer_class.ancestors.include? MarketDrainer
         # TODO: Use available for drainers markets only config[:markets]
         Market.all.map do |market|
-          drainer_class.new(
-            id: key,
-            market: market,
-            account: Account.find(config['account'])
-          )
+          drainer_class.new(id: key, market: market, account: account)
         end
       else
-        drainer_class.new(
-          id: key,
-          account: Account.find(config['account'])
-        )
+        drainer_class.new(id: key, account: account)
       end
     end.flatten
   end
@@ -97,17 +97,18 @@ class God
   def build_upstreams
     Settings.upstreams.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       id, options = pair
-      client_class = options.key?('credential_client') ? options['credential_client'].constantize : nil
-      hash[id] = Upstream.new id: id, credential_client_class: client_class
+      client_class = options.key?('client') ? options['client'].constantize : nil
+      hash[id] = Upstream.new id: id, client_class: client_class
     end
   end
 
   def build_markets
     Settings.markets
             .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |name, a|
-      market = if name.is_a? String
+      market = case name
+               when String
                  Market.build_by_id(name)
-               elsif name.is_a? Hash
+               when Hash
                  Market.new(**name.symbolize_keys)
                else
                  raise "Uknown market definition type #{name.class} (#{name})"
@@ -124,13 +125,15 @@ class God
         settings = options.fetch('settings', {})
         settings = settings.fetch('global', {}).merge settings.dig('markets', market.id) || {}
 
-        strategies << strategy_class.new(
+        attrs = {
           name: key,
           market: market,
           account: accounts.fetch(options['account']),
           default_settings: settings,
           comment: options['comment']
-        )
+        }
+        attrs[:buyout_account] = accounts.fetch(options['buyout_account']) if options.key? 'buyout_account'
+        strategies << strategy_class.new(**attrs)
       end
     end
     strategies

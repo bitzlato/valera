@@ -1,23 +1,25 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  market_id: MyString
+ask:
+  market_id: BTC_USDT
   trade_id: 1
-  side: MyString
-  taker_type: MyString
+  side: ask
+  taker_type: taker
   traded_at: 2021-05-25 08:27:59
-  total: 9.99
-  amount: 9.99
-  price: 9.99
-  account_id: MyString
+  total: 5000
+  amount: 10
+  price: 500
+  account_id: peatio1
+  order_id: 1
 
-two:
-  market_id: MyString
+bid:
+  market_id: BTC_USDT
   trade_id: 1
-  side: MyString
-  taker_type: MyString
+  side: bid
+  taker_type: maker
   traded_at: 2021-05-25 08:27:59
-  total: 9.99
-  amount: 9.99
-  price: 9.99
-  account_id: MyString
+  total: 5000
+  amount: 10
+  price: 500
+  account_id: peatio2
+  order_id: 2

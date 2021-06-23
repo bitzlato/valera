@@ -4,6 +4,8 @@ class MarketDrainer < Drainer
   attr_reader :market, :upstream_market
 
   def initialize(id:, market:, account:)
+    raise 'Account must be present' if account.nil?
+
     super(id: id, account: account)
     @market = market
     @upstream_market = market.upstream_markets.find_by_upstream! upstream

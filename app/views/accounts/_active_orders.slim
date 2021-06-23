@@ -1,5 +1,8 @@
+- orders = account.active_orders
 - Market.all.each do |market|
-  h4= market
+  h4
+    = market
+    span.ml-2.text-small.text-muted= humanized_time_ago account.active_orders_updated_at
   table.table.table-nopadding
     - Order::SIDES.each do |side|
       tr

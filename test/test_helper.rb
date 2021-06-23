@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+ENV['JWT_PUBLIC_KEY'] = Base64.urlsafe_encode64(OpenSSL::PKey::RSA.generate(512).public_key.to_pem, padding: false)
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require_relative './support/sqlite_test_db_loader'

@@ -1,7 +1,5 @@
 defaults: &defaults
   root_prefix: /valera
-  # markets_ ["BTC_USDT", "BTC_MCR", "ETH_BTC", "ETH_USDT", "ETH_MCR", "USDT_MCR"]
-  # binance_symbol: symbol.upcase.gsub('MCR', 'RUB')
   markets: 
     - BTC_USDT
     - quote: UUU
@@ -16,9 +14,10 @@ defaults: &defaults
     orders_updater: 'processor'
 
   upstreams: 
-    binance: {}
+    binance: 
+      client: Valera::BinanceClient
     peatio:
-      credential_client: Peatio::Client::REST
+      client: Peatio::Client::REST
 
   accounts:
     bargainer_bot:
@@ -29,6 +28,7 @@ defaults: &defaults
       credentials: deep_stoner_bot
     binance:
       upstream: binance
+      credentials: binance
 
   drainers:
     binance_websocket:
@@ -59,16 +59,19 @@ defaults: &defaults
   strategies:
     deep_stoner:
       class: DeepStonerStrategy
-      comment: Глубокий наполнятель стакана
+      comment: Арбитражник - глубокий наполнятель стакана
       account: deep_stoner_bot
+      buyout_account: binance
 
     bargainer:
       class: BargainerStrategy
-      comment: Проторговщик, торгует на малые объёмы но постоянно и сам с собой
+      comment: Проторговщик, торгует на малые объёмы, иногда так получается что сделки закрываются на самого себя
       account: bargainer_bot
 
 development:
   <<: *defaults
+  markets: 
+    - BTC_USDT
   polling_sleep: 1
   maker_sleep: 1
 staging:
@@ -79,18 +82,65 @@ test:
   <<: *defaults
   root_prefix: /valera
   markets: ["BTC_USDT"]
+  drainers:
+    binance_websocket:
+      class: BinanceWebsocketDrainer
+      account: binance
+      upstream: binance
+
+    peatio_websocket:
+      class: PeatioWebsocketDrainer
+      account: peatio1
+      upstream: peatio
+
+    peatio_rest:
+      class: PeatioRestDrainer
+      account: peatio1
+      upstream: peatio
+
+    peatio_balance_deep_stoner:
+      class: PeatioAccountDrainer
+      upstream: peatio
+      account: peatio1
+
+    peatio_balance_bargainer:
+      class: PeatioAccountDrainer
+      upstream: peatio
+      account: binance
+
 
   upstreams: 
-    binance: {}
-    peatio: {}
+    binance:
+      client: Valera::BinanceClient
+    peatio:
+      client: Peatio::Client::REST
 
   accounts:
     peatio1:
       upstream: peatio
+      credentials: 
+        access_key: test
+        secret_key: text
     peatio2:
       upstream: peatio
+      credentials: 
+        access_key: test
+        secret_key: text
     binance:
       upstream: binance
+      credentials: 
+        name: :binance
+        api_key: test
+        secret_key: test
 
-  drainers: {}
-  strategies: {}
+  strategies:
+    deep_stoner:
+      class: DeepStonerStrategy
+      comment: Арбитражник - глубокий наполнятель стакана
+      account: peatio1
+      buyout_account: binance
+
+    bargainer:
+      class: BargainerStrategy
+      comment: Проторговщик, торгует на малые объёмы, иногда так получается что сделки закрываются на самого себя
+      account: peatio2

@@ -13,9 +13,6 @@ module RedisModel
     attribute :id, String
     attribute :updated_at, Time
 
-    alias_method :to_s, :id
-    alias_method :to_param, :id
-
     def self.build(**attrs)
       new(**attrs).reload
     end
@@ -28,13 +25,22 @@ module RedisModel
   def update_attributes(attributes)
     update_attributes!(attributes)
     true
-  rescue ActiveModel::ValidationError
+  rescue ActiveModel::ValidationError => e
+    report_exception e
     false
   end
 
   def update_attributes!(attributes)
     assign_attributes attributes
     save!
+  end
+
+  def to_s
+    id.to_s
+  end
+
+  def to_param
+    id.to_s
   end
 
   def persisted?
@@ -60,6 +66,7 @@ module RedisModel
         restore!
         validate!
       rescue ActiveModel::ValidationError, ActiveModel::UnknownAttributeError => e
+        report_exception e
         Rails.logger.error "#{e} restoring #{self}##{id}, reset to defaults"
         clear!
       end

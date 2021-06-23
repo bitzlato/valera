@@ -93,7 +93,7 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'nokogiri', '~> 1.11'
 
-gem 'auto_logger', path: 'vendor/auto_logger'
+gem 'auto_logger', github: 'BrandyMint/auto_logger'
 
 gem 'binance', '~> 1.2', github: 'finfex/binance', branch: 'immutable-strings-ruby-27'
 
@@ -103,8 +103,8 @@ gem 'money', '~> 6.14'
 
 gem 'influxdb', '~> 0.8.1'
 
-gem "sentry-ruby"
-gem "sentry-rails"
+gem 'sentry-rails'
+gem 'sentry-ruby'
 
 gem 'technical-analysis', '~> 0.2.4'
 
@@ -112,24 +112,6 @@ gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
 
 gem 'sd_notify'
 gem 'virtus', '~> 1.0'
-group :deploy do
-  gem 'bugsnag-capistrano', require: false
-  gem 'capistrano', require: false
-  gem 'capistrano3-puma'
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-db-tasks', require: false
-  gem 'capistrano-dotenv-tasks'
-  gem 'capistrano-rails-console', require: false
-  gem 'capistrano-faster-assets', require: false
-  gem 'capistrano-git-with-submodules'
-  gem 'capistrano-master-key', require: false, github: 'virgoproz/capistrano-master-key'
-  gem 'capistrano-nvm', require: false
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-rbenv', require: false
-  gem 'capistrano-shell', require: false
-  gem 'capistrano-systemd-multiservice', github: 'groovenauts/capistrano-systemd-multiservice', require: false
-  gem 'capistrano-yarn', require: false
-end
 
 gem 'sqlite3'
 
@@ -144,3 +126,21 @@ gem 'dotenv-rails', '~> 2.7'
 gem 'percentage', '~> 1.4'
 
 gem 'mini_racer', '~> 0.4.0'
+group :deploy do
+  gem 'bugsnag-capistrano', require: false
+  gem 'capistrano', require: false
+  gem 'capistrano3-puma'
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-db-tasks', require: false
+  gem 'capistrano-dotenv-tasks'
+  gem 'capistrano-faster-assets', require: false
+  gem 'capistrano-git-with-submodules'
+  gem 'capistrano-master-key', require: false, github: 'virgoproz/capistrano-master-key'
+  gem 'capistrano-nvm', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rails-console', require: false
+  gem 'capistrano-rbenv', require: false
+  gem 'capistrano-shell', require: false
+  gem 'capistrano-systemd-multiservice', github: 'groovenauts/capistrano-systemd-multiservice', require: false
+  gem 'capistrano-yarn', require: false
+end

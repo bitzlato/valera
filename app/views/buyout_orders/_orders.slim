@@ -1,0 +1,25 @@
+table.table.table-small.table-narrow.table-stripped.table-condensed
+  thead.thead-light
+    tr
+      th
+      th= t '.side'
+      th= t '.volume'
+      th= t '.price'
+      th= t '.total'
+  tbody
+    tr style="background-color: #{side_bg_color(buyout_order.original_trade.side)}"
+      th= t '.original_trade'
+      td= buyout_order.original_trade.side
+      td= format_money buyout_order.original_trade.amount, buyout_order.original_trade.base
+      td= format_money buyout_order.original_trade.price, buyout_order.original_trade.quote
+      td= format_money buyout_order.original_trade.total, buyout_order.original_trade.base
+    tr style="background-color: #{side_bg_color(buyout_order.side)}"
+      th= t '.created_order'
+      td= buyout_order.side
+      td= format_money buyout_order.volume, buyout_order.base
+      td= format_money buyout_order.price, buyout_order.quote
+      td= format_money buyout_order.volume_price, buyout_order.base
+    tr
+      td.text-right colspan=4
+        = t '.revenue'
+      td= format_money buyout_order.revenue, buyout_order.base

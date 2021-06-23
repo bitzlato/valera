@@ -1,7 +1,7 @@
 .container-fluid
   = link_to t('.back'), strategies_path
   .row
-    .col-md-4
+    .col-md-3
       h1= "#{strategy.class}##{strategy.id}"
       = render 'strategy_enabler', strategy: strategy
       = strategy_status strategy
@@ -10,6 +10,9 @@
       = account_link strategy.account
     .col-md-4
       = render 'form', strategy: strategy
+    .col-md-1
+      h2= t '.account_balances'
+      = AccountDecorator.decorate(strategy.account).balances(strategy.market.currencies)
     .col-md-4
       = render 'orders_table', strategy: strategy
   hr
@@ -30,4 +33,6 @@
   iframe[src=grafana_iframe_src(strategy) width="100%" height=500 frameborder=0 data-turbolinks-permanent]
 
   javascript:
-    window.subscribeToStrategy(#{raw strategy.id.to_json});
+    $(function(){
+      window.subscribeToStrategy(#{raw strategy.id.to_json});
+    });

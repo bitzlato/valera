@@ -25,6 +25,8 @@ class PersistedOrder
   PRECISION = Order::PRECISION
 
   include Virtus.model
+  include ActiveModel::Validations
+  include SideInquirer
 
   attribute :id, Integer
   attribute :raw, Hash
@@ -58,7 +60,7 @@ class PersistedOrder
   end
 
   def market
-    @market ||= Market.find market_id
+    Market.find market_id
   end
 
   def to_s

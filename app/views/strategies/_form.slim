@@ -2,9 +2,10 @@ table.table.table-condensed#strategyForm[data-turbolinks-permanent]
   thead.thead-light
     tr
       - strategy.settings.scopes.each do |scope|
-        th.text-right width='300px' #{scope} settings
+        th.text-right width='300px'
+          =t ".#{scope}_settings"
   tbody
     tr
       - strategy.settings.scopes.each do |scope|
-        td.text-right
+        td.text-right style='border-right: 1px solid #eee'
           = render 'strategy_settings_form', strategy: strategy, scope: scope

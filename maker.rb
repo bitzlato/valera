@@ -4,26 +4,38 @@
 APP_PATH = File.expand_path('./config/application', __dir__)
 require_relative './config/environment'
 
-SdNotify.ready
-God.instance
-SdNotify.status('God was born!')
+class Maker
+  include AutoLogger
 
-God.strategies.each(&:start!)
+  def new
+    SdNotify.ready
+    God.instance
+  end
 
-loop do
-  God.strategies.each do |strategy|
-    strategy.perform
-    sleep Settings.maker_sleep
-  rescue StandardError => e
-    report_exception e
-    God.logger.error e
+  def perform
+    God.strategies.each(&:start!)
+
+    loop do
+      God.strategies.each do |strategy|
+        logger.debug "Perform strategy #{strategy}"
+        strategy.perform
+        logger.debug "Sleep for #{Settings.maker_sleep}"
+        sleep Settings.maker_sleep
+      rescue StandardError => e
+        report_exception e
+        logger.error e
+      end
+    rescue Interrupt => e
+      logger.warn e
+      God.strategies.each do |strategy|
+        logger.debug "Stop strategy #{strategy}"
+        strategy.stop! e.message.presence || e.inspect
+      end
+      raise e
+    end
+
+    SdNotify.stopping
   end
-rescue Interrupt => e
-  God.logger.info e
-  God.strategies.each do |strategy|
-    strategy.stop! e.message.presence || e.inspect
-  end
-  raise e
 end
 
-SdNotify.stopping
+Maker.new.perform

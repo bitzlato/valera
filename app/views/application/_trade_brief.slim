@@ -1,0 +1,14 @@
+table.table.table-small.table-narrow
+  tbody
+    tr
+      th Side
+      td= trade.side
+    tr
+      th Price
+      td.text-right= format_money trade.price, trade.market.quote
+    tr
+      th Amount
+      td.text-right= format_money trade.amount, trade.market.base
+    tr
+      th Total
+      td.text-right= format_money trade.total, trade.market.quote

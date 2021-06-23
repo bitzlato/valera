@@ -1,3 +1,0 @@
-[submodule "vendor/auto_logger"]
-	path = vendor/auto_logger
-	url = git@github.com:BrandyMint/auto_logger.git

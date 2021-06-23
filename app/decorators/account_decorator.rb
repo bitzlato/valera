@@ -10,16 +10,16 @@ class AccountDecorator < ApplicationDecorator
 
   def drainers
     object.drainers.map do |drainer|
-      h.link_to drainer.to_s, h.drainer_path(drainer)
+      h.link_to drainer.to_s, h.drainer_path(drainer.id || :unknown)
     end.join(', ').html_safe
   end
 
   def active_orders
-    h.render 'accounts/active_orders', orders: object.active_orders
+    h.render 'accounts/active_orders', account: object
   end
 
-  def balances
-    h.render 'balances', balances: object.balances
+  def balances(currencies = nil)
+    h.render 'balances', account: object, currencies: currencies
   end
 
   def trades

@@ -30,7 +30,7 @@ module Peatio
       end
 
       def to_s
-        name.to_s + '->' + endpoint
+        "#{name}->#{endpoint}"
       end
 
       def account_balances(currency = nil)

@@ -29,6 +29,7 @@ html
       = active_link_to t('.accounts'), accounts_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
       = active_link_to t('.drainers'), drainers_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
       = active_link_to t('.trades'), trades_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
+      = active_link_to t('.buyout_orders'), buyout_orders_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
       = active_link_to t('.sidekiq'), sidekiq_web_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item' if defined? Sidekiq
 
     = yield

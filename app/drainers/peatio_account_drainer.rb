@@ -7,18 +7,63 @@ class PeatioAccountDrainer < Drainer
 
   KEYS = %i[balance].freeze
 
+  def initialize(id:, account:)
+    raise 'Account must be present' if account.nil?
+
+    super id: id, account: account
+  end
+
   def self.type
     POLLING_TYPE
   end
 
   def update!
-    logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
+    update_balances!
+    update_active_orders!
+    update_trades!
+  end
+
+  def update_balances!
     account.update_attributes!(
       balances: fetch_balances,
-      active_orders: fetch_active_orders
+      balances_updated_at: Time.now
     )
-    update_trades!
-    logger.debug 'update_trades_amounts!'
+  rescue Peatio::Client::REST::Error => e
+    logger.error e
+    report_exception e
+  end
+
+  def update_active_orders!
+    account.update_attributes!(
+      active_orders: fetch_active_orders,
+      active_orders_updated_at: Time.now
+    )
+  rescue Peatio::Client::REST::Error => e
+    logger.error e
+    report_exception e
+  end
+
+  def update_trades!
+    logger.debug 'update_trades!'
+    client.trades.each do |raw_trade|
+      market = Market.find_by(peatio_symbol: raw_trade['market']) # TODO: Move to Peatio Client
+      if market.nil?
+        logger.warn("Skip unknown market #{raw_trade['market']}")
+        next
+      end
+      raw_trade['side'] = Peatio::Client::REST::SIDES_MAP.invert.fetch(raw_trade['side']) # TODO: Move to Peatio Client
+      Trade
+        .create_with(
+          raw_trade.slice('price', 'amount', 'total', 'taker_type', 'side', 'order_id').merge(
+            traded_at: raw_trade['created_at']
+          )
+        )
+        .find_or_create_by!(
+          trade_id: raw_trade['id'],
+          market_id: market.id,
+          account_id: account.id
+        )
+    end
     account.update_trades_amounts!
   rescue Peatio::Client::REST::Error => e
     logger.error e
@@ -26,24 +71,6 @@ class PeatioAccountDrainer < Drainer
   end
 
   private
-
-  def update_trades!
-    logger.debug 'update_trades!'
-    client.trades.each do |raw_trade|
-      Trade
-        .create_with(
-          raw_trade.slice('price', 'amount', 'total', 'taker_type').merge(
-            side: Peatio::Client::REST::SIDES_MAP.invert.fetch(raw_trade['side']), # TODO: Move to Peatio Client
-            traded_at: raw_trade['created_at']
-          )
-        )
-        .find_or_create_by(
-          trade_id: raw_trade['id'],
-          market_id: Market.find_by!(peatio_symbol: raw_trade['market']), # TODO: Move to Peatio Client
-          account_id: account.id
-        )
-    end
-  end
 
   def fetch_active_orders
     # Collect by side

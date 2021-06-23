@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module StrategiesHelper
-  PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part].freeze
+  PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part _percentage].freeze
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def strategy_settings_attribute_input(strategy, attribute)
     side = attribute.to_s.split('_').first
     currency_method = side == 'bid' ? :quote : :base
@@ -19,14 +20,16 @@ module StrategiesHelper
       display_with = ->(value) { "#{value} sec" }
     end
     type = attribute.to_s.include?('enabled') || attribute.to_s.starts_with?('is_') ? :checkbox : :input
-    if attribute.to_s == 'enabled'
+    case attribute.to_s
+    when 'enabled'
       collection = %w[Disabled Enabled]
-    elsif attribute.to_s == 'target_state'
-      collection = StrategySettings::TARGET_STATES.map { |s| [s,s] }
+    when 'target_state'
+      collection = StrategySettings::TARGET_STATES.map { |s| [s, s] }
       type = :select
     end
     best_in_place strategy.settings, attribute, as: type, display_with: display_with, collection: collection
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   STATUS_LABELS = {
     true => 'badge-success',

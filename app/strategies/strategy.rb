@@ -86,19 +86,26 @@ class Strategy
   end
 
   def perform
+    logger.debug 'perform'
     reload
-    bump! if (state.updated_at.nil? || Time.now - state.updated_at > settings.base_latency)
+    logger.debug 'reload'
+    if state.updated_at.nil? || Time.now - state.updated_at > settings.base_latency
+      bump!
+    else
+      logger.debug('Skip bumping because of base_latency')
+    end
   end
 
   # Change state
   # @param changes [Hash]
   def bump!(changes = {})
-    # logger.debug "Bump with #{changes}"
+    logger.debug "Bump with #{changes}"
 
     case settings.target_state
     when 'enable'
       if state.is_active?
-        state.update_attributes! created_orders: updater.update!(build_orders)
+        created_orders = updater.update!(build_orders).to_a
+        state.update_attributes! created_orders: created_orders
       else
         state.touch!
       end
@@ -114,7 +121,7 @@ class Strategy
       state.touch!
     end
 
-    # Временно отключил
+    # Temporary turned off
     # StrategyChannel.update self
   rescue Peatio::Client::REST => e
     logger.error "#{self} #{e}"
@@ -147,10 +154,10 @@ class Strategy
 
   def build_order(side, price, volume, comparer = nil, level = 0)
     if price.nil? || price.zero?
-      logger.warn "Skip order building for side [#{side}] because price is zero or undefined (volume: #{volume}, level: #{level})"
+      logger.debug "Skip order building for side [#{side}] because price is zero or undefined (volume: #{volume}, level: #{level})"
       nil
     elsif volume.nil? || volume.zero?
-      logger.warn "Skip order building for side [#{side}] because volume is zero or undefined (price: #{price}, level: #{level})"
+      logger.debug "Skip order building for side [#{side}] because volume is zero or undefined (price: #{price}, level: #{level})"
       nil
     else
       logger.debug "build_order(#{side}, #{price}, #{volume})"

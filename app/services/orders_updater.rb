@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-# Smartly updates private order book for market/account and logs changes.
+# Smart updates private order book for market/account and logs changes.
 #
+# rubocop:disable Metrics/ClassLength
 class OrdersUpdater
   include AutoLogger
 
@@ -18,26 +19,33 @@ class OrdersUpdater
     @market = market || raise('No market')
     @account = account || raise('No account')
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger)
-      .tagged([self.class.name, market, client.name, client.endpoint].join(' '))
+                                          .tagged([self.class.name, market, client.try(:name),
+                                                   client.try(:endpoint)].join(' '))
     @name = name
   end
 
   # Updates orders on market. Cancel redundant orders and create new if necessary
   # @param Set[Order]
-  def update!(orders)
+  def update!(orders, update_active_orders: true)
     raise 'Must be a Set' unless orders.is_a? Set
 
-    logger.info "Update with #{orders.to_a.join(',')}"
-    Order::SIDES.map do |side|
+    account.update_active_orders! if update_active_orders
+
+    @changed = false
+    logger.info "Update request #{orders.to_a.join('; ')}"
+    created_orders = Order::SIDES.map do |side|
       update_by_side!(side, orders.filter { |o| o.side.to_s == side.to_s })
     end.flatten.compact
+
+    logger.info 'All orders up to date, nothing changed' unless @changed
+    created_orders
   end
 
   # Cancel all orders when bot stops
   def cancel!
-    logger.debug 'Cancel all orders'
+    logger.info 'Cancel all orders'
     canceled_orders = client.cancel_orders
-    logger.debug "Orders canceled #{canceled_orders.count}"
+    logger.info "Orders canceled #{canceled_orders.count}"
   end
 
   def update_by_side!(side, required_orders)
@@ -49,11 +57,10 @@ class OrdersUpdater
     outdated_orders, orders_to_create = calculate_orders Set.new(persisted_orders), Set.new(required_orders)
     logger.debug "[#{side}] Outdated orders: #{outdated_orders}, orders to create: #{orders_to_create}"
 
+    created_orders = create_orders! orders_to_create if orders_to_create.any?
     cancel_orders! outdated_orders if outdated_orders.any?
 
-    return [] if orders_to_create.empty?
-
-    create_orders! orders_to_create
+    created_orders
   end
 
   def active_orders(side)
@@ -92,7 +99,8 @@ class OrdersUpdater
   end
 
   def cancel_orders!(orders)
-    logger.debug "Cancel orders #{orders}"
+    @changed = true
+    logger.info "Cancel orders #{orders.to_a.join('; ')}"
     orders.each do |order|
       client.cancel_order order.id
     end
@@ -100,6 +108,8 @@ class OrdersUpdater
 
   # rubocop:disable Style/MultilineBlockChain
   def create_orders!(orders)
+    @changed = true
+    logger.info "Create orders #{orders.to_a.join('; ')}"
     Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
     rescue Errno::ECONNREFUSED, Peatio::Client::REST::Error => e
@@ -137,3 +147,4 @@ class OrdersUpdater
                     )
   end
 end
+# rubocop:enable Metrics/ClassLength
