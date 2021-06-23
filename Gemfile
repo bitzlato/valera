@@ -128,6 +128,7 @@ gem 'percentage', '~> 1.4'
 gem 'mini_racer', '~> 0.4.0'
 group :deploy do
   gem 'bugsnag-capistrano', require: false
+  gem 'capistrano-sentry'
   gem 'capistrano', require: false
   gem 'capistrano3-puma'
   gem 'capistrano-bundler', require: false

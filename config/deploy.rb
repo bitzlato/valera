@@ -81,3 +81,9 @@ set :systemd_daemon_role, :app
 set :systemd_daemon_instances, -> { %w[maker poller websocket_collectors] }
 
 # Rake::Task["deploy:assets:backup_manifest"].clear_actions
+#
+set :sentry_organization, ENV['SENTRY_ORGANIZATION']
+set :sentry_release_version, -> { [fetch(:app_version), fetch(:current_version)].join('-') }
+
+before 'deploy:starting', 'sentry:validate_config'
+after 'deploy:published', 'sentry:notice_deployment'
