@@ -4,16 +4,18 @@ div is="dapi-updatable" id=('ordersStrategy-'+strategy.id)
     thead.thead-dark
       tr
         th.text-right Side
-        th.text-center Last created orders
+        - if session[:show_last_creaated] || params[:show_last_creaated]
+          th.text-center Last created orders
         th.text-center Active orders
     tbody
       - Order::SIDES.each do |side|
         tr style="background-color: #{side_bg_color(side)}"
           th style='vertical-align: middle'= side.to_s.upcase
-          td.text-right style='padding: 0; border-left: 1px solid #eee'
-            = render 'persisted_orders', 
-              orders: sorted_orders_by_side(strategy.state.created_orders, side),
-              market: strategy.market
+          - if session[:show_last_creaated] || params[:show_last_creaated]
+            td.text-right style='padding: 0; border-left: 1px solid #eee'
+              = render 'persisted_orders', 
+                orders: sorted_orders_by_side(strategy.state.created_orders, side),
+                market: strategy.market
           td.text-right style='padding: 0; border-left: 1px solid #eee'
             = render 'persisted_orders', 
               orders: sorted_orders_by_side(strategy.active_orders, side),
