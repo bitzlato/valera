@@ -28,6 +28,13 @@ module ApplicationHelper
     BG_SIDE_COLORS[side.to_s]
   end
 
+  def colorized_side(side)
+    css_class = side.to_s == 'ask' ? 'badge badge-danger' : 'badge badge-success'
+    content_tag :span, class: css_class do
+      side
+    end
+  end
+
   def app_title
     'VALERA'
   end

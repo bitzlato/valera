@@ -16,7 +16,11 @@ class BuyoutOrder < ApplicationRecord
   end
 
   def revenue
-    original_trade.total - volume_price
+    if side? :bid
+      original_trade.total - volume_price
+    else
+      volume_price - original_trade.total
+    end
   end
 
   def volume_price

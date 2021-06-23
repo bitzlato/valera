@@ -14,15 +14,15 @@ table.table.table-small.table-narrow.table-stripped.table-condensed.m-0
       td.text-small= buyout_order.original_trade.side
       td.text-small= format_money buyout_order.original_trade.amount, buyout_order.original_trade.base
       td.text-small= format_money buyout_order.original_trade.price, buyout_order.original_trade.quote
-      td.text-small= format_money buyout_order.original_trade.total, buyout_order.original_trade.base
+      td.text-small= format_money buyout_order.original_trade.total, buyout_order.original_trade.quote
     tr style="background-color: #{side_bg_color(buyout_order.side)}"
       th.text-small= t '.created_order'
       td.text-small= buyout_order.side
       td.text-small= format_money buyout_order.volume, buyout_order.base
       td.text-small= format_money buyout_order.price, buyout_order.quote
-      td.text-small= format_money buyout_order.volume_price, buyout_order.base
+      td.text-small= format_money buyout_order.volume_price, buyout_order.quote
   tfoot
     tr
       th.text-small.text-right colspan=4
         = t '.revenue'
-      td.text-small= format_money buyout_order.revenue, buyout_order.base
+      td.text-small= format_money buyout_order.revenue, buyout_order.quote
