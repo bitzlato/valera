@@ -8,6 +8,8 @@ class Trade < ApplicationRecord
 
   has_one :buyout_order, foreign_key: :original_trade_id
 
+  scope :today, -> { where 'traded_at>?', 24.hours.ago }
+
   after_commit on: :create do
     account.trade_created self
   end

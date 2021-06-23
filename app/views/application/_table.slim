@@ -5,7 +5,7 @@
     - scope = scope.decorate unless scope.respond_to?(:decorated?) && scope.decorated?
   - decorator ||= scope.first.is_a?(ApplicationDecorator) ? scope.first.class : scope.first.decorator_class
   - columns = decorator.table_columns unless defined?(columns) && columns.present?
-  table.table.table-striped.table-hover.table-narrow data-sticky=true
+  table.table.table-striped.table-hover.table-narrow data-sticky=true class=(defined?(table_classes) ? table_classes : '')
     thead.thead-dark
       tr
         - columns.each do |column|

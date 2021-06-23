@@ -32,7 +32,7 @@ class OrdersUpdater
     account.update_active_orders! if update_active_orders
 
     @changed = false
-    logger.info "Update request #{orders.to_a.join('; ')}"
+    logger.info "Update request #{po orders}"
     created_orders = Order::SIDES.map do |side|
       update_by_side!(side, orders.filter { |o| o.side.to_s == side.to_s })
     end.flatten.compact
@@ -52,10 +52,10 @@ class OrdersUpdater
     logger.debug "[#{side}] Update by side #{side} #{required_orders}"
 
     persisted_orders = active_orders(side)
-    logger.debug "[#{side}] Persisted orders [#{persisted_orders.join('; ')}]"
+    logger.debug "[#{side}] Persisted orders #{po persisted_orders}"
 
     outdated_orders, orders_to_create = calculate_orders Set.new(persisted_orders), Set.new(required_orders)
-    logger.debug "[#{side}] Outdated orders: [#{outdated_orders.to_a.join('; ')}], orders to create: [#{orders_to_create.to_a.join('; ')}]"
+    logger.debug "[#{side}] Outdated orders: #{po outdated_orders}], orders to create: #{po orders_to_create}"
 
     created_orders = create_orders! orders_to_create if orders_to_create.any?
     cancel_orders! outdated_orders if outdated_orders.any?
@@ -68,6 +68,11 @@ class OrdersUpdater
   end
 
   private
+
+  # Present orders
+  def po(orders)
+    "[#{orders.to_a.join('; ')}]"
+  end
 
   def calculate_orders(persisted_orders, required_orders)
     persisted_orders_to_skip = Set.new
@@ -100,7 +105,7 @@ class OrdersUpdater
 
   def cancel_orders!(orders)
     @changed = true
-    logger.info "Cancel orders #{orders.to_a.join('; ')}"
+    logger.info "Cancel orders #{po orders}"
     orders.each do |order|
       client.cancel_order order.id
     end
@@ -109,7 +114,7 @@ class OrdersUpdater
   # rubocop:disable Style/MultilineBlockChain
   def create_orders!(orders)
     @changed = true
-    logger.info "Create orders [#{orders.to_a.join('; ')}]"
+    logger.info "Create orders #{po orders}"
     Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
     rescue Errno::ECONNREFUSED, Peatio::Client::REST::Error => e

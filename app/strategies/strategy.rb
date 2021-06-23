@@ -108,7 +108,7 @@ class Strategy
         state.update_attributes!(
           best_ask_price: best_price_for(:ask),
           best_bid_price: best_price_for(:bid),
-          created_orders: created_orders,
+          created_orders: created_orders
         )
       else
         state.touch!

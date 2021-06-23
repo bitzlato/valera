@@ -5,10 +5,11 @@ table.table.table-condensed.table-narrow style='border-right: 1px solid #eee; bo
       th Market
       th.text-center Settings
       th.text-right Side
-      th.text-right Binance ask/bid
+      th.text-right Best source price
       - if show_last_created?
         th.text-center Last created orders
       th.text-center Active orders
+      th.text-center Last trades
 
   tbody
     - strategies.each do |strategy|
@@ -35,6 +36,9 @@ table.table.table-condensed.table-narrow style='border-right: 1px solid #eee; bo
             = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side? :ask }, market: strategy.market
         td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
           = render 'persisted_orders', orders: strategy.active_orders.filter { |o| o.side? :ask }, market: strategy.market
+
+        td style='padding: 0'
+          = render 'strategies/last_trades', strategy: strategy
 
       tr
         - side = 'bid'

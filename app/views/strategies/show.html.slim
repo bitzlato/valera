@@ -19,23 +19,9 @@
     .col-md-4
       = render 'orders_table', strategy: strategy
   hr
-  h3= link_to t('.strategy_state'), '#strategyState', data: { toggle: 'collapse' }
-  .collapse#strategyState
-    div.mb-2 data-cable-broadcast=StrategyChannel.broadcasting_for(strategy) data-cable-field='update_date'
-      = Time.now
-    code.text-small style='max-height: 420px; overflow: scroll; display: block'
-      pre data-cable-broadcast=StrategyChannel.broadcasting_for(strategy) data-cable-field='pretty_state' style='columns: 250px'
-        = JSON.pretty_generate strategy.state.as_json
-    - strategy.upstream_markets.each do |upstream_market|
-      h3= upstream_market.upstream
-      code.text-small style='max-height: 420px; overflow: scroll; display: block'
-        pre data-cable-broadcast=StrategyChannel.broadcasting_for(upstream_market) data-cable-field='pretty_state' style='columns: 250px'
-          = JSON.pretty_generate upstream_market.as_json
-
-  h2 Grafana
-  iframe[src=grafana_iframe_src(strategy) width="100%" height=500 frameborder=0 data-turbolinks-permanent]
-
-  javascript:
-    $(function(){
-      window.subscribeToStrategy(#{raw strategy.id.to_json});
-    });
+  h3 Last trades
+  = render 'last_trades', strategy: strategy
+  hr
+  = render 'grafana', strategy: strategy
+  hr
+  = render 'debug', strategy: strategy

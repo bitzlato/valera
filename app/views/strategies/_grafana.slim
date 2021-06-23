@@ -1,0 +1,7 @@
+h2 Grafana
+iframe[src=grafana_iframe_src(strategy) width="100%" height=500 frameborder=0 data-turbolinks-permanent]
+
+javascript:
+  $(function(){
+    window.subscribeToStrategy(#{raw strategy.id.to_json});
+  });

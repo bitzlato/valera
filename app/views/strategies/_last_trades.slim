@@ -1,0 +1,25 @@
+- trades = strategy.account.trades.today.order('traded_at desc').limit(params[:trades_limit] || 10)
+
+- if trades.any?
+  table.table.table-condensed.table-striped.table-sm.table-narrow.table-bordered
+    thead.thead-light
+      tr
+        th.text-small.text-right Time
+        th.text-small.text-right Side
+        th.text-small.text-right Amount
+        th.text-small.text-right Price
+        th.text-small.text-right Total
+    tbody
+      - trades.each do |trade|
+        - td = TradeDecorator.decorate(trade)
+        tr
+          td.text-small.text-monospace.text-muted.text-nowrap
+            = humanized_time_ago trade.traded_at
+          td.text-small.text-right title=trade.id
+            = td.side
+          td.text-small.text-right= td.amount
+          td.text-small.text-right= td.price
+          td.text-small.text-right= td.total
+
+- else
+  .text-center.mt-2= middot

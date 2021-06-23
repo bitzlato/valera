@@ -4,6 +4,7 @@ div is="dapi-updatable" id=('ordersStrategy-'+strategy.id)
     thead.thead-dark
       tr
         th.text-right Side
+        th.text-right Best source price
         - if show_last_created?
           th.text-center Last created orders
         th.text-center Active orders
@@ -11,6 +12,8 @@ div is="dapi-updatable" id=('ordersStrategy-'+strategy.id)
       - Order::SIDES.each do |side|
         tr style="background-color: #{side_bg_color(side)}"
           th style='vertical-align: middle'= side.to_s.upcase
+          td.text-right= format_money strategy.state.send("best_#{side}_price"), strategy.market.quote
+
           - if show_last_created?
             td.text-right style='padding: 0; border-left: 1px solid #eee'
               = render 'persisted_orders', 

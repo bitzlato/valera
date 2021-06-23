@@ -26,7 +26,7 @@ class PeatioAccountDrainer < Drainer
   def update_balances!
     account.update_attributes!(
       balances_updated_at: Time.now, # Fetch time first
-      balances: fetch_balances,
+      balances: fetch_balances
     )
   rescue Peatio::Client::REST::Error => e
     logger.error e
@@ -36,7 +36,7 @@ class PeatioAccountDrainer < Drainer
   def update_active_orders!
     account.update_attributes!(
       active_orders_updated_at: Time.now, # Fetch time first
-      active_orders: fetch_active_orders,
+      active_orders: fetch_active_orders
     )
   rescue Peatio::Client::REST::Error => e
     logger.error e
