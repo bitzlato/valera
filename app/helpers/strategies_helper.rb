@@ -23,7 +23,7 @@ module StrategiesHelper
     elsif attribute.to_s.include? 'latency'
       display_with = ->(value) { "#{value} sec" }
     end
-    type = attribute.to_s.include?('enabled') || attribute.to_s.starts_with?('is_') ? :checkbox : :input
+    type = attribute.to_s.include?('enable') || attribute.to_s.starts_with?('is_') ? :checkbox : :input
     case attribute.to_s
     when 'enabled'
       collection = %w[Disabled Enabled]
