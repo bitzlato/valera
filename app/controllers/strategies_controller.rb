@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class StrategiesController < ApplicationController
-  helper_method :selected_market
+  include SelectedMarket
 
   def index
     strategies = god.strategies
@@ -13,11 +13,5 @@ class StrategiesController < ApplicationController
   def show
     strategy = Strategy.find! params[:id]
     render locals: { strategy: strategy }
-  end
-
-  private
-
-  def selected_market
-    Market.find params[:market_id] if params[:market_id]
   end
 end

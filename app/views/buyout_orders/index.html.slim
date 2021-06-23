@@ -1,6 +1,7 @@
 .container-fluid
   h2= t '.buyout_orders'
   hr
+  = render 'markets_select', selected_market: selected_market
   = render 'ransack_conditions', conditions: @q.conditions
   - if all_orders.any?
     = render 'table', scope: paginated_orders, decorator: BuyoutOrderDecorator
