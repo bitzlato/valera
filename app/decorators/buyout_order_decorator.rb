@@ -2,8 +2,27 @@
 
 class BuyoutOrderDecorator < ApplicationDecorator
   delegate_all
+
   def self.table_columns
     %i[id created_at updated_at market trade_account buyout_account orders status ignore_message]
+  end
+
+  def self.table_td_class(column)
+    css_class = super(column).to_s.dup
+    css_class << ' p-0' if column.to_s == 'orders'
+    css_class
+  end
+
+  def ignore_message
+    return '' if object.ignore_message.blank?
+
+    h.content_tag :em do
+      object.ignore_message
+    end
+  end
+
+  def status
+    h.buyout_order_status object
   end
 
   def orders

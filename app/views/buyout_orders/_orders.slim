@@ -1,25 +1,28 @@
-table.table.table-small.table-narrow.table-stripped.table-condensed
-  thead.thead-light
+table.table.table-small.table-narrow.table-stripped.table-condensed.m-0
+  thead.thead-dark
     tr
       th
-      th= t '.side'
-      th= t '.volume'
-      th= t '.price'
-      th= t '.total'
+      th.text-small= t '.side'
+      th.text-small= t '.volume'
+      th.text-small= t '.price'
+      th.text-small= t '.total'
   tbody
     tr style="background-color: #{side_bg_color(buyout_order.original_trade.side)}"
-      th= t '.original_trade'
-      td= buyout_order.original_trade.side
-      td= format_money buyout_order.original_trade.amount, buyout_order.original_trade.base
-      td= format_money buyout_order.original_trade.price, buyout_order.original_trade.quote
-      td= format_money buyout_order.original_trade.total, buyout_order.original_trade.base
+      th.text-small
+        = link_to trade_path(buyout_order.original_trade), title: buyout_order.original_trade.id do
+          = t '.original_trade'
+      td.text-small= buyout_order.original_trade.side
+      td.text-small= format_money buyout_order.original_trade.amount, buyout_order.original_trade.base
+      td.text-small= format_money buyout_order.original_trade.price, buyout_order.original_trade.quote
+      td.text-small= format_money buyout_order.original_trade.total, buyout_order.original_trade.base
     tr style="background-color: #{side_bg_color(buyout_order.side)}"
-      th= t '.created_order'
-      td= buyout_order.side
-      td= format_money buyout_order.volume, buyout_order.base
-      td= format_money buyout_order.price, buyout_order.quote
-      td= format_money buyout_order.volume_price, buyout_order.base
+      th.text-small= t '.created_order'
+      td.text-small= buyout_order.side
+      td.text-small= format_money buyout_order.volume, buyout_order.base
+      td.text-small= format_money buyout_order.price, buyout_order.quote
+      td.text-small= format_money buyout_order.volume_price, buyout_order.base
+  tfoot
     tr
-      td.text-right colspan=4
+      th.text-small.text-right colspan=4
         = t '.revenue'
-      td= format_money buyout_order.revenue, buyout_order.base
+      td.text-small= format_money buyout_order.revenue, buyout_order.base

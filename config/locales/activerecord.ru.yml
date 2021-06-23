@@ -1,0 +1,11 @@
+ru:
+  activerecord:
+    attributes:
+      buyout_order:
+        statuses:
+          ignored: Пропущен
+          done: Удачно откупились
+          initial: Заявка в процессе
+          posted: Заявка размещена
+          waited: Заявка в ожидании исполнения
+

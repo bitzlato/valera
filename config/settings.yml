@@ -70,8 +70,6 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  markets: 
-    - BTC_USDT
   polling_sleep: 1
   maker_sleep: 1
 staging:

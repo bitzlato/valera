@@ -7,38 +7,51 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     @buyout_account = Account.find(:binance)
     @market = Market.find('BTC_USDT')
     @upstream_market = UpstreamMarket.find_by(account: @buyout_account, market: @market)
-    # @upstream_market.bidPrice = 90
   end
 
-  test 'ignore buyout order if sell price is lower then traded price' do
+  # Sold expensive. Create order to bought cheaper
+  test 'successful create bid order for sold trade' do
+    market_price = 100
+    @upstream_market.bidPrice = market_price
     trade = trades(:ask)
-    @upstream_market.askPrice = trade.price - 10
+    trade.update! price: market_price * 1.1
     buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
     assert buyout_order.side?(:bid)
-    assert buyout_order.ignored?
-  end
-
-  test 'success create bid buyout order' do
-    trade = trades(:ask)
-    @upstream_market.askPrice = trade.price + 10
-    buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
-    assert buyout_order.side?(:bid)
+    assert buyout_order.price > market_price
+    assert buyout_order.price < trade.price
     assert buyout_order.initial?
   end
 
-  test 'ignore buyout order if buy price is higher then traded price' do
+  # Bough cheap. Sold expensive
+  test 'successful create ask order for bought trade' do
+    market_price = 100
+    @upstream_market.askPrice = market_price
     trade = trades(:bid)
-    @upstream_market.bidPrice = trade.price + 10
+    trade.update! price: market_price * 0.9
+    buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
+    assert buyout_order.side?(:ask)
+    assert buyout_order.price < market_price
+    assert buyout_order.price > trade.price
+    assert buyout_order.initial?
+  end
+
+  test 'ignore buyout of market price is higher than we bought' do
+    market_price = 100
+    @upstream_market.askPrice = market_price
+    trade = trades(:bid)
+    trade.update! price: market_price * 1.2
     buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
     assert buyout_order.side?(:ask)
     assert buyout_order.ignored?
   end
 
-  test 'success ask buyout order' do
-    trade = trades(:bid)
-    @upstream_market.bidPrice = trade.price - 10
+  test 'ignore buyout of market price is lower than we sold' do
+    market_price = 100
+    @upstream_market.bidPrice = market_price
+    trade = trades(:ask)
+    trade.update! price: market_price * 0.9
     buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
-    assert buyout_order.side?(:ask)
-    assert buyout_order.initial?
+    assert buyout_order.side?(:bid)
+    assert buyout_order.ignored?
   end
 end

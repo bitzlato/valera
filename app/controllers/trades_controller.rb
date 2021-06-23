@@ -10,6 +10,6 @@ class TradesController < ApplicationController
   end
 
   def show
-    redirect_to trades_path
+    render locals: { trade: Trade.find(params[:id]) }
   end
 end

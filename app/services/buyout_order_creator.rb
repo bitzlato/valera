@@ -42,17 +42,20 @@ class BuyoutOrderCreator
 
   def calculate_price(upstream_market, trade, ask_percentage, bid_percentage)
     # Sold expensive, buy cheaper
-    if trade.side? :bid
-      side = 'ask'
-      price = (100 + ask_percentage).percent_of(upstream_market.bidPrice)
+    if trade.side? :ask
+      side = 'bid'
+      raise "No bidPrice in #{upstream_market}" if upstream_market.bidPrice.to_d.zero?
+
+      price = (100 + bid_percentage).percent_of(upstream_market.bidPrice)
       if price >= trade.price
-        ignore_message = "Target price (#{price}) is larger than traded (#{trade.price}) for trade #{trade.id}"
+        ignore_message = "Target price (#{price}) is higher than traded (#{trade.price}) for trade #{trade.id}"
         logger.info ignore_message
       end
     else # Bought cheap, sell expensive
-      side = 'bid'
-      price = (100 - bid_percentage).percent_of(upstream_market.askPrice)
+      side = 'ask'
+      raise "No bidPrice in #{upstream_market}" if upstream_market.askPrice.to_d.zero?
 
+      price = (100 - ask_percentage).percent_of(upstream_market.askPrice)
       if price <= trade.price
         ignore_message = "Target price (#{price}) is lower than traded (#{trade.price}) for trade #{trade.id}"
         logger.info ignore_message
