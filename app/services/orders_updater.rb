@@ -52,10 +52,10 @@ class OrdersUpdater
     logger.debug "[#{side}] Update by side #{side} #{required_orders}"
 
     persisted_orders = active_orders(side)
-    logger.debug "[#{side}] Persisted orders #{persisted_orders}"
+    logger.debug "[#{side}] Persisted orders [#{persisted_orders.join('; ')}]"
 
     outdated_orders, orders_to_create = calculate_orders Set.new(persisted_orders), Set.new(required_orders)
-    logger.debug "[#{side}] Outdated orders: #{outdated_orders}, orders to create: #{orders_to_create}"
+    logger.debug "[#{side}] Outdated orders: [#{outdated_orders.to_a.join('; ')}], orders to create: [#{orders_to_create.to_a.join('; ')}]"
 
     created_orders = create_orders! orders_to_create if orders_to_create.any?
     cancel_orders! outdated_orders if outdated_orders.any?
@@ -109,7 +109,7 @@ class OrdersUpdater
   # rubocop:disable Style/MultilineBlockChain
   def create_orders!(orders)
     @changed = true
-    logger.info "Create orders #{orders.to_a.join('; ')}"
+    logger.info "Create orders [#{orders.to_a.join('; ')}]"
     Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
     rescue Errno::ECONNREFUSED, Peatio::Client::REST::Error => e

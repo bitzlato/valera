@@ -6,7 +6,8 @@ table.table.table-condensed.table-narrow style='border-right: 1px solid #eee; bo
       th.text-center Settings
       th.text-right Side
       th.text-right Binance ask/bid
-      th.text-center Last created orders
+      - if show_last_created?
+        th.text-center Last created orders
       th.text-center Active orders
 
   tbody
@@ -27,10 +28,11 @@ table.table.table-condensed.table-narrow style='border-right: 1px solid #eee; bo
           = render 'strategies/form', strategy: strategy
         - side = 'ask'
         td.text-right  style="background-color: #{side_bg_color(side)}" ASK
-        td.text-right  style="background-color: #{side_bg_color(side)}" 
-          -# TODO = format_money strategy.state.binance_askPrice, strategy.market.quote
-        td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
-          = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side? :ask }, market: strategy.market
+        td.text-right  style="background-color: #{side_bg_color(side)}"
+          = format_money strategy.state.best_ask_price, strategy.market.quote
+        - if show_last_created?
+          td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
+            = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side? :ask }, market: strategy.market
         td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
           = render 'persisted_orders', orders: strategy.active_orders.filter { |o| o.side? :ask }, market: strategy.market
 
@@ -38,8 +40,9 @@ table.table.table-condensed.table-narrow style='border-right: 1px solid #eee; bo
         - side = 'bid'
         td.text-right style="background-color: #{side_bg_color(side)}" BID
         td.text-right style="background-color: #{side_bg_color(side)}"
-          -# TODO = format_money strategy.state.binance_bidPrice, strategy.market.quote
-        td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
-          = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side? :bid }, market: strategy.market
+          = format_money strategy.state.best_bid_price, strategy.market.quote
+        - if show_last_created?
+          td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
+            = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side? :bid }, market: strategy.market
         td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
           = render 'persisted_orders', orders: strategy.active_orders.filter { |o| o.side? :bid }, market: strategy.market

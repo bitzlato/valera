@@ -3,6 +3,10 @@
 module StrategiesHelper
   PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part _percentage].freeze
 
+  def show_last_created?
+    session[:show_last_created] || params[:show_last_created]
+  end
+
   # rubocop:disable Metrics/CyclomaticComplexity
   def strategy_settings_attribute_input(strategy, attribute)
     side = attribute.to_s.split('_').first

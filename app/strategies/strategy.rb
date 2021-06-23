@@ -105,7 +105,11 @@ class Strategy
     when 'enable'
       if state.is_active?
         created_orders = updater.update!(build_orders).to_a
-        state.update_attributes! created_orders: created_orders
+        state.update_attributes!(
+          best_ask_price: best_price_for(:ask),
+          best_bid_price: best_price_for(:bid),
+          created_orders: created_orders,
+        )
       else
         state.touch!
       end

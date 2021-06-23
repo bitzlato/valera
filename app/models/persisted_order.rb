@@ -36,6 +36,14 @@ class PersistedOrder
   attribute :remaining_volume, BigDecimal
   attribute :price, BigDecimal
   attribute :market_id, String # Our market_id
+  attribute :created_at, Time
+  attribute :executed_volume, BigDecimal
+  attribute :ord_type, String
+  attribute :avg_price, BigDecimal
+  attribute :maker_fee, BigDecimal
+  attribute :taker_fee, BigDecimal
+  attribute :trades_count, BigDecimal
+  attribute :state, String
 
   def initialize(attrs)
     super(attrs).freeze
