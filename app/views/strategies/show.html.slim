@@ -1,18 +1,21 @@
 .container-fluid
   = link_to t('.back'), strategies_path
   .row
-    .col-md-3
+    .col-md-6
       h1= "#{strategy.class}##{strategy.id}"
       = render 'strategy_enabler', strategy: strategy
       = strategy_status strategy
       .mb-2.text-small.text-muted= strategy.comment
+    .col-md-6
       div.mb-2= strategy.description
-      = account_link strategy.account
-    .col-md-4
+
+  .row.mt-2
+    .col-md-6
       = render 'form', strategy: strategy
-    .col-md-1
+    .col-md-2
+      .float-right= account_link strategy.account
       h2= t '.account_balances'
-      = AccountDecorator.decorate(strategy.account).balances(strategy.market.currencies)
+      = render 'balances', account: strategy.account, currencies: strategy.market.currencies
     .col-md-4
       = render 'orders_table', strategy: strategy
   hr

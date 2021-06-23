@@ -52,7 +52,8 @@ module Peatio
       # volume
       def create_order(order)
         build_persisted_order(
-          post('/market/orders', order.symbolize_keys.merge(side: SIDES_MAP.fetch(order.fetch(:side))))
+          post('/market/orders', order.symbolize_keys.merge(side: SIDES_MAP.fetch(order.fetch(:side)))),
+          skip_unknown_market: false
         )
       end
 
@@ -70,6 +71,7 @@ module Peatio
       def orders(params = {})
         get('/market/orders', params)
           .map { |data| build_persisted_order data }
+          .compact
       end
 
       def trades(params = {})
@@ -158,13 +160,21 @@ module Peatio
       # "maker_fee"=>"0.0",
       # "taker_fee"=>"0.0",
       # "trades_count"=>0
-      def build_persisted_order(raw)
+      def build_persisted_order(raw, skip_unknown_market: true)
         data = raw
                .symbolize_keys
                .slice(*PersistedOrder.attribute_set.map(&:name))
         data[:side] = SIDES_MAP.invert.fetch data.fetch(:side)
-        data[:market_id] = Market.find_by!(peatio_symbol: raw.fetch('market')).id
-        PersistedOrder.new data.merge(raw: raw)
+        market = Market.find_by(peatio_symbol: raw.fetch('market'))
+        if market.present?
+          data[:market_id] = market.id
+          PersistedOrder.new data.merge(raw: raw)
+        elsif skip_unknown_market
+          logger.warn "Unknown market #{raw.fetch('market')}. Ignore order #{data}"
+          nil
+        else
+          raise "Unknown market #{raw.fetch('market')}"
+        end
       end
 
       def logger

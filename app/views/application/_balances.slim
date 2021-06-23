@@ -1,8 +1,8 @@
-table.table.table-sm
+table.table.table-sm.table-narrow
   - account.balances.each_pair do |currency, amount|
     - next if currencies.present? && !currencies.include?(currency.upcase)
     tr
       th.text-right.text-small.text-nowrap= format_currency currency
       td.text-right.text-small= format_money amount, currency
 
-.text-muted= humanized_time_ago account.balances_updated_at
+.text-muted.text-small= humanized_time_ago account.balances_updated_at
