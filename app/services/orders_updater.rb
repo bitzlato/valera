@@ -67,6 +67,29 @@ class OrdersUpdater
     account.active_orders.filter { |o| o.market == market && o.side?(side) }
   end
 
+  def cancel_orders!(orders)
+    @changed = true
+    logger.info "Cancel orders #{po orders}"
+    orders.each do |order|
+      client.cancel_order order.id
+    end
+  end
+
+  # rubocop:disable Style/MultilineBlockChain
+  def create_orders!(orders)
+    @changed = true
+    logger.info "Create orders #{po orders}"
+    Parallel.map orders.map, in_threads: THREADS do |order|
+      create_order! order
+    rescue Errno::ECONNREFUSED, Peatio::Client::REST::Error => e
+      logger.error e
+      []
+    end.tap do |created_orders|
+      logger.debug "Created orders #{created_orders}"
+    end
+  end
+  # rubocop:enable Style/MultilineBlockChain
+
   private
 
   # Present orders
@@ -102,29 +125,6 @@ class OrdersUpdater
 
     [orders_to_cancel, orders_to_create]
   end
-
-  def cancel_orders!(orders)
-    @changed = true
-    logger.info "Cancel orders #{po orders}"
-    orders.each do |order|
-      client.cancel_order order.id
-    end
-  end
-
-  # rubocop:disable Style/MultilineBlockChain
-  def create_orders!(orders)
-    @changed = true
-    logger.info "Create orders #{po orders}"
-    Parallel.map orders.map, in_threads: THREADS do |order|
-      create_order! order
-    rescue Errno::ECONNREFUSED, Peatio::Client::REST::Error => e
-      logger.error e
-      []
-    end.tap do |created_orders|
-      logger.debug "Created orders #{created_orders}"
-    end
-  end
-  # rubocop:enable Style/MultilineBlockChain
 
   # @param order <Order>
   def create_order!(order)

@@ -104,12 +104,7 @@ class Strategy
     case settings.target_state
     when 'enable'
       if state.is_active?
-        created_orders = updater.update!(build_orders).to_a
-        state.update_attributes!(
-          best_ask_price: best_price_for(:ask),
-          best_bid_price: best_price_for(:bid),
-          created_orders: created_orders
-        )
+        update_orders!
       else
         state.touch!
       end
@@ -152,6 +147,14 @@ class Strategy
 
   private
 
+  def update_orders!
+    state.update_attributes!(
+      best_ask_price: best_price_for(:ask),
+      best_bid_price: best_price_for(:bid),
+      created_orders: updater.update!(build_orders).to_a
+    )
+  end
+
   def build_orders
     raise 'not implemented'
   end
@@ -180,7 +183,7 @@ class Strategy
       .find_by_market!(market)
   end
 
-  def user_orders_volume(side)
+  def users_orders_volume(side)
     target_upstream_market.send("users#{side.capitalize}sVolume").to_d
   end
 

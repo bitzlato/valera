@@ -35,7 +35,7 @@ class DeepStonerStrategy < Strategy
       validates "base_liquidity_part_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
 
       attribute "base_total_volume_#{i}", Float, default: 1
-      validates "base_total_volume_#{i}", presence: true, numericality: { greater_than: 0 }
+      validates "base_total_volume_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0 }
     end
 
     def levels
@@ -71,32 +71,76 @@ class DeepStonerStrategy < Strategy
 
   private
 
-  def build_orders
-    Set.new(
-      %i[ask bid].map do |side|
-        if best_price_for(side).nil?
-          logger.debug("No upstream data (best price) for #{side}")
-          next
-        end
-        settings.levels.times.map do |level|
-          LEVELS_MULT.times.map do |index|
-            build_order(side, level + index * LEVELS_DECADE)
-          end
-        end
-      end.flatten.compact
+  def update_orders!
+    orders_to_create = Array.new
+    orders_to_cancel = Array.new
+
+    account.update_active_orders!
+
+    %i[ask bid].map do |side|
+      prepare_orders_by_side(side, orders_to_cancel, orders_to_create)
+    end
+
+    updater.cancel_orders! orders_to_cancel if orders_to_cancel.any?
+    updater.create_orders! orders_to_create if orders_to_create.any?
+
+    state.update_attributes!(
+      best_ask_price: best_price_for(:ask),
+      best_bid_price: best_price_for(:bid),
+      created_orders: orders_to_create.to_a
     )
   end
 
-  def build_order(side, level)
-    price_range = build_price_range side, level
-    price = rand price_range
-    logger.debug("Calculated price for #{side} level #{level} price_range=#{price_range} price=#{price}")
+  def prepare_orders_by_side(side, orders_to_cancel, orders_to_create)
+    leveled_orders = settings.levels.times.each_with_object({}) { |a,o| o[a] = Array.new }
 
-    volume = calculate_volume(side, level)
-    comparer = lambda do |persisted_order|
-      !settings.base_mad_mode_enable? && price_range.member?(persisted_order.price)
+    account.active_orders.filter { |o| o.market == market && o.side?(side) }.each do |persisted_order|
+      level = find_level_of_order persisted_order
+      if level.nil?
+        orders_to_cancel << persisted_order
+      else
+        leveled_orders[level] << persisted_order
+      end
     end
 
+    settings.levels.times.map do |level|
+      target_orders_volume = calculate_target_orders_volume level
+
+      persisted_orders = leveled_orders[level]
+
+      while persisted_orders.sum(&:remaining_volume) > target_orders_volume
+        orders_to_cancel << persisted_orders.pop
+      end
+
+      persisted_volume = persisted_orders.sum(&:remaining_volume)
+      new_orders = Array.new
+      while persisted_volume + new_orders.sum(&:volume) < target_orders_volume && target_orders_volume - (persisted_volume + new_orders.sum(&:volume)) > settings.base_min_volume
+        order = build_order(side, level, target_orders_volume - new_orders.sum(&:volume) - persisted_volume)
+        new_orders << order unless order.nil?
+      end
+
+      orders_to_create.push(*new_orders)
+    end
+  end
+
+  def find_level_of_order(persisted_order)
+    volume_range = settings.base_min_volume.to_f..settings.base_max_volume.to_f
+    settings.levels.times.find do |level|
+      build_price_range(persisted_order.side, level).member?(persisted_order.price) && volume_range.member?(persisted_order.remaining_volume)
+    end
+  end
+
+  def build_order(side, level, max_volume)
+    volume_range = settings.base_min_volume.to_f..[settings.base_max_volume, max_volume].min.to_f
+    price_range = build_price_range side, level
+    comparer = lambda do |persisted_order|
+      !settings.base_mad_mode_enable?  && \
+        price_range.member?(persisted_order.price) && \
+        volume_range.member?(persisted_order.remaining_volume)
+    end
+    price = rand price_range
+    volume = rand volume_range
+    logger.debug("Calculated price for #{side} level #{level} price_range=#{price_range} price=#{price} volume=#{volume}")
     super side, price, volume, comparer, level
   end
 
@@ -113,7 +157,7 @@ class DeepStonerStrategy < Strategy
       settings.send("base_best_price_deviation_to_#{level}")
     ].sort
 
-    case side
+    case side.to_sym
     when :ask
       (100.0.to_d + deviation_from)..(100.0.to_d + deviation_to)
     when :bid
@@ -123,15 +167,13 @@ class DeepStonerStrategy < Strategy
     end
   end
 
-  def calculate_volume(side, level)
-    level -= level / LEVELS_DECADE * LEVELS_DECADE
-    liquidity_part = settings.send "base_liquidity_part_#{level}"
-
-    return 0 if liquidity_part.zero?
-
-    [
-      [user_orders_volume(side) * liquidity_part / 100, settings.base_min_volume].max,
-      settings.base_max_volume
-    ].min
+  def calculate_target_orders_volume(level)
+    if settings.base_enable_order_by_liquidity
+      level -= level / LEVELS_DECADE * LEVELS_DECADE
+      liquidity_part = settings.send "base_liquidity_part_#{level}"
+      users_orders_volume(side) * liquidity_part / 100
+    else
+      settings.send "base_total_volume_#{level}"
+    end
   end
 end
