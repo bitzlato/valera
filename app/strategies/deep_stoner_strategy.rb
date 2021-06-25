@@ -23,6 +23,8 @@ class DeepStonerStrategy < Strategy
 
     attribute :base_mad_mode_enable, Boolean, default: false
 
+    attribute :base_enable_order_by_liquidity, Boolean, default: false
+
     LEVELS = 5
     LEVELS.times.each do |i|
       attribute "base_best_price_deviation_from_#{i}", Float, default: 10
@@ -31,6 +33,9 @@ class DeepStonerStrategy < Strategy
       validates "base_best_price_deviation_to_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
       attribute "base_liquidity_part_#{i}", Float, default: 10
       validates "base_liquidity_part_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+
+      attribute "base_total_volume_#{i}", Float, default: 1
+      validates "base_total_volume_#{i}", presence: true, numericality: { greater_than: 0 }
     end
 
     def levels
