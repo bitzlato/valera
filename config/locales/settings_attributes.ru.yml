@@ -10,7 +10,8 @@ ru:
     base_liquidity_part: Часть ликвидности
     base_volume: Объём заявки
     base_max_upstream_threshold: Максимальное допустимое отклонение от целевой цены
-    base_total_volume: Общий объём заявок
+    base_ask_total_volume: Общий объём заявок на продажу
+    base_bid_total_volume: Общий объём заявок на покупку
     buyout_enable: Разрешить откуп
     buyout_ask_percentage: Процент сдвига ВНИЗ цены ПРОДАЖИ на откуп для учеличения шанса сделки
     buyout_bid_percentage: Процент сдвига ВВЕРХ цены ПОКУПКИ на откуп для увеличения шанса сделки

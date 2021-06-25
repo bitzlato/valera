@@ -25,6 +25,12 @@ class DeepStonerStrategy < Strategy
 
     attribute :base_enable_order_by_liquidity, Boolean, default: false
 
+    attribute "base_bid_total_volume", Float, default: 0.01
+    validates "base_bid_total_volume", presence: true, numericality: { greater_than_or_equal_to: 0 }
+
+    attribute "base_ask_total_volume", Float, default: 0.01
+    validates "base_ask_total_volume", presence: true, numericality: { greater_than_or_equal_to: 0 }
+
     LEVELS = 5
     LEVELS.times.each do |i|
       attribute "base_best_price_deviation_from_#{i}", Float, default: 10
@@ -33,9 +39,6 @@ class DeepStonerStrategy < Strategy
       validates "base_best_price_deviation_to_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
       attribute "base_liquidity_part_#{i}", Float, default: 10
       validates "base_liquidity_part_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
-
-      attribute "base_total_volume_#{i}", Float, default: 1
-      validates "base_total_volume_#{i}", presence: true, numericality: { greater_than_or_equal_to: 0 }
     end
 
     def levels
@@ -104,7 +107,7 @@ class DeepStonerStrategy < Strategy
     end
 
     settings.levels.times.map do |level|
-      target_orders_volume = calculate_target_orders_volume level
+      target_orders_volume = calculate_target_orders_volume side, level
 
       persisted_orders = leveled_orders[level]
 
@@ -167,13 +170,13 @@ class DeepStonerStrategy < Strategy
     end
   end
 
-  def calculate_target_orders_volume(level)
+  def calculate_target_orders_volume(side, level)
     if settings.base_enable_order_by_liquidity
       level -= level / LEVELS_DECADE * LEVELS_DECADE
       liquidity_part = settings.send "base_liquidity_part_#{level}"
       users_orders_volume(side) * liquidity_part / 100
     else
-      settings.send "base_total_volume_#{level}"
+      settings.send "base_#{side}_total_volume"
     end
   end
 end

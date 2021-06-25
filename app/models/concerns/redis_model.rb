@@ -90,7 +90,7 @@ module RedisModel
   private
 
   def restore!
-    assign_attributes redis_value.value if persisted?
+    assign_attributes redis_value.value.slice(*self.class.attribute_names) if persisted?
   end
 
   def after_save; end
