@@ -47,6 +47,6 @@ table.table.table-condensed.table-narrow style='border-right: 1px solid #eee; bo
           = format_money strategy.state.best_bid_price, strategy.market.quote
         - if show_last_created?
           td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
-            = render 'persisted_orders', orders: strategy.state.created_orders.filter { |o| o.side? :bid }, market: strategy.market
+            = render 'persisted_orders', orders: sorted_orders_by_side(strategy.state.created_orders, :bid), market: strategy.market
         td.text-right style="padding: 0; border-left: 1px solid #eee; background-color: #{side_bg_color(side)}"
-          = render 'persisted_orders', orders: strategy.active_orders.filter { |o| o.side? :bid }, market: strategy.market
+          = render 'persisted_orders', orders: sorted_orders_by_side(strategy.active_orders, :bid), market: strategy.market
