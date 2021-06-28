@@ -127,6 +127,7 @@ class DeepStonerStrategy < Strategy
 
     settings.levels.times.map do |level|
       target_orders_volume = calculate_target_orders_volume side, level
+      logger.debug("target_orders_volume(level:#{level},side:#{side})=#{target_orders_volume}")
 
       persisted_orders = leveled_orders[level]
 
@@ -196,12 +197,12 @@ class DeepStonerStrategy < Strategy
   end
 
   def calculate_target_orders_volume(side, level)
+    level -= level / LEVELS_DECADE * LEVELS_DECADE
+    liquidity_part = settings.send "base_liquidity_part_#{level}"
     if settings.base_enable_order_by_liquidity
-      level -= level / LEVELS_DECADE * LEVELS_DECADE
-      liquidity_part = settings.send "base_liquidity_part_#{level}"
-      users_orders_volume(side) * liquidity_part / 100
+      liquidity_part.percent_of users_orders_volume(side)
     else
-      settings.send "base_#{side}_total_volume"
+      liquidity_part.percent_of settings.send("base_#{side}_total_volume")
     end
   end
 end
