@@ -14,9 +14,9 @@ module Valera
     # Map valera sides to clients sides
     SIDES_MAP = { bid: 'buy', ask: 'sell' }.freeze
 
-    attr_reader :name, :endpoint, :prefix
+    attr_reader :prefix
 
-    def initialize(name: nil,
+    def initialize(name:,
                    access_key: ENV['PEATIO_API_ACCESS_KEY'],
                    secret_key: ENV['PEATIO_API_SECRET_KEY'],
                    endpoint: ENV['PEATIO_ENDPOINT'],
@@ -26,11 +26,7 @@ module Valera
       @endpoint = endpoint || raise('No endpoint')
       @prefix = prefix || raise('No prefix')
       @name = name
-      super
-    end
-
-    def to_s
-      "#{name}->#{endpoint}"
+      super()
     end
 
     def account_balances(currency = nil)

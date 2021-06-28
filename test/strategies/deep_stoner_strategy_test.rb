@@ -12,10 +12,11 @@ class DeepStonerStrategyTest < ActiveSupport::TestCase
 
     @account = Account.find(:peatio1)
     @account.instance_variable_set '@client',
-                                   Valera::PeatioClient.new(access_key: 'access_key', secret_key: 'secret_key')
+                                   Valera::PeatioClient.new(name: 'peatio', access_key: 'access_key',
+                                                            secret_key: 'secret_key')
     @source_account = Account.find(:binance)
     @source_account.instance_variable_set '@client',
-                                          Valera::BinanceClient.new(name: 'name', api_key: 'api_key',
+                                          Valera::BinanceClient.new(name: 'binance', api_key: 'api_key',
                                                                     secret_key: 'secret_key')
 
     @source_upstream_market = @source_account.upstream_markets.find_by_market!(@market)

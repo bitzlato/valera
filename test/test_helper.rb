@@ -16,7 +16,7 @@ module TestSetup
     fixtures :all
 
     # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors)
+    parallelize(workers: :number_of_processors) unless ENV.true?('SINGLE_THREAD_TESTS')
 
     # Make sure that you reload the sqlite when starting processes
     parallelize_setup do

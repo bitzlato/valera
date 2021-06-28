@@ -6,5 +6,11 @@ module Valera
     WrongResponse = Class.new Error
     Failure = Class.new Error
     InffuccientBalance = Class.new
+
+    attr_reader :name, :endpoint
+
+    def to_s
+      "#{name}->#{endpoint}"
+    end
   end
 end

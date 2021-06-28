@@ -3630,4 +3630,59 @@ http_interactions:
       encoding: UTF-8
       string: '{"errors":["authz.unexistent_apikey"]}'
   recorded_at: Mon, 28 Jun 2021 06:26:39 GMT
+- request:
+    method: post
+    uri: "<PEATIO_ENDPOINT>/api/v2/peatio/market/orders"
+    body:
+      encoding: UTF-8
+      string: '{"market":"btcusdt","ord_type":"limit","price":"8100.0","volume":"0.0011","side":"buy"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      X-Auth-Apikey:
+      - access_key
+      X-Auth-Nonce:
+      - '1624862905463'
+      X-Auth-Signature:
+      - a015b794c6dbb08a5666dd664bc4d002b821ed8c16a02c14d2dcb1b84b42d68f
+      User-Agent:
+      - Faraday v1.4.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Date:
+      - Mon, 28 Jun 2021 06:48:25 GMT
+      Content-Type:
+      - text/plain
+      Content-Length:
+      - '38'
+      Connection:
+      - keep-alive
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - 0af2f96d2e0000177a7639c000000001
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v2?s=ptCdPn71lBltdUOI0gU5a52RI0ws5yUe2uvrtpXtXOwjb5YfGAb2ZfWcIdRyQX1N%2BKqWF17zTZy%2BZ0DrAE%2FDnmshSgeaHkzWSmXogze%2FHsx9UL5gYDBM0dmkIvc%3D"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6664f82848ba177a-FRA
+      Alt-Svc:
+      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443";
+        ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"errors":["authz.unexistent_apikey"]}'
+  recorded_at: Mon, 28 Jun 2021 06:48:25 GMT
 recorded_with: VCR 6.0.0

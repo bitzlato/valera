@@ -61,14 +61,10 @@ class God
       raise "No upstream client_class for #{upstream}" if upstream.client_class.nil?
 
       credentials = config.fetch('credentials')
-      credentials = credentials.is_a?(Hash) ? credentials : fetch_credentials(credentials)
+      credentials = credentials.is_a?(Hash) ? credentials.reverse_merge(name: key) : fetch_credentials(credentials)
       client = upstream.client_class.new(**credentials.symbolize_keys)
 
-      hash[key] = Account.new(
-        id: key,
-        upstream: upstream,
-        client: client
-      )
+      hash[key] = Account.new(id: key, upstream: upstream, client: client)
     rescue ArgumentError => e
       raise "#{e} with #{upstream.client_class}"
     end
