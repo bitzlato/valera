@@ -125,6 +125,7 @@ class God
           name: key,
           market: market,
           account: accounts.fetch(options['account']),
+          source_account: accounts.fetch(options['source_account']),
           default_settings: settings,
           comment: options['comment']
         }
