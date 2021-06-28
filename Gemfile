@@ -128,7 +128,6 @@ gem 'percentage', '~> 1.4'
 gem 'mini_racer', '~> 0.4.0'
 group :deploy do
   gem 'bugsnag-capistrano', require: false
-  gem 'capistrano-sentry'
   gem 'capistrano', require: false
   gem 'capistrano3-puma'
   gem 'capistrano-bundler', require: false
@@ -141,6 +140,7 @@ group :deploy do
   gem 'capistrano-rails', require: false
   gem 'capistrano-rails-console', require: false
   gem 'capistrano-rbenv', require: false
+  gem 'capistrano-sentry'
   gem 'capistrano-shell', require: false
   gem 'capistrano-systemd-multiservice', github: 'groovenauts/capistrano-systemd-multiservice', require: false
   gem 'capistrano-yarn', require: false

@@ -17,7 +17,7 @@ defaults: &defaults
     binance: 
       client: Valera::BinanceClient
     peatio:
-      client: Peatio::Client::REST
+      client: Valera::PeatioClient
 
   accounts:
     bargainer_bot:
@@ -62,11 +62,13 @@ defaults: &defaults
       comment: Арбитражник - глубокий наполнятель стакана
       account: deep_stoner_bot
       buyout_account: binance
+      source_account: binance
 
     bargainer:
       class: BargainerStrategy
       comment: Проторговщик, торгует на малые объёмы, иногда так получается что сделки закрываются на самого себя
       account: bargainer_bot
+      source_account: binance
 
 development:
   <<: *defaults
@@ -111,7 +113,7 @@ test:
     binance:
       client: Valera::BinanceClient
     peatio:
-      client: Peatio::Client::REST
+      client: Valera::PeatioClient
 
   accounts:
     peatio1:

@@ -54,9 +54,13 @@ class StrategySettings
       .map(&:to_sym)
   end
 
+  def strategy
+    Strategy.find! id
+  end
+
   private
 
   def after_save
-    StrategyChannel.update Strategy.find id
+    StrategyChannel.update strategy
   end
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class DeepStonerStrategy < Strategy
   LEVELS_MULT = ENV.fetch('LEVELS_MULT', 1).to_i
   LEVELS_DECADE = ENV.fetch('LEVELS_DECADE', 10).to_i
@@ -25,11 +26,11 @@ class DeepStonerStrategy < Strategy
 
     attribute :base_enable_order_by_liquidity, Boolean, default: false
 
-    attribute "base_bid_total_volume", Float, default: 0.01
-    validates "base_bid_total_volume", presence: true, numericality: { greater_than_or_equal_to: 0 }
+    attribute 'base_bid_total_volume', Float, default: 0.01
+    validates 'base_bid_total_volume', presence: true, numericality: { greater_than_or_equal_to: 0 }
 
-    attribute "base_ask_total_volume", Float, default: 0.01
-    validates "base_ask_total_volume", presence: true, numericality: { greater_than_or_equal_to: 0 }
+    attribute 'base_ask_total_volume', Float, default: 0.01
+    validates 'base_ask_total_volume', presence: true, numericality: { greater_than_or_equal_to: 0 }
 
     LEVELS = 5
     LEVELS.times.each do |i|
@@ -55,9 +56,16 @@ class DeepStonerStrategy < Strategy
   end
 
   # rubocop:disable Metrics/ParameterLists
-  def initialize(name:, market:, account:, buyout_account:, default_settings: {}, comment: nil)
+  def initialize(name:, market:, account:, source_account:, buyout_account:, default_settings: {}, comment: nil)
     @buyout_account = buyout_account
-    super name: name, market: market, account: account, default_settings: default_settings, comment: comment
+    super(
+      name: name,
+      market: market,
+      account: account,
+      source_account: source_account,
+      default_settings: default_settings,
+      comment: comment
+    )
   end
   # rubocop:enable Metrics/ParameterLists
 
@@ -75,8 +83,8 @@ class DeepStonerStrategy < Strategy
   private
 
   def update_orders!
-    orders_to_create = Array.new
-    orders_to_cancel = Array.new
+    orders_to_create = []
+    orders_to_cancel = []
 
     account.update_active_orders!
 
@@ -94,8 +102,10 @@ class DeepStonerStrategy < Strategy
     )
   end
 
+  # rubpcop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def prepare_orders_by_side(side, orders_to_cancel, orders_to_create)
-    leveled_orders = settings.levels.times.each_with_object({}) { |a,o| o[a] = Array.new }
+    leveled_orders = settings.levels.times.each_with_object({}) { |a, o| o[a] = [] }
 
     account.active_orders.filter { |o| o.market == market && o.side?(side) }.each do |persisted_order|
       level = find_level_of_order persisted_order
@@ -111,20 +121,24 @@ class DeepStonerStrategy < Strategy
 
       persisted_orders = leveled_orders[level]
 
-      while persisted_orders.sum(&:remaining_volume) > target_orders_volume
-        orders_to_cancel << persisted_orders.pop
-      end
+      orders_to_cancel << persisted_orders.pop while persisted_orders.sum(&:remaining_volume) > target_orders_volume
 
       persisted_volume = persisted_orders.sum(&:remaining_volume)
-      new_orders = Array.new
+      new_orders = []
       while persisted_volume + new_orders.sum(&:volume) < target_orders_volume && target_orders_volume - (persisted_volume + new_orders.sum(&:volume)) > settings.base_min_volume
         order = build_order(side, level, target_orders_volume - new_orders.sum(&:volume) - persisted_volume)
         new_orders << order unless order.nil?
       end
 
       orders_to_create.push(*new_orders)
+
+      if new_orders.sum(&:volume) + persisted_orders.sum(&:remaining_volume) - orders_to_create.sum(&:volume) > target_orders_volume
+        raise "Total orders sum (#{new_orders.sum(&:volume)} + #{persisted_orders.sum(&:remaining_volume)} - #{orders_to_create.sum(&:volume)}) larget then target #{target_orders_volume}"
+      end
     end
   end
+  # rubpcop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def find_level_of_order(persisted_order)
     volume_range = settings.base_min_volume.to_f..settings.base_max_volume.to_f
@@ -137,7 +151,7 @@ class DeepStonerStrategy < Strategy
     volume_range = settings.base_min_volume.to_f..[settings.base_max_volume, max_volume].min.to_f
     price_range = build_price_range side, level
     comparer = lambda do |persisted_order|
-      !settings.base_mad_mode_enable?  && \
+      !settings.base_mad_mode_enable? && \
         price_range.member?(persisted_order.price) && \
         volume_range.member?(persisted_order.remaining_volume)
     end
@@ -150,6 +164,8 @@ class DeepStonerStrategy < Strategy
   def build_price_range(side, level)
     d = price_deviation_range side, level
     best_price = best_price_for side
+    raise "no best price for #{side}" if best_price.to_d.zero?
+
     d.first.percent_of(best_price)..d.last.percent_of(best_price)
   end
 
@@ -180,3 +196,4 @@ class DeepStonerStrategy < Strategy
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

@@ -11,7 +11,7 @@ class Strategy
 
   UPDATE_PERIOD_SEC = Rails.env.production? ? 0.3 : 1
 
-  attr_reader :account, :market, :name, :state, :comment, :logger, :updater, :upstream_markets
+  attr_reader :account, :market, :name, :state, :comment, :logger, :updater, :upstream_markets, :source_account
 
   delegate :description, :settings_class, :state_class, to: :class
   delegate :is_active, to: :settings
@@ -38,10 +38,12 @@ class Strategy
 
   # @param name [String] key of bot from Rails credentials
   # @param market [Market]
-  def initialize(name:, market:, account:, default_settings: {}, comment: nil)
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(name:, market:, account:, source_account:, default_settings: {}, comment: nil)
     @name = name
     @market = market
     @default_settings = default_settings
+    @source_account = source_account
     @account = account
     @state = state_class.build id: id
     @comment = comment
@@ -51,6 +53,7 @@ class Strategy
     @upstreams = Upstream.all
     @upstream_markets = market.upstream_markets
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def active_orders
     account.active_orders.filter { |ao| ao.market == market }
@@ -122,7 +125,7 @@ class Strategy
 
     # Temporary turned off
     # StrategyChannel.update self
-  rescue Valera::PeatilClient::Error => e
+  rescue Valera::BaseClient::Error => e
     logger.error "#{self} #{e}"
   rescue StandardError => e
     report_exception e
@@ -192,7 +195,9 @@ class Strategy
   end
 
   def source_upstream_market
-    upstream_markets.find_by_upstream!(:binance)
+    source_account
+      .upstream_markets
+      .find_by_market!(market)
   end
 end
 # rubocop:enable Metrics/ClassLength

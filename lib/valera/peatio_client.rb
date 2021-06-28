@@ -9,8 +9,8 @@ require_relative 'base_client'
 # puts client.get '/api/v2/peatio/orders', market: 'ethbtc'
 
 module Valera
+  # rubocop:disable Metrics/ClassLength
   class PeatioClient < BaseClient
-    # rubocop:disable Metrics/ClassLength
     # Map valera sides to clients sides
     SIDES_MAP = { bid: 'buy', ask: 'sell' }.freeze
 
@@ -26,6 +26,7 @@ module Valera
       @endpoint = endpoint || raise('No endpoint')
       @prefix = prefix || raise('No prefix')
       @name = name
+      super
     end
 
     def to_s
@@ -74,7 +75,9 @@ module Valera
     end
 
     def trades(params = {})
-      get('/market/trades', params)
+      get('/market/trades', params).map do |trade|
+        raw_trade['side'] = SIDES_MAP.invert.fetch(trade['side'])
+      end
     end
 
     def cancel_order(order_id)
@@ -129,17 +132,18 @@ module Valera
     def parse_response(response)
       if response['content-type'] != 'application/json'
         raise WrongResponse,
-          "Wrong content type (#{response['content-type']}) for #{name}"
+              "Wrong content type (#{response['content-type']}) for #{name}"
       end
 
       data = response.body.empty? ? nil : JSON.parse(response.body)
       return data if response.success?
 
-      if response.status.to_i == 422 && data['errors'].include?("market.account.insufficient_balance")
+      if response.status.to_i == 422 && data['errors'].include?('market.account.insufficient_balance')
         raise InffuccientBalance
       end
+
       raise Failure,
-        "Failed response status (#{response.status}) with body '#{response.body}' for #{name}"
+            "Failed response status (#{response.status}) with body '#{response.body}' for #{name}"
 
       # attach headers, like 'per', 'per-page'
     end
@@ -163,8 +167,8 @@ module Valera
     # "trades_count"=>0
     def build_persisted_order(raw, skip_unknown_market: true)
       data = raw
-        .symbolize_keys
-        .slice(*PersistedOrder.attribute_set.map(&:name))
+             .symbolize_keys
+             .slice(*PersistedOrder.attribute_set.map(&:name))
       data[:side] = SIDES_MAP.invert.fetch data.fetch(:side)
       market = Market.find_by(peatio_symbol: raw.fetch('market'))
       if market.present?

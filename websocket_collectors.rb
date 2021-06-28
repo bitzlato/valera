@@ -6,7 +6,7 @@ require_relative './config/environment'
 
 class WebSocketCollectors
   include AutoLogger
-  SAFE_ERRORS = [Faraday::ConnectionFailed, Peatio::Client::REST::Error].freeze
+  SAFE_ERRORS = [Faraday::ConnectionFailed, Valera::BaseClient::Error].freeze
 
   def initialize
     God.instance

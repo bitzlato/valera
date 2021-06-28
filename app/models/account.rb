@@ -16,6 +16,8 @@ class Account
   attribute :hour_trades_amounts, Hash # { market_id => amount }
   attribute :trades_updated_at, Time
 
+  delegate :upstream_markets, to: :upstream
+
   def initialize(id:, upstream:, client:)
     super id: id
     @upstream = upstream

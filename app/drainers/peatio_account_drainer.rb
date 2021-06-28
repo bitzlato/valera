@@ -28,7 +28,7 @@ class PeatioAccountDrainer < Drainer
       balances_updated_at: Time.now, # Fetch time first
       balances: fetch_balances
     )
-  rescue Valera::PeatilClient::Error => e
+  rescue Valera::BaseClient::Error => e
     logger.error e
     report_exception e
   end
@@ -38,7 +38,7 @@ class PeatioAccountDrainer < Drainer
       active_orders_updated_at: Time.now, # Fetch time first
       active_orders: fetch_active_orders
     )
-  rescue Valera::PeatilClient::Error => e
+  rescue Valera::BaseClient::Error => e
     logger.error e
     report_exception e
   end
@@ -51,7 +51,6 @@ class PeatioAccountDrainer < Drainer
         logger.warn("Skip unknown market #{raw_trade['market']}")
         next
       end
-      raw_trade['side'] = Peatio::Client::REST::SIDES_MAP.invert.fetch(raw_trade['side']) # TODO: Move to Peatio Client
       Trade
         .create_with(
           raw_trade.slice('price', 'amount', 'total', 'taker_type', 'side', 'order_id').merge(
@@ -65,7 +64,7 @@ class PeatioAccountDrainer < Drainer
         )
     end
     account.update_trades_amounts!
-  rescue Valera::PeatilClient::Error => e
+  rescue Valera::BaseClient::Error => e
     logger.error e
     report_exception e
   end

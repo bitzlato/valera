@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Valera
   class BaseClient
     Error = Class.new StandardError

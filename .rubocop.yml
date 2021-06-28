@@ -41,6 +41,8 @@ Metrics/BlockLength:
 # Configuration parameters: IgnoredMethods.
 Metrics/CyclomaticComplexity:
   Max: 10
+  IgnoredMethods: 
+    - prepare_orders_by_side
 
 # Offense count: 8
 # Configuration parameters: CountComments, CountAsOne, ExcludedMethods, IgnoredMethods.
