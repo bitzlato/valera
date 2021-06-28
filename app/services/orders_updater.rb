@@ -136,7 +136,7 @@ class OrdersUpdater
     created_order
   rescue Valera::BaseClient::InsufficientBalance => e
     logger.error "Error #{e} creating order #{order}"
-    raise 2
+    raise e
   rescue StandardError => e
     logger.error "Error #{e} creating order #{order}"
     report_exception
