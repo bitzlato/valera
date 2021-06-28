@@ -6,6 +6,7 @@
       = render 'strategy_enabler', strategy: strategy
       = strategy_status strategy
       .mb-2.text-small.text-muted= strategy.comment
+      .mt-2= strategy_error strategy.last_error_message
     .col-md-6
       div.mb-2= strategy.description
 
