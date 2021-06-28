@@ -122,7 +122,7 @@ class Strategy
 
     # Temporary turned off
     # StrategyChannel.update self
-  rescue Peatio::Client::REST => e
+  rescue Valera::PeatilClient::Error => e
     logger.error "#{self} #{e}"
   rescue StandardError => e
     report_exception e

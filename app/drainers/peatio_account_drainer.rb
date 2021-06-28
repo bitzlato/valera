@@ -28,7 +28,7 @@ class PeatioAccountDrainer < Drainer
       balances_updated_at: Time.now, # Fetch time first
       balances: fetch_balances
     )
-  rescue Peatio::Client::REST::Error => e
+  rescue Valera::PeatilClient::Error => e
     logger.error e
     report_exception e
   end
@@ -38,7 +38,7 @@ class PeatioAccountDrainer < Drainer
       active_orders_updated_at: Time.now, # Fetch time first
       active_orders: fetch_active_orders
     )
-  rescue Peatio::Client::REST::Error => e
+  rescue Valera::PeatilClient::Error => e
     logger.error e
     report_exception e
   end
@@ -65,7 +65,7 @@ class PeatioAccountDrainer < Drainer
         )
     end
     account.update_trades_amounts!
-  rescue Peatio::Client::REST::Error => e
+  rescue Valera::PeatilClient::Error => e
     logger.error e
     report_exception e
   end

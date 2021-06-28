@@ -81,7 +81,7 @@ class OrdersUpdater
     logger.info "Create orders #{po orders}"
     Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
-    rescue Errno::ECONNREFUSED, Peatio::Client::REST::Error => e
+    rescue Errno::ECONNREFUSED, Valera::PeatioClient::Error => e
       logger.error e
       []
     end.tap do |created_orders|

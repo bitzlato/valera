@@ -15,7 +15,7 @@ class PeatioRestDrainer < MarketDrainer
     logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
     super(fetch_market_depth)
     write_to_influx upstream_market.attributes.slice(:usersAsksVolume, :usersBidsVolume)
-  rescue Peatio::Client::REST::Error => e
+  rescue Valera::PeatilClient::Error => e
     logger.error e
   end
 
