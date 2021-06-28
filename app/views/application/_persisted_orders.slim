@@ -17,7 +17,7 @@
           td.text-small= format_money(order['price'], market.quote)
         - total_volume += order['origin_volume']
         - total_price += order['price'] * order['origin_volume']
-    - if orders.many? && params[:show_total]
+    - if orders.many?
       tfoot.tfoot-light
         tr
           th.text-small= t '.total'
