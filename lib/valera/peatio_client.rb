@@ -135,7 +135,7 @@ module Valera
       return data if response.success?
 
       if response.status.to_i == 422 && data['errors'].include?('market.account.insufficient_balance')
-        raise InffuccientBalance
+        raise InsufficientBalance
       end
 
       raise Failure,

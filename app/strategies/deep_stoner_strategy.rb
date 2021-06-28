@@ -102,7 +102,7 @@ class DeepStonerStrategy < Strategy
       last_error_message: nil
     )
   rescue StandardError => e
-    report_exception(e)
+    report_exception(e) unless e.is_a? Valera::BaseClient::InsufficientBalance
     logger.error(e)
     state.update_attributes!(last_error_message: e.message)
   end
