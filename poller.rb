@@ -6,7 +6,7 @@ require_relative './config/environment'
 
 class Poller
   include AutoLogger
-  SAFE_ERRORS = [Faraday::ConnectionFailed, Velara::BaseClient::Error].freeze
+  SAFE_ERRORS = [Faraday::ConnectionFailed, Valera::BaseClient::Error].freeze
 
   def initialize
     God.instance
