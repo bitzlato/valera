@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class OrderTest < ActiveSupport::TestCase
   test 'invalid order' do
     refute Order.new.valid?
