@@ -5,7 +5,11 @@ lock '3.16'
 set :user, 'app'
 set :application, 'valera'
 
-set :repo_url, ENV.fetch('DEPLOY_REPO', `git remote -v | grep origin | head -1 | awk  '{ print $2 }'`.chomp) if ENV['USE_LOCAL_REPO'].nil?
+if ENV['USE_LOCAL_REPO'].nil?
+  set :repo_url,
+      ENV.fetch('DEPLOY_REPO',
+                `git remote -v | grep origin | head -1 | awk  '{ print $2 }'`.chomp)
+end
 set :keep_releases, 10
 
 set :roles, %w[db web app sentry].freeze

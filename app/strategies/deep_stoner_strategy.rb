@@ -98,8 +98,13 @@ class DeepStonerStrategy < Strategy
     state.update_attributes!(
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),
-      created_orders: orders_to_create.to_a
+      created_orders: orders_to_create.to_a,
+      last_error_message: nil
     )
+  rescue StandardError => e
+    report_exception(e)
+    logger.error(e)
+    state.update_attributes!(last_error_message: e.message)
   end
 
   # rubpcop:disable Metrics/CyclomaticComplexity

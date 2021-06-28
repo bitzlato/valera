@@ -127,7 +127,7 @@ module Valera
 
     def parse_response(response)
       if response['content-type'] != 'application/json'
-        raise Valera::BaseClient::WrongResponse,
+        raise BaseClient::WrongResponse,
               "Wrong content type (#{response['content-type']}) for #{name}"
       end
 
@@ -135,10 +135,10 @@ module Valera
       return data if response.success?
 
       if response.status.to_i == 422 && data['errors'].include?('market.account.insufficient_balance')
-        raise Valera::BaseClient::InffuccientBalance
+        raise BaseClient::InffuccientBalance
       end
 
-      raise Valera::BaseClient::Failure,
+      raise BaseClient::Failure,
             "Failed response status (#{response.status}) with body '#{response.body}' for #{name}"
 
       # attach headers, like 'per', 'per-page'
@@ -174,7 +174,7 @@ module Valera
         logger.warn "Unknown market #{raw.fetch('market')}. Ignore order #{data}"
         nil
       else
-        raise Valera::BaseClient::Error.new("Unknown market #{raw.fetch('market')}")
+        raise Valera::BaseClient::Error, "Unknown market #{raw.fetch('market')}"
       end
     end
 

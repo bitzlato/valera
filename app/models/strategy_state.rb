@@ -10,4 +10,6 @@ class StrategyState
 
   attribute :best_ask_price, BigDecimal
   attribute :best_bid_price, BigDecimal
+
+  attribute :last_error_message, String
 end
