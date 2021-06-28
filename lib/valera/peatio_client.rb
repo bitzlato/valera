@@ -72,7 +72,7 @@ module Valera
 
     def trades(params = {})
       get('/market/trades', params).map do |trade|
-        raw_trade['side'] = SIDES_MAP.invert.fetch(trade['side'])
+        trade.merge('side' => SIDES_MAP.invert.fetch(trade['side']))
       end
     end
 
