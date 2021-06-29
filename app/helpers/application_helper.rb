@@ -13,10 +13,6 @@ module ApplicationHelper
     link_to "@#{account}", account_path(account)
   end
 
-  def a(strategy)
-    link_to strategy.name, strategy_path(strategy)
-  end
-
   def sorted_orders_by_side(orders, side)
     orders.to_a
           .filter { |o| o.side? side }

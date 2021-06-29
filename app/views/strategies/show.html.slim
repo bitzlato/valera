@@ -14,9 +14,7 @@
     .col-md-6
       = render 'form', strategy: strategy
     .col-md-2
-      .float-right= account_link strategy.account
-      h2= t '.account_balances'
-      = render 'balances', account: strategy.account, currencies: strategy.market.currencies
+      = render 'strategy_balances', strategy: strategy
     .col-md-4
       = render 'orders_table', strategy: strategy
   hr

@@ -15,6 +15,7 @@ class Strategy
 
   delegate :description, :settings_class, :state_class, to: :class
   delegate :is_active, to: :settings
+  delegate :currencies, to: :market
 
   def self.description
     raise 'undefined strategy'

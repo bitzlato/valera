@@ -53,18 +53,21 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def created_at
-    h.content_tag :span, class: 'text-nowrap', title: object.updated_at do
-      I18n.l object.created_at, format: :default
-    end
+    present_time object.created_at
   end
 
   def updated_at
-    h.content_tag :span, class: 'text-nowrap', title: object.updated_at do
-      I18n.l object.updated_at, format: :default
-    end
+    present_time object.updated_at
   end
 
   private
+
+  def present_time(time)
+    return h.middot if time.nil?
+    h.content_tag :span, class: 'text-nowrap', title: time do
+      I18n.l time, format: :default
+    end
+  end
 
   def t(key)
     I18n.t key
