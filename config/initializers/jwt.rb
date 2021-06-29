@@ -1,3 +1,5 @@
+# Copyright (c) 2019 Danil Pismenny <danil@brandymint.ru>
+
 # frozen_string_literal: true
 
 raise 'No JWT_PUBLIC_KEY env variable' unless ENV.key? 'JWT_PUBLIC_KEY'

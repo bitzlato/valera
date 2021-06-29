@@ -1,3 +1,5 @@
+# Copyright (c) 2019 Danil Pismenny <danil@brandymint.ru>
+
 # frozen_string_literal: true
 
 ENV['JWT_PUBLIC_KEY'] = Base64.urlsafe_encode64(OpenSSL::PKey::RSA.generate(512).public_key.to_pem, padding: false)

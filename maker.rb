@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# Copyright (c) 2019 Danil Pismenny <danil@brandymint.ru>
+
 # frozen_string_literal: true
 
 APP_PATH = File.expand_path('./config/application', __dir__)
