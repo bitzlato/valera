@@ -108,7 +108,8 @@ class DeepStonerStrategy < Strategy
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),
       created_orders: [],
-      last_error_message: e.message)
+      last_error_message: e.message
+    )
   end
 
   # rubpcop:disable Metrics/CyclomaticComplexity

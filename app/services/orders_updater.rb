@@ -139,7 +139,7 @@ class OrdersUpdater
     raise e
   rescue StandardError => e
     logger.error "Error #{e} creating order #{order}"
-    report_exception
+    report_exception e
   end
 
   def write_to_influx(order, level: 0)

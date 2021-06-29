@@ -64,6 +64,7 @@ class ApplicationDecorator < Draper::Decorator
 
   def present_time(time)
     return h.middot if time.nil?
+
     h.content_tag :span, class: 'text-nowrap', title: time do
       I18n.l time, format: :default
     end
