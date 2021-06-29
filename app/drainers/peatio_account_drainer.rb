@@ -84,8 +84,7 @@ class PeatioAccountDrainer < Drainer
                .client
                .account_balances
                .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |r, a|
-      a[r['currency']] =
-        r['balance']
+      a[r['currency']] = { available: r['balance'], locked: r['locked'] }
     end
     logger.debug("balances=#{balances}")
     balances

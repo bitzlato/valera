@@ -1,8 +1,16 @@
-table.table.table-sm.table-narrow
-  - account.balances.each_pair do |currency, amount|
-    - next if currencies.present? && !currencies.include?(currency.upcase)
+table.table.table-sm
+  thead.thead-light
     tr
-      th.text-right.text-small.text-nowrap= format_currency currency
-      td.text-right.text-small= format_money amount, currency
+      th.text-right.text-small= t('.currency')
+      th.text-right.text-small= t('.available')
+      th.text-right.text-small= t('.locked')
+  tbody
+    - account.balances.each_pair do |currency, data|
+      - next if currencies.present? && !currencies.include?(currency.upcase)
+      - if data.is_a?(Hash) # TODO Временно пока меняем схему, удалить проверку после релиза 0.2.80
+        tr
+          th.text-right.text-small.text-nowrap= format_currency currency
+          td.text-right.text-small= format_money data['available'], currency
+          td.text-right.text-small= format_money data['locked'], currency
 
 .text-muted.text-small= humanized_time_ago account.balances_updated_at

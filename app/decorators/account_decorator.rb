@@ -26,6 +26,10 @@ class AccountDecorator < ApplicationDecorator
     h.link_to object.trades.count, h.trades_path(q: { account_id_eq: object.id })
   end
 
+  def trades_updated_at
+    present_time object.trades_updated_at
+  end
+
   def upstream
     h.link_to object.upstream, h.upstream_path(object.upstream)
   end

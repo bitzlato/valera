@@ -1,0 +1,8 @@
+.float-right= account_link strategy.account
+h3 Account balances
+= render 'balances', account: strategy.account, currencies: strategy.currencies
+
+- if strategy.respond_to? :buyout_account
+  .float-right= account_link strategy.buyout_account
+  h3.mt-3 Buyout account balances
+  = render 'balances', account: strategy.buyout_account, currencies: strategy.currencies

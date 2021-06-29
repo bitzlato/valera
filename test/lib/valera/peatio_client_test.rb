@@ -15,7 +15,7 @@ class PeatioClientTest < ActiveSupport::TestCase
       .to_return(status: 422,
                  body: { errors: ['market.account.insufficient_balance'] }.to_json,
                  headers: { 'Content-Type' => 'application/json' })
-    assert_raises Valera::BaseClient::InffuccientBalance do
+    assert_raises Valera::BaseClient::InsufficientBalance do
       order = { side: :ask, price: 1, volume: 2 }
       @client.create_order order
     end
