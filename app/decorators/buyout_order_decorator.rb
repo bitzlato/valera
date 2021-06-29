@@ -6,7 +6,7 @@ class BuyoutOrderDecorator < ApplicationDecorator
   delegate_all
 
   def self.table_columns
-    %i[id created_at updated_at side market trade_account buyout_account orders status ignore_message]
+    %i[id created_at side market trade_account buyout_account orders status ignore_message meta]
   end
 
   def self.table_td_class(column)
