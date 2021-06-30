@@ -1,4 +1,5 @@
 require 'faraday'
+
 module Faraday
   class Adapter
     class NetHttp < Faraday::Adapter
@@ -9,4 +10,4 @@ module Faraday
       end
     end
   end
-end
+end if ENV.true? 'DISABLE_SSL_VERIFICATION'
