@@ -35,7 +35,9 @@ module Valera
       if currency.present?
         get("/account/balances/#{currency}")
       else
-        get('/account/balances')
+        get('/account/balances').each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |r, a|
+          a[r['currency']] = { available: r['balance'], locked: r['locked'] }
+        end
       end
     end
 
