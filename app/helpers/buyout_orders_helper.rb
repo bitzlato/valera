@@ -4,11 +4,11 @@
 
 module BuyoutOrdersHelper
   STATUS_CLASSES = {
-    'ignored' => 'badge badge-warn',
+    'ignored' => 'badge badge-secondary',
     'done' => 'badge badge-success',
-    'posted' => 'badge badge-success',
+    'posted' => 'badge badge-warn',
     'default' => 'badge badge-info',
-    'errored' => 'badge badge-danger',
+    'errored' => 'badge badge-danger'
   }.freeze
 
   def buyout_order_status(buyout_order)

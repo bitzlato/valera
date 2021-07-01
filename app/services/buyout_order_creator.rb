@@ -15,6 +15,7 @@ class BuyoutOrderCreator
     trade.with_lock do
       if trade.buyout_order.present?
         logger.warn "Trade #{trade.id} already buyouted with order #{trade.buyout_order.id}. Skip"
+        logger.warn caller.join("\n")
         return nil
       end
 
@@ -96,7 +97,8 @@ class BuyoutOrderCreator
 
       logger.info("Posting response: #{order}")
 
-      buyout_order.update! target_order_id: order['id'], status: :posted,
+      status = order['status'] == 'FILLED' ? :done : :posted
+      buyout_order.update! target_order_id: order['id'], status: status,
                            meta: buyout_order.meta.merge(response: order)
     rescue StandardError => e
       report_exception e
