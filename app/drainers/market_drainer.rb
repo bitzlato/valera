@@ -2,8 +2,16 @@
 
 # frozen_string_literal: true
 
-class MarketDrainer < Drainer
-  attr_reader :market, :upstream_market
+module MarketDrainer
+  extend ActiveSupport::Concern
+
+  included do
+    attr_reader :market, :upstream_market
+
+    def self.use_market?
+      true
+    end
+  end
 
   def initialize(id:, market:, account:)
     raise 'Account must be present' if account.nil?

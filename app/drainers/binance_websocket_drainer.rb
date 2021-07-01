@@ -5,6 +5,8 @@
 # Connects to binance stream and store kline to internal influx
 #
 class BinanceWebsocketDrainer < WebsocketDrainer
+  include MarketDrainer
+
   MAPPING = {
     'bookTicker' => {
       'b' => :bidPrice,
@@ -49,7 +51,7 @@ class BinanceWebsocketDrainer < WebsocketDrainer
     simple_map values, MAPPING[stream]
   end
 
-  def client
-    @client ||= Binance::Client::WebSocket.new
+  def ws_client
+    @ws_client ||= Binance::Client::WebSocket.new
   end
 end

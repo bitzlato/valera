@@ -2,7 +2,7 @@
 
 # frozen_string_literal: true
 
-class WebsocketDrainer < MarketDrainer
+class WebsocketDrainer < Drainer
   def self.type
     WEBSOCKET_TYPE
   end
@@ -11,7 +11,7 @@ class WebsocketDrainer < MarketDrainer
   def attach
     logger.info "Attach streams #{streams}"
     SdNotify.status('Drainer attach')
-    client.multi(streams: streams, methods: methods)
+    ws_client.multi(streams: streams, methods: methods)
   end
 
   def open(event)

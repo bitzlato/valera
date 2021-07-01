@@ -4,7 +4,9 @@
 
 # TODO: Rename to PatioMarketDrainer
 #
-class PeatioRestDrainer < MarketDrainer
+class PeatioRestDrainer < Drainer
+  include MarketDrainer
+
   FETCH_PERIOD = 1 # sec
 
   KEYS = %i[asksVolume bidsVolume].freeze

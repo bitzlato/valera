@@ -5,6 +5,8 @@
 # Connects to binance stream and store kline to internal influx
 #
 class PeatioWebsocketDrainer < WebsocketDrainer
+  include MarketDrainer
+
   MAPPING = {
     'open' => :open,
     'high' => :high,
@@ -39,7 +41,7 @@ class PeatioWebsocketDrainer < WebsocketDrainer
     simple_map tickers, MAPPING
   end
 
-  def client
-    @client ||= Peatio::Client::WebSocket.new(base_url: ENV.fetch('PEATIO_WEBSOCKET_URL'))
+  def ws_client
+    @ws_client ||= Peatio::Client::WebSocket.new(base_url: ENV.fetch('PEATIO_WEBSOCKET_URL'))
   end
 end
