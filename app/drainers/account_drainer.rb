@@ -9,9 +9,10 @@ class AccountDrainer < Drainer
 
   KEYS = %i[balance].freeze
 
-  def initialize(id:, account:, interval: )
+  def initialize(id:, account:, interval:)
     raise 'Account must be present' if account.nil?
-    raise "Interval must be greater or equal to 1 second" if interval.to_i < 1
+    raise 'Interval must be greater or equal to 1 second' if interval.to_i < 1
+
     @interval = interval
     @last_update_at = nil
     super id: id, account: account

@@ -14,7 +14,7 @@ class BuyoutOrderCreator
     buyout_order = nil
     trade.with_lock do
       if trade.buyout_order.present?
-        logger.warn "Trade #{trade.id} already buyouted. Skip"
+        logger.warn "Trade #{trade.id} already buyouted with order #{trade.buyout_order.id}. Skip"
         return nil
       end
 
@@ -39,7 +39,11 @@ class BuyoutOrderCreator
         }
       )
     end
-    post_buyout_order(buyout_order, buyout_account) if buyout_order.initial?
+    if buyout_order.initial?
+      post_buyout_order(buyout_order, buyout_account)
+    else
+      logger.warn("Wrong state of buyout #{buyout_order.id} - #{buyout_order.status}. Skip posting")
+    end
     buyout_order
   end
 
@@ -71,7 +75,10 @@ class BuyoutOrderCreator
 
   def post_buyout_order(buyout_order, account)
     logger.info "Post buyout_order #{buyout_order.as_json}"
-    return if ENV.false? 'DISABLE_BUYOUT_POST'
+    if ENV.true? 'DISABLE_BUYOUT_POST'
+      logger.info 'Skip buyout posting as it disabled'
+      return
+    end
 
     buyout_order.with_lock do
       raise "buyout_order #{buyout_order.id} has wrong status #{buyout_order.status}" unless buyout_order.initial?
@@ -86,6 +93,9 @@ class BuyoutOrderCreator
       )
 
       buyout_order.update! target_order_id: order['id'], status: :posted
+    rescue StandardError => e
+      report_exception e
+      buyout_order.update! status: :errored, ignore_message: e.message
     end
   end
 end
