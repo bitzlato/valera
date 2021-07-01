@@ -4,7 +4,7 @@
 
 # Periodicaly fetch data from upstream and save it to account
 #
-class PeatioAccountDrainer < Drainer
+class AccountDrainer < Drainer
   FETCH_PERIOD = 1 # sec
 
   KEYS = %i[balance].freeze
@@ -27,8 +27,8 @@ class PeatioAccountDrainer < Drainer
 
   def update_balances!
     account.update_attributes!(
-      balances_updated_at: Time.now, # Fetch time first
-      balances: fetch_balances
+      balances_updated_at: Time.now, # Save time first
+      balances: account.client.account_balances.tap { |balances| logger.debug("balances=#{balances}") }
     )
   rescue Valera::BaseClient::Error => e
     logger.error e
@@ -37,8 +37,8 @@ class PeatioAccountDrainer < Drainer
 
   def update_active_orders!
     account.update_attributes!(
-      active_orders_updated_at: Time.now, # Fetch time first
-      active_orders: fetch_active_orders
+      active_orders_updated_at: Time.now, # Save time first
+      active_orders: client.open_orders.tap { |open_orders| logger.debug("open_orders=#{open_orders}") }
     )
   rescue Valera::BaseClient::Error => e
     logger.error e
@@ -47,21 +47,19 @@ class PeatioAccountDrainer < Drainer
 
   def update_trades!
     logger.debug 'update_trades!'
-    client.trades.each do |raw_trade|
-      market = Market.find_by(peatio_symbol: raw_trade['market']) # TODO: Move to Peatio Client
-      if market.nil?
-        logger.warn("Skip unknown market #{raw_trade['market']}")
+    client.my_trades(account.markets).each do |raw_trade|
+      if raw_trade['market'].nil?
+        logger.warn("Skip unknown market #{raw_trade['market_symbol']}")
         next
       end
       Trade
         .create_with(
-          raw_trade.slice('price', 'amount', 'total', 'taker_type', 'side', 'order_id').merge(
+          raw_trade.slice('price', 'amount', 'total', 'taker_type', 'side', 'order_id', 'market').merge(
             traded_at: raw_trade['created_at']
           )
         )
         .find_or_create_by!(
           trade_id: raw_trade['id'],
-          market_id: market.id,
           account_id: account.id
         )
     end
@@ -69,26 +67,5 @@ class PeatioAccountDrainer < Drainer
   rescue Valera::BaseClient::Error => e
     logger.error e
     report_exception e
-  end
-
-  private
-
-  def fetch_active_orders
-    # Collect by side
-    active_orders = client
-                    .orders(state: :wait)
-    logger.debug("active_orders=#{active_orders}")
-    active_orders
-  end
-
-  def fetch_balances
-    balances = account
-               .client
-               .account_balances
-               .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |r, a|
-      a[r['currency']] = { available: r['balance'], locked: r['locked'] }
-    end
-    logger.debug("balances=#{balances}")
-    balances
   end
 end

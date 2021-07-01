@@ -26,6 +26,10 @@ class Account
     @client = client || raise("No client for account #{id}")
   end
 
+  def markets
+    upstream_markets.map(&:market).uniq
+  end
+
   def update_active_orders!
     drainers.each { |d| d.update_active_orders! if d.respond_to? :update_active_orders! }
   end

@@ -20,6 +20,10 @@ class Trade < ApplicationRecord
     @market ||= Market.find market_id
   end
 
+  def market=(new_market)
+    self.market_id = new_market.id
+  end
+
   def account
     @account ||= Account.find account_id
   end

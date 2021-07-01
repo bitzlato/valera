@@ -45,8 +45,8 @@ Run first bot only
 
 # TODO
 
-* [ ] Не делать и не отменять заявки если они в пределах допустимого
-* [ ] Automaticalyy cancel all orders if there are no fresh data from more then
+* [ ] Auto setup drainers for account
+* [ ] Automaticaly cancel all orders if there are no fresh data from more then
   N msecs
 * [ ] Check maker/collector oneness (store pid and host name of runners)
 * [ ] Reconnect websockets

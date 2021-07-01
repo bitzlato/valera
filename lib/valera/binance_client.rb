@@ -25,6 +25,18 @@ module Valera
       end
     end
 
+    def open_orders
+      # https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#current-open-orders-user_data
+      client.open_orders
+    end
+
+    def my_trades(markets)
+      # https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#account-trade-list-user_data
+      markets.map do |market|
+        client.my_trades(symbol: market.binance_symbol)
+      end.flatten
+    end
+
     def create_order
       raise 'not implemented'
     end

@@ -57,6 +57,10 @@ module Valera
       )
     end
 
+    def open_orders
+      orders(state: :wait)
+    end
+
     # optional :market,
     # optional :base_unit,
     # optional :quote_unit,
@@ -72,6 +76,14 @@ module Valera
       get('/market/orders', params)
         .map { |data| build_persisted_order data }
         .compact
+    end
+
+    def my_trades(_markets)
+      trades.map do |trade|
+        trade['market_symbol'] = trade['market']
+        trade['market'] = Market.find_by(peatio_symbol: trade['market'])
+        trade
+      end
     end
 
     def trades(params = {})
