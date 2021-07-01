@@ -94,7 +94,7 @@ class BuyoutOrderCreator
         side: buyout_order.side
       )
 
-      buyout_order.update! target_order_id: order['id'], status: :posted
+      buyout_order.update! target_order_id: order['id'], status: :posted, meta: buyout_order.meta.merge(response: order )
     rescue StandardError => e
       report_exception e
       buyout_order.update! status: :errored, ignore_message: e.message
