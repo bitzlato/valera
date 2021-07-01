@@ -8,7 +8,7 @@ module BuyoutOrdersHelper
     'done' => 'badge badge-success',
     'posted' => 'badge badge-success',
     'default' => 'badge badge-info',
-    'error' => 'badge badge-danger',
+    'errored' => 'badge badge-danger',
   }.freeze
 
   def buyout_order_status(buyout_order)
