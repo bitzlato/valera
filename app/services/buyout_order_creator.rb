@@ -12,10 +12,11 @@ class BuyoutOrderCreator
 
   def call(trade:, buyout_account:, ask_percentage: ASK_PERCENTAGE, bid_percentage: BID_PERCENTAGE)
     buyout_order = nil
+    logger.warn "Call with trade #{trade.id}"
+    logger.warn caller.join("\n")
     trade.with_lock do
       if trade.buyout_order.present?
         logger.warn "Trade #{trade.id} already buyouted with order #{trade.buyout_order.id}. Skip"
-        logger.warn caller.join("\n")
         return nil
       end
 
