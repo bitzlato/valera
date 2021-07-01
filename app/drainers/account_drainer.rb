@@ -23,7 +23,7 @@ class AccountDrainer < Drainer
 
   def update!
     if @last_update_at.is_a?(Time) && @last_update_at > @interval.seconds.ago
-      logger("Skip update until interval (#{@interval} meet")
+      logger.warn("Skip update until interval (#{@interval} meet")
     end
     update_balances!
     update_active_orders!
