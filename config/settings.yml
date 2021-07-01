@@ -6,7 +6,7 @@ defaults: &defaults
       base: BBB
       binance_symbol: BTCUSDT
 
-  polling_sleep: 0.01
+  polling_sleep: 0.1
   maker_sleep: 0.1
 
   influx:
@@ -46,13 +46,20 @@ defaults: &defaults
     peatio_balance_deep_stoner:
       class: AccountDrainer
       account: deep_stoner_bot
+      interval: 1
 
     peatio_balance_bargainer:
       class: AccountDrainer
       account: bargainer_bot
+      interval: 1
 
     binance_account:
       class: AccountDrainer
+      account: binance
+      interval: 30
+
+    binance_userdata_websocket:
+      class: BinanceUserdataWebsocketDrainer
       account: binance
 
   strategies:
