@@ -97,7 +97,7 @@ class BuyoutOrderCreator
 
       logger.info("Posting response: #{order}")
 
-      status = order['status'] == 'FILLED' ? :done : :posted
+      status = order.state == 'FILLED' ? :done : :posted
       buyout_order.update! target_order_id: order['id'], status: status,
                            meta: buyout_order.meta.merge(response: order)
     rescue StandardError => e
