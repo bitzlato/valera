@@ -74,8 +74,11 @@ class BuyoutOrderCreator
     return if ENV.false? 'DISABLE_BUYOUT_POST'
 
     buyout_order.with_lock do
+      raise "buyout_order #{buyout_order.id} has wrong status #{buyout_order.status}" unless buyout_order.initial?
+
       order = account.client.create_order(
-        market: market.binance_symbol,
+        time_in_force: 'IOC',
+        market: market,
         ord_type: :limit,
         price: buyout_order.price,
         volume: buyout_order.volume,

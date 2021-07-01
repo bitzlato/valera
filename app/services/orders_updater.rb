@@ -128,7 +128,7 @@ class OrdersUpdater
   # @param order <Order>
   def create_order!(order)
     created_order = client.create_order(
-      market: market.peatio_symbol,
+      market: market,
       ord_type: :limit,
       price: order.price,
       volume: order.volume,

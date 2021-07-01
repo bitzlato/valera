@@ -45,17 +45,31 @@ module Valera
       get('/public/markets')
     end
 
+    # @params:
     # market
     # ord_type = [market, limit] default is limit
     # price = require if ord_type == limit
     # side = [sell, buy] (OrderAsk, OrderBid)
     # volume
-    def create_order(order)
+    # time_in_force is not used
+    #
+    # rubocop:disable Lint/UnusedMethodArgument
+    # rubocop:disable Metrics/ParameterLists
+    def create_order(market:, price:, side:, volume:, ord_type: :limit, time_in_force: nil)
+      order = {
+        market: market.peatio_symbol,
+        side: SIDES_MAP.fetch(side),
+        ord_type: ord_type,
+        price: price,
+        volume: volume
+      }
       build_persisted_order(
-        post('/market/orders', order.symbolize_keys.merge(side: SIDES_MAP.fetch(order.fetch(:side)))),
+        post('/market/orders', order),
         skip_unknown_market: false
       )
     end
+    # rubocop:enable Metrics/ParameterLists
+    # rubocop:enable Lint/UnusedMethodArgument
 
     def open_orders
       orders(state: :wait)
@@ -144,7 +158,7 @@ module Valera
     def parse_response(response)
       if response['content-type'] != 'application/json'
         raise WrongResponse,
-              "Wrong content type (#{response['content-type']}) for #{name}"
+              "Wrong content type (#{response['content-type']}) for #{name} with body #{response.body.truncate(100)}"
       end
 
       data = response.body.empty? ? nil : JSON.parse(response.body)
@@ -185,7 +199,7 @@ module Valera
       market = Market.find_by(peatio_symbol: raw.fetch('market'))
       if market.present?
         data[:market_id] = market.id
-        PersistedOrder.new data.merge(raw: raw)
+        PersistedOrder.new(data.merge(raw: raw)).freeze
       elsif skip_unknown_market
         logger.warn "Unknown market #{raw.fetch('market')}. Ignore order #{data}"
         nil
