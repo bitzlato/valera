@@ -4,10 +4,13 @@
 
 module BuyoutOrdersHelper
   STATUS_CLASSES = {
-    'ignored' => 'badge badge-danger',
+    'ignored' => 'badge badge-warn',
     'done' => 'badge badge-success',
-    'default' => 'badge badge-info'
+    'posted' => 'badge badge-success',
+    'default' => 'badge badge-info',
+    'error' => 'badge badge-danger',
   }.freeze
+
   def buyout_order_status(buyout_order)
     css_class = STATUS_CLASSES[buyout_order.status] || STATUS_CLASSES['default']
     content_tag :span, class: css_class do
