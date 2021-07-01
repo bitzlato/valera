@@ -47,7 +47,6 @@ class BinanceUserdataWebsocketDrainer < WebsocketDrainer
       a[r.fetch('a')] = { available: r['f'], locked: r['l'] }
     end
 
-    binding.pry
     # TODO sync update
     #
     account.update_attributes!(
