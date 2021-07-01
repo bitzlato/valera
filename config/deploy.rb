@@ -75,13 +75,13 @@ set :puma_start_task, 'systemd:puma:start'
 
 set :init_system, :systemd
 
-set :bugsnag_api_key, ENV['BUGSNAG_API_KEY']
 set :app_version, SemVer.find.to_s
 
 after 'deploy:check', 'master_key:check'
 after 'deploy:publishing', 'systemd:puma:reload-or-restart'
 after 'deploy:publishing', 'systemd:daemon:reload-or-restart'
-after 'deploy:published', 'bugsnag:release'
+before 'deploy:starting', 'sentry:validate_config'
+after 'deploy:published', 'sentry:notice_deployment'
 
 set :systemd_daemon_role, :app
 set :systemd_daemon_instances, -> { %w[maker poller websocket_collectors] }
@@ -90,6 +90,3 @@ set :systemd_daemon_instances, -> { %w[maker poller websocket_collectors] }
 #
 set :sentry_organization, ENV['SENTRY_ORGANIZATION']
 set :sentry_release_version, -> { [fetch(:app_version), fetch(:current_version)].compact.join('-') }
-
-before 'deploy:starting', 'sentry:validate_config'
-after 'deploy:published', 'sentry:notice_deployment'
