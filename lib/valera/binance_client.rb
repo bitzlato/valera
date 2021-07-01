@@ -53,7 +53,7 @@ module Valera
     def create_order(market:, price:, side:, volume:, time_in_force:, ord_type: :limit)
       order = {
         symbol: market.binance_symbol,
-        side: SIDES_MAP.fetch(side),
+        side: SIDES_MAP.fetch(side.to_sym),
         type: ord_type,
         price: price,
         quantity: volume,

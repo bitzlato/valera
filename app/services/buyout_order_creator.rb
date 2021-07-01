@@ -52,7 +52,7 @@ class BuyoutOrderCreator
   def calculate_price(upstream_market, trade, ask_percentage, bid_percentage)
     # Sold expensive, buy cheaper
     if trade.side? :ask
-      side = 'bid'
+      side = :bid
       raise "No bidPrice in #{upstream_market}" if upstream_market.bidPrice.to_d.zero?
 
       price = (100 + bid_percentage).percent_of(upstream_market.bidPrice)
@@ -61,7 +61,7 @@ class BuyoutOrderCreator
         logger.info ignore_message
       end
     else # Bought cheap, sell expensive
-      side = 'ask'
+      side = :ask
       raise "No bidPrice in #{upstream_market}" if upstream_market.askPrice.to_d.zero?
 
       price = (100 - ask_percentage).percent_of(upstream_market.askPrice)
