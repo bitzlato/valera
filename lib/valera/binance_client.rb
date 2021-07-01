@@ -72,6 +72,8 @@ module Valera
     private
 
     def raise_on_response_errors(response)
+      return response unless response.is_a? Hash
+
       raise OrderCreationError, response if response.key? 'code'
 
       response
@@ -93,8 +95,6 @@ module Valera
     # "fills"=>[{"price"=>"33385.05000000", "qty"=>"0.00100000",
     #            "commission"=>"0.03338505", "commissionAsset"=>"USDT", "tradeId"=>940968667}]}
     def build_persisted_order(raw_order)
-      raise_on_response_errors
-
       PersistedOrder.new(
         raw: raw_order,
         market: Market.find_by(binance_symbol: raw_order['symbol']),
