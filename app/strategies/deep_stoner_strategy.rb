@@ -101,7 +101,7 @@ class DeepStonerStrategy < Strategy
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),
       created_orders: orders_to_create.to_a,
-      last_error_message: nil
+      last_error_message: updater.errors.join('; ')
     )
   rescue StandardError => e
     report_exception(e) unless e.is_a? Valera::BaseClient::InsufficientBalance

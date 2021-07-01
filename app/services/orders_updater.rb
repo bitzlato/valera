@@ -13,7 +13,7 @@ class OrdersUpdater
   # If volume*price of order is changed on less then this percentage the order will not be changed
   AVAILABLE_DIVERGENCE = 0.01
 
-  attr_reader :account, :market, :logger, :name
+  attr_reader :account, :market, :logger, :name, :errors
 
   delegate :client, to: :account
 
@@ -24,6 +24,7 @@ class OrdersUpdater
                                           .tagged([self.class.name, market, client.try(:name),
                                                    client.try(:endpoint)].join(' '))
     @name = name
+    @errors = []
   end
 
   # Updates orders on market. Cancel redundant orders and create new if necessary
@@ -33,6 +34,7 @@ class OrdersUpdater
 
     account.update_active_orders! if update_active_orders
 
+    @errors = []
     @changed = false
     logger.info "Update request #{po orders}"
     created_orders = Order::SIDES.map do |side|
@@ -74,6 +76,8 @@ class OrdersUpdater
     logger.info "Cancel orders #{po orders}"
     orders.each do |order|
       client.cancel_order order.id
+    rescue Valera::BaseClient::Error => e
+      @errors << e
     end
   end
 
@@ -83,6 +87,8 @@ class OrdersUpdater
     logger.info "Create orders #{po orders}"
     Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
+    rescue Valera::BaseClient::Error => e
+      @errors << e
     end.tap do |created_orders|
       logger.debug "Created orders #{created_orders}"
     end
