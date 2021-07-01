@@ -13,7 +13,10 @@ class BuyoutOrderCreator
   def call(trade:, buyout_account:, ask_percentage: ASK_PERCENTAGE, bid_percentage: BID_PERCENTAGE)
     buyout_order = nil
     trade.with_lock do
-      raise "Trade #{trade.id} already buyouted" if trade.buyout_order.present?
+      if trade.buyout_order.present?
+        logger.warn "Trade #{trade.id} already buyouted. Skip"
+        return nil
+      end
 
       upstream_market = UpstreamMarket.find_by!(account: buyout_account, market: trade.market)
       side, price, ignore_message = calculate_price(upstream_market, trade, ask_percentage, bid_percentage)
