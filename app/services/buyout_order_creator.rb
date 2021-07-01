@@ -40,7 +40,7 @@ class BuyoutOrderCreator
       )
     end
     if buyout_order.initial?
-      post_buyout_order(buyout_order, buyout_account)
+      post_buyout_order(buyout_order)
     else
       logger.warn("Wrong state of buyout #{buyout_order.id} - #{buyout_order.status}. Skip posting")
     end
@@ -56,6 +56,7 @@ class BuyoutOrderCreator
       raise "No bidPrice in #{upstream_market}" if upstream_market.bidPrice.to_d.zero?
 
       price = (100 + bid_percentage).percent_of(upstream_market.bidPrice)
+      price = Currency.round(upstream_market.market.quote, price)
       if price >= trade.price
         ignore_message = "Target price (#{price}) is higher than traded (#{trade.price}) for trade #{trade.id}"
         logger.info ignore_message
@@ -65,6 +66,7 @@ class BuyoutOrderCreator
       raise "No bidPrice in #{upstream_market}" if upstream_market.askPrice.to_d.zero?
 
       price = (100 - ask_percentage).percent_of(upstream_market.askPrice)
+      price = Currency.round(upstream_market.market.quote, price)
       if price <= trade.price
         ignore_message = "Target price (#{price}) is lower than traded (#{trade.price}) for trade #{trade.id}"
         logger.info ignore_message
@@ -73,7 +75,7 @@ class BuyoutOrderCreator
     [side, price, ignore_message]
   end
 
-  def post_buyout_order(buyout_order, account)
+  def post_buyout_order(buyout_order)
     logger.info "Post buyout_order #{buyout_order.as_json}"
     if ENV.true? 'DISABLE_BUYOUT_POST'
       logger.info 'Skip buyout posting as it disabled'
@@ -83,7 +85,7 @@ class BuyoutOrderCreator
     buyout_order.with_lock do
       raise "buyout_order #{buyout_order.id} has wrong status #{buyout_order.status}" unless buyout_order.initial?
 
-      order = account.client.create_order(
+      order = buyout_order.buyout_account.client.create_order(
         time_in_force: 'IOC',
         market: buyout_order.market,
         ord_type: :limit,

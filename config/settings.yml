@@ -1,5 +1,14 @@
 defaults: &defaults
   root_prefix: /valera
+  currencies:
+    BTC:
+      precision: 8
+    USDT:
+      precision: 2
+    BBB: 
+      precision: 8
+    UUU: 
+      precision: 2
   markets: 
     - BTC_USDT
     - quote: UUU
