@@ -85,7 +85,7 @@ class BuyoutOrderCreator
 
       order = account.client.create_order(
         time_in_force: 'IOC',
-        market: market,
+        market: buyout_order.market,
         ord_type: :limit,
         price: buyout_order.price,
         volume: buyout_order.volume,
