@@ -25,6 +25,7 @@ class OrdersUpdater
                                                    client.try(:endpoint)].join(' '))
     @name = name
     @errors = []
+    @changed = false
   end
 
   # Updates orders on market. Cancel redundant orders and create new if necessary
@@ -45,8 +46,9 @@ class OrdersUpdater
     created_orders
   end
 
-  def clear_errors!
+  def start!
     @errors = []
+    @changed = false
   end
 
   # Cancel all orders when bot stops

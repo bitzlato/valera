@@ -98,10 +98,12 @@ class DeepStonerStrategy < Strategy
       prepare_orders_by_side(side, orders_to_cancel, orders_to_create)
     end
 
-    updater.clear_errors!
+    updater.start!
+    logger.debug("Updater errors on start #{updater.errors}")
     updater.cancel_orders! orders_to_cancel if orders_to_cancel.any?
     updater.create_orders! orders_to_create if orders_to_create.any?
 
+    logger.debug("Updater errors on finish #{updater.errors}")
     state.update_attributes!(
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),
