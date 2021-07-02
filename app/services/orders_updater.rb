@@ -94,8 +94,10 @@ class OrdersUpdater
     Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
     rescue Valera::BaseClient::Error => e
+      logger.warn "#{e} for order #{order}"
       @errors << e
-    end.tap do |created_orders|
+      nil
+    end.compact.tap do |created_orders|
       logger.debug "Created orders #{created_orders}"
     end
   end
