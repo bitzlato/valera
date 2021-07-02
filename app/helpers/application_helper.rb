@@ -57,6 +57,7 @@ module ApplicationHelper
 
   def present_time(time)
     return middot if time.nil?
+
     I18n.l time, format: :default
   end
 

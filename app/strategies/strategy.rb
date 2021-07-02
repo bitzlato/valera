@@ -111,10 +111,10 @@ class Strategy
     when 'enable'
       logger.debug 'enabled'
       if state.is_active?
-        logger.debug "run update_orders!"
+        logger.debug 'run update_orders!'
         update_orders!
       else
-        logger.debug "state.touch!"
+        logger.debug 'state.touch!'
         state.touch!
       end
     when 'disable'
@@ -124,12 +124,12 @@ class Strategy
         updater.cancel!
         state.update_attributes! created_orders: [], last_error_message: ''
       else
-        logger.debug "state.touch!"
+        logger.debug 'state.touch!'
         state.touch!
       end
     else
       logger.debug 'paused'
-      logger.debug "state.touch!"
+      logger.debug 'state.touch!'
       state.touch!
     end
 

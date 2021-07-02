@@ -3,26 +3,34 @@
     thead.thead-light
       tr
         th.text-small ID
-        th.text-small Volume
+        th.text-small Origin Volume
+        th.text-small Remaining Volume
         th.text-small Price
+        th.text-small Quote volume
     tbody
       - total_volume = 0.0
       - total_price = 0.0
+      - total_quote_volume = 0.0
 
       - orders.each do |order|
         tr
           td
             .text-small.text-monospace.text-muted= '#' + order['id'].to_s
-          td.text-small= format_money(order['origin_volume'], market.base)
-          td.text-small= format_money(order['price'], market.quote)
-        - total_volume += order['origin_volume']
-        - total_price += order['price'] * order['origin_volume']
+          td.text-small= format_money(order.origin_volume, market.base)
+          td.text-small= format_money(order.remaining_volume, market.base)
+          td.text-small= format_money(order.price, market.quote)
+          td.text-small= format_money(order.price*order.remaining_volume, market.quote)
+        - total_quote_volume += order.price * order.remaining_volume
+        - total_volume += order.remaining_volume
+        - total_price += order.price * order.remaining_volume
     - if orders.many?
       tfoot.tfoot-light
         tr
-          th.text-small= t '.total'
+          th.text-small colspan=2
+            = t '.total_remaining'
           td.text-small.text-monospace= format_money total_volume, market.base
           td.text-small.text-monospace= format_money total_price/total_volume, market.quote
+          td.text-small.text-monospace= format_money total_quote_volume, market.quote
 
 - else
   .text-center.mt-2= middot

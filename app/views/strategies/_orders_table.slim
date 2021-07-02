@@ -7,7 +7,7 @@ div is="dapi-updatable" id=('ordersStrategy-'+strategy.id)
         th.text-right Best source price
         - if show_last_created?
           th.text-center Last created orders
-        th.text-center Active orders
+        th.text-center Open orders
     tbody
       - Order::SIDES.each do |side|
         tr style="background-color: #{side_bg_color(side)}"
