@@ -6,7 +6,7 @@ module StrategiesHelper
   PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part _percentage].freeze
 
   def strategy_error(error_message)
-    content_tag :div, error_message, class: 'badge badge-danger' if error_message.present?
+    content_tag :div, error_message.truncate(80), class: 'badge badge-danger' if error_message.present?
   end
 
   def show_last_created?

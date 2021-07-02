@@ -99,16 +99,14 @@ class DeepStonerStrategy < Strategy
     end
 
     updater.start!
-    logger.debug("Updater errors on start #{updater.errors}")
     updater.cancel_orders! orders_to_cancel if orders_to_cancel.any?
     updater.create_orders! orders_to_create if orders_to_create.any?
 
-    logger.debug("Updater errors on finish #{updater.errors}")
     state.update_attributes!(
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),
       created_orders: orders_to_create.to_a,
-      last_error_message: updater.errors.uniq.compact.join('; ')
+      last_error_message: updater.errors.map(&:message).uniq.compact.join('; ')
     )
   rescue StandardError => e
     report_exception(e) unless e.is_a? Valera::BaseClient::InsufficientBalance
