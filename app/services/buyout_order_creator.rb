@@ -7,6 +7,7 @@ class BuyoutOrderCreator
 
   ASK_PERCENTAGE = 0.1
   BID_PERCENTAGE = 0.1
+  OUTDATE_PRICE = 2.seconds
 
   self.class.delegate :call, to: :new
 
@@ -74,6 +75,13 @@ class BuyoutOrderCreator
         logger.info ignore_message
       end
     end
+    if upstream_market.updated_at < OUTDATE_PRICE.ago
+      ignore_message = [
+        ignore_message,
+        "The price is out of date by #{(Time.now - upstream_market.updated_at).to_i.seconds}sec > #{OUTDATE_PRICE}sec"
+      ].compact.join('; ')
+    end
+
     [side, price, ignore_message]
   end
 

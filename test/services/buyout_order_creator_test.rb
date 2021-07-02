@@ -9,6 +9,7 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     @buyout_account = Account.find(:binance)
     @market = Market.find('BTC_USDT')
     @upstream_market = UpstreamMarket.find_by(account: @buyout_account, market: @market)
+    @upstream_market.updated_at = Time.now
   end
 
   # Sold expensive. Create order to bought cheaper
@@ -24,7 +25,21 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     assert buyout_order.initial?
   end
 
-  # Bough cheap. Sold expensive
+  # Cancel buyout as price is outdated
+  test 'outdated price' do
+    market_price = 100
+    @upstream_market.askPrice = market_price
+    @upstream_market.updated_at = Time.now - 1.hour
+    trade = trades(:bid)
+    trade.update! price: market_price * 0.9
+    buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
+    assert buyout_order.side?(:ask)
+    assert buyout_order.price < market_price
+    assert buyout_order.price > trade.price
+    assert buyout_order.ignored?
+  end
+
+  # Bought cheap. Sold expensive
   test 'successful create ask order for bought trade' do
     market_price = 100
     @upstream_market.askPrice = market_price
