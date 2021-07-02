@@ -32,9 +32,9 @@ class OrdersUpdater
   def update!(orders, update_active_orders: true)
     raise 'Must be a Set' unless orders.is_a? Set
 
+    @errors = []
     account.update_active_orders! if update_active_orders
 
-    @errors = []
     @changed = false
     logger.info "Update request #{po orders}"
     created_orders = Order::SIDES.map do |side|
@@ -43,6 +43,10 @@ class OrdersUpdater
 
     logger.info 'All orders up to date, nothing changed' unless @changed
     created_orders
+  end
+
+  def clear_errors!
+    @errors = []
   end
 
   # Cancel all orders when bot stops

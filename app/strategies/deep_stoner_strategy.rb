@@ -98,6 +98,7 @@ class DeepStonerStrategy < Strategy
       prepare_orders_by_side(side, orders_to_cancel, orders_to_create)
     end
 
+    updater.clear_errors!
     updater.cancel_orders! orders_to_cancel if orders_to_cancel.any?
     updater.create_orders! orders_to_create if orders_to_create.any?
 
