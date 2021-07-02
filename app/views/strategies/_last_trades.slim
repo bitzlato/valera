@@ -4,12 +4,12 @@
   table.table.table-condensed.table-striped.table-sm.table-narrow.table-bordered
     thead.thead-light
       tr
-        th.text-small.text-right Time
+        th.text-small Time
         th.text-small.text-right Side
         th.text-small.text-right Amount
         th.text-small.text-right Price
         th.text-small.text-right Total
-        th.text-small.text-right Buyout
+        th.text-small Buyout
     tbody
       - trades.each do |trade|
         - td = TradeDecorator.decorate(trade)

@@ -54,6 +54,7 @@ bbb:
 
 btc:
   priority: 3
+  precision: 6
   iso_code: BTC
   name: Bitcoin
   symbol: B⃦

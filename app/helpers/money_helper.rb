@@ -3,8 +3,6 @@
 # frozen_string_literal: true
 
 module MoneyHelper
-  DEFAULT_PRECISION = 8
-
   def present_fee(fee, amount = nil)
     content_tag :span, class: 'text-nowrap text-monospace' do
       buffer = "#{fee * 100}%"
@@ -43,7 +41,7 @@ module MoneyHelper
     currency = currency.is_a?(Money::Currency) ? currency : Money::Currency.find(currency)
     css_classes = %w[text-nowrap text-monospace]
     css_classes << options[:css_class]
-    buffer = money_precission(amount, currency.try(:precision) || DEFAULT_PRECISION)
+    buffer = money_precission(amount, currency.precision)
     buffer += format_currency(currency, css_class: 'text-muted ml-1') if options[:show_currency] && !amount.nil?
     content_tag :span, class: css_classes.join(' '), title: options[:tooltip], data: { toggle: :tooltip } do
       buffer.html_safe
@@ -57,10 +55,7 @@ module MoneyHelper
     return '0' if amount.zero?
     return amount.to_i.to_s if amount.to_i == amount
 
-    precised = format("%0.#{precision}f", amount)
-    return precised if precised.to_d == amount
-
-    format("%0.#{DEFAULT_PRECISION}f", amount)
+    format("%0.#{precision}f", amount)
   end
 
   def format_currency(currency_id, css_class: '')

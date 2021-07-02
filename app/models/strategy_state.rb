@@ -14,4 +14,6 @@ class StrategyState
   attribute :best_bid_price, BigDecimal
 
   attribute :last_error_message, String
+
+  attribute :acted_at, Time
 end

@@ -2,6 +2,7 @@
 
 # frozen_string_literal: true
 
+Money.rounding_mode = BigDecimal::ROUND_HALF_UP
 # rubocop:disable Style/ClassAndModuleChildren
 #
 # Remove all currencies
@@ -17,7 +18,7 @@ Money::Currency.all.each do |cur|
   Object.const_set cur.iso_code, cur
 end
 
-class Module::Currency
+class Money::Currency
   def self.all_crypto
     @all_crypto ||= all.select(&:is_crypto?)
   end
@@ -26,18 +27,18 @@ class Module::Currency
     Money.from_amount(0, self)
   end
 
-  def initialize_data!
-    super
-    data = self.class.table[@id]
-    @is_crypto = data[:is_crypto]
-  end
-
   def is_crypto?
-    !!@is_crypto
+    !!data[:is_crypto]
   end
 
   def precision
-    8
+    data[:precision] || Math.log10(subunit_to_unit).to_i
+  end
+
+  private
+
+  def data
+    self.class.table[@id]
   end
 end
 # rubocop:enable Style/ClassAndModuleChildren
