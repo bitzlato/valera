@@ -45,7 +45,7 @@ ru:
   time:
     formats:
       time: "%H:%M"
-      default: "%e %B %Y %H:%M"
+      default: "%e %B %Y %H:%M:%S (%z)"
       today: 'today at %H:%M'
       this_year: '%e %B at %H:%M'
       yesterday: 'yesterday at %H:%M'

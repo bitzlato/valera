@@ -55,6 +55,11 @@ module ApplicationHelper
     end
   end
 
+  def present_time(time)
+    return middot if time.nil?
+    I18n.l time, format: :default
+  end
+
   def present_latest_order(last_orders, side, key, currency)
     return middot if last_orders.nil?
 

@@ -20,7 +20,9 @@ table.table.table-condensed.table-narrow style='border-right: 1px solid #eee; bo
           = render 'strategy_enabler', strategy: strategy
           .text-small.text-muted= strategy.comment
           = strategy_status strategy
-          .text-small.text-muted.mt-2= t strategy.settings.updated_at, format: :default
+          .text-small.text-muted.mt-2.mb-2
+            = t '.last_state_updated_at'
+            = present_time strategy.state.updated_at
           = account_link strategy.account
           .mt-2.mb-2= strategy_error strategy.state.last_error_message
           = render 'strategies/strategy_balances', strategy: strategy

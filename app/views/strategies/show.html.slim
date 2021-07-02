@@ -7,6 +7,9 @@
       = strategy_status strategy
       .mb-2.text-small.text-muted= strategy.comment
       .mt-2.mb-2= strategy_error strategy.state.last_error_message
+      .text-small.text-muted
+        = t '.last_state_updated_at'
+        = present_time strategy.state.updated_at
     .col-md-6
       div.mb-2= strategy.description
 
