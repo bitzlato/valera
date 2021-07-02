@@ -76,7 +76,19 @@ class PersistedOrder
   def to_s
     id.to_s + '#' + # rubocop:disable Style/StringConcatenation
       side.to_s + ':' +
-      format("%0.#{PRECISION}f", origin_volume) + 'x' +
-      format("%0.#{PRECISION}f", price)
+      origin_volume_formatted + 'x' +
+      price_formatted
+  end
+
+  def origin_volume_formatted
+    return 'undefined' if origin_volume.nil?
+
+    format("%0.#{PRECISION}f", origin_volume)
+  end
+
+  def price_formatted
+    return 'undefined' if price.nil?
+
+    format("%0.#{PRECISION}f", price)
   end
 end
