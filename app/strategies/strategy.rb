@@ -98,7 +98,7 @@ class Strategy
     if state.updated_at.nil? || Time.now - state.updated_at > settings.base_latency
       bump!
     else
-      logger.debug('Skip bumping because of base_latency')
+      logger.debug("Skip bumping because of base_latency (#{Time.now - state.updated_at}<#{settings.base_latency})")
     end
   end
 
@@ -109,20 +109,27 @@ class Strategy
 
     case settings.target_state
     when 'enable'
+      logger.debug 'enabled'
       if state.is_active?
+        logger.debug "run update_orders!"
         update_orders!
       else
+        logger.debug "state.touch!"
         state.touch!
       end
     when 'disable'
+      logger.debug 'disabled'
       if state.created_orders.present? || account.active_orders.present?
         logger.info 'Does not update bot orders because bot is disabled or inactive. Cancel all orders'
         updater.cancel!
-        state.update_attributes! created_orders: []
+        state.update_attributes! created_orders: [], last_error_message: ''
       else
+        logger.debug "state.touch!"
         state.touch!
       end
     else
+      logger.debug 'paused'
+      logger.debug "state.touch!"
       state.touch!
     end
 
