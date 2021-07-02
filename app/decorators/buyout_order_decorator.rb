@@ -19,7 +19,7 @@ class BuyoutOrderDecorator < ApplicationDecorator
     return '' if object.ignore_message.blank?
 
     h.content_tag :em do
-      object.ignore_message
+      object.ignore_message.truncate(80)
     end
   end
 
