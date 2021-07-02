@@ -73,11 +73,15 @@ class DeepStonerStrategy < Strategy
 
   def trade_created(trade)
     if settings.buyout_enable?
-      BuyoutOrderCreator
-        .call(trade: trade,
-              buyout_account: buyout_account,
-              ask_percentage: settings.buyout_ask_percentage,
-              bid_percentage: settings.buyout_bid_percentage)
+      if settings.enabled?
+        BuyoutOrderCreator
+          .call(trade: trade,
+                buyout_account: buyout_account,
+                ask_percentage: settings.buyout_ask_percentage,
+                bid_percentage: settings.buyout_bid_percentage)
+      else
+        logger.warn("Strategy is disabled. Skip buyout for trade #{trade.id}..")
+      end
     end
     super
   end
