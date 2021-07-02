@@ -1,4 +1,4 @@
-- trades = strategy.account.trades.today.order('traded_at desc').limit(params[:trades_limit] || 10)
+- trades = strategy.account.trades.today.includes(:buyout_order).order('traded_at desc').limit(params[:trades_limit] || 10)
 
 - if trades.any?
   table.table.table-condensed.table-striped.table-sm.table-narrow.table-bordered
@@ -9,6 +9,7 @@
         th.text-small.text-right Amount
         th.text-small.text-right Price
         th.text-small.text-right Total
+        th.text-small.text-right Buyout
     tbody
       - trades.each do |trade|
         - td = TradeDecorator.decorate(trade)
@@ -20,6 +21,7 @@
           td.text-small.text-right= td.amount
           td.text-small.text-right= td.price
           td.text-small.text-right= td.total
+          td.text-small= td.buyout_brief
 
 - else
   .text-center.mt-2= middot

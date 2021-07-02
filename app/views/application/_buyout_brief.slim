@@ -1,0 +1,5 @@
+- bo = BuyoutOrderDecorator.decorate(buyout_order)
+div
+  span.mr-2= bo.status
+  = link_to '#'+buyout_order.id.to_s, buyout_order_path(buyout_order), target: '_blank'
+= bo.ignore_message

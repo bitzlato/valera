@@ -32,4 +32,12 @@ class TradeDecorator < ApplicationDecorator
   def upstream
     h.link_to object.upstream, h.upstream_path(object.upstream)
   end
+
+  def buyout_brief
+    if object.buyout_order.present?
+      h.render 'buyout_brief', buyout_order: buyout_order
+    else
+      h.middot
+    end
+  end
 end
