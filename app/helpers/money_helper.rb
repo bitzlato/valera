@@ -38,10 +38,11 @@ module MoneyHelper
       amount = amount.to_d
     end
     options = options.symbolize_keys.reverse_merge show_currency: true
-    currency = currency.is_a?(Money::Currency) ? currency : Money::Currency.find(currency)
+    money_currency = currency.is_a?(Money::Currency) ? currency : Money::Currency.find(currency)
+    precision = money_currency.nil? ? 6 : money_currency.precision
     css_classes = %w[text-nowrap text-monospace]
     css_classes << options[:css_class]
-    buffer = money_precission(amount, currency.precision)
+    buffer = money_precission(amount, precision)
     buffer += format_currency(currency, css_class: 'text-muted ml-1') if options[:show_currency] && !amount.nil?
     content_tag :span, class: css_classes.join(' '), title: options[:tooltip], data: { toggle: :tooltip } do
       buffer.html_safe
