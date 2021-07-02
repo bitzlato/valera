@@ -1,4 +1,4 @@
-- trades = strategy.account.trades.today.includes(:buyout_order).order('traded_at desc').limit(params[:trades_limit] || 10)
+- trades = strategy.account.trades.today.where(market_id: strategy.market.id).includes(:buyout_order).order('traded_at desc').limit(params[:trades_limit] || 10)
 
 - if trades.any?
   table.table.table-condensed.table-striped.table-sm.table-narrow.table-bordered
