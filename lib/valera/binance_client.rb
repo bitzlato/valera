@@ -37,7 +37,20 @@ module Valera
     def my_trades(markets)
       # https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#account-trade-list-user_data
       markets.map do |market|
-        raise_on_response_errors client.my_trades(symbol: market.binance_symbol)
+        raw_trade = raise_on_response_errors client.my_trades(symbol: market.binance_symbol)
+        #=> {"symbol"=>"BTCUSDT",
+            #"id"=>942135172,
+            #"orderId"=>6712985887,
+            #"orderListId"=>-1,
+            #"price"=>"33184.43000000",
+            #"qty"=>"0.00160000",
+            #"quoteQty"=>"53.09508800",
+            #"commission"=>"0.00000160",
+            #"commissionAsset"=>"BTC",
+            #"time"=>1625217378170,
+            #"isBuyer"=>true,
+            #"isMaker"=>false,
+            #"isBestMatch"=>true}
       end.flatten
     end
 
