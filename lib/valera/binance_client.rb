@@ -34,23 +34,43 @@ module Valera
       raise_on_response_errors client.open_orders
     end
 
+    # @return {'price', 'amount', 'total', 'taker_type', 'side', 'order_id', 'market', 'market_symbol'}
     def my_trades(markets)
       # https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#account-trade-list-user_data
       markets.map do |market|
-        raw_trade = raise_on_response_errors client.my_trades(symbol: market.binance_symbol)
-        #=> {"symbol"=>"BTCUSDT",
-            #"id"=>942135172,
-            #"orderId"=>6712985887,
-            #"orderListId"=>-1,
-            #"price"=>"33184.43000000",
-            #"qty"=>"0.00160000",
-            #"quoteQty"=>"53.09508800",
-            #"commission"=>"0.00000160",
-            #"commissionAsset"=>"BTC",
-            #"time"=>1625217378170,
-            #"isBuyer"=>true,
-            #"isMaker"=>false,
-            #"isBestMatch"=>true}
+        (raise_on_response_errors client.my_trades(symbol: market.binance_symbol)).map do |raw_trade|
+          #=> {"symbol"=>"BTCUSDT",
+          # "id"=>942135172,
+          # "orderId"=>6712985887,
+          # "orderListId"=>-1,
+          # "price"=>"33184.43000000",
+          # "qty"=>"0.00160000",
+          # "quoteQty"=>"53.09508800",
+          # "commission"=>"0.00000160",
+          # "commissionAsset"=>"BTC",
+          # "time"=>1625217378170,
+          # "isBuyer"=>true,
+          # "isMaker"=>false,
+          # "isBestMatch"=>true}
+          {
+            id: raw_trade['id'],
+            market: Market.find_by(binance_symbol: raw_trade['symbol']),
+            market_symbol: raw_trade['symbol'],
+            amount: raw_trade['amount'].to_d,
+            price: raw_trade['price'].to_d,
+            total: raw_trade['quoteQty'].to_d,
+            fee: raw_trade['commission'].to_d,
+            fee_currency: raw_trade['commissionAsset'],
+            created_at: Time.at(raw_trade['time'] / 1000),
+            order_id: raw_trade['orderId'],
+            side: raw_trade['isBuyer'] ? :bid : :ask,
+            taker_type: if raw_trade['isMaker']
+                          raw_trade['isBuyer'] ? :sell : :buy
+                        else
+                          (raw_trade['isBuyer'] ? :buy : :sell)
+                        end
+          }.stringify_keys
+        end
       end.flatten
     end
 

@@ -74,7 +74,7 @@ class AccountDrainer < Drainer
     end
     account.update_trades_amounts!
   rescue Valera::BaseClient::Error => e
-    logger.error e
     report_exception e
+    logger.error e
   end
 end

@@ -92,6 +92,10 @@ module Valera
         .compact
     end
 
+    # @return  [
+    # "id", "price", "amount", "total", "fee_currency", "fee", "fee_amount",
+    # "market", "market_type", "created_at", "taker_type", "side", "order_id", "market_symbol"
+    # ]
     def my_trades(_markets)
       trades.map do |trade|
         trade['market_symbol'] = trade['market']

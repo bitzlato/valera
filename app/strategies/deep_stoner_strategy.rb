@@ -72,6 +72,10 @@ class DeepStonerStrategy < Strategy
   # rubocop:enable Metrics/ParameterLists
 
   def trade_created(trade)
+    unless trade.account == account
+      logger.debug("Skip trade #{trade.id} because of other account used")
+      return
+    end
     settings.reload
     if settings.buyout_enable?
       if settings.enabled?
