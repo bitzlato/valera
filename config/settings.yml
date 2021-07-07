@@ -2,6 +2,11 @@ defaults: &defaults
   root_prefix: /valera
   markets: 
     - BTC_USDT
+    - BTC_MCR
+    - ETH_BTC
+    - ETH_USDT
+    - ETH_MCR
+    - USDT_MCR
     - quote: UUU
       base: BBB
       binance_symbol: BTCUSDT
