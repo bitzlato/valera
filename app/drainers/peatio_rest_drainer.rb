@@ -20,6 +20,7 @@ class PeatioRestDrainer < Drainer
     super(fetch_market_depth)
     write_to_influx upstream_market.attributes.slice(:usersAsksVolume, :usersBidsVolume)
   rescue Valera::BaseClient::Error => e
+    report_exception e
     logger.error e
   end
 

@@ -36,7 +36,7 @@ class Strategy
   end
 
   def trade_created(trade)
-    logger.debug "Trade created #{trade}"
+    logger.debug "Trade created callback #{trade.id}"
   end
 
   # @param name [String] key of bot from Rails credentials
@@ -135,9 +135,7 @@ class Strategy
 
     # Temporary turned off
     # StrategyChannel.update self
-  rescue Valera::BaseClient::Error => e
-    logger.error "#{self} #{e}"
-  rescue StandardError => e
+  rescue Valera::BaseClient::Error, StandardError => e
     report_exception e
     logger.error "#{self} #{e}"
   end
