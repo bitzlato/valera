@@ -2,13 +2,19 @@ defaults: &defaults
   root_prefix: /valera
   markets: 
     - BTC_USDT
-    - BTC_MCR
+    - base: BTC
+      quote: MCR
+      binance_symbol: BTCRUB
     - ETH_BTC
     - ETH_USDT
-    - ETH_MCR
-    - USDT_MCR
-    - quote: UUU
-      base: BBB
+    - base: ETH
+      quote: MCR
+      binance_symbol: ETHRUB
+    - base: USDT
+      quote: MCR
+      binance_symbol: USDTRUB
+    - base: BBB
+      quote: UUU
       binance_symbol: BTCUSDT
 
   polling_sleep: 0.1
