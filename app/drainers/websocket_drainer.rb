@@ -34,7 +34,12 @@ class WebsocketDrainer < Drainer
 
   def close(event = nil)
     dump_headers event
-    logger.warn "Closed connection with code #{event.code}, stop strategies #{market.strategies.map(&:to_s)}"
+    logger.warn "Closed connection with code #{event.code}, stop strategies #{strategies.map(&:to_s)}"
+  end
+
+  def strategies
+    # TODO
+    []
   end
 
   def message(event)

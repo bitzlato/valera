@@ -30,7 +30,7 @@ class AccountDrainer < Drainer
       update_trades!
       @last_update_at = Time.now
     else
-      logger.warn("Skip update until interval (#{@interval} meet")
+      logger.warn("Skip update for interval (#{@interval} secs)")
     end
   end
 
@@ -58,7 +58,7 @@ class AccountDrainer < Drainer
     logger.debug 'update_trades!'
     client.my_trades(account.markets).each do |raw_trade|
       if raw_trade['market'].nil?
-        logger.warn("Skip unknown market #{raw_trade['market_symbol']}")
+        logger.debug("Skip unknown market #{raw_trade['market']}")
         next
       end
       Trade
