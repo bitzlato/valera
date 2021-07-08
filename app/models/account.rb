@@ -43,7 +43,9 @@ class Account
   end
 
   def trade_created(trade)
-    strategies.each do |s|
+    strategies
+      .filter { |s| s.market == trade.market }
+      .each do |s|
       s.trade_created trade
     end
   end

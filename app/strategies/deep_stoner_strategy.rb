@@ -80,6 +80,10 @@ class DeepStonerStrategy < Strategy
       logger.debug("Skip trade #{trade.id} because trade account is buyout account")
       return
     end
+    unless trade.market.enable_buyout
+      logger.debug("Skip trade #{trade.id} because market is disabled for buyout")
+      return
+    end
     settings.reload
     if settings.buyout_enable?
       if settings.enabled?

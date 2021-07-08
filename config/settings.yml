@@ -1,22 +1,30 @@
 defaults: &defaults
   root_prefix: /valera
   markets: 
-    - BTC_USDT
+    - base: BTC
+      quote: USDT
+      enable_buyout: true
     - base: BTC
       quote: MCR
       binance_symbol: BTCRUB
-    - ETH_BTC
-    - ETH_USDT
+      enable_buyout: true
+    - base: ETH
+      quote: BTC
+      enable_buyout: true
+    - base: ETH
+      quote: USDT
+      enable_buyout: true
     - base: ETH
       quote: MCR
       binance_symbol: ETHRUB
+      enable_buyout: true
     - base: USDT
       quote: MCR
       binance_symbol: USDTRUB
+      enable_buyout: true
     - base: BBB
       quote: UUU
       binance_symbol: BTCUSDT
-
   polling_sleep: 0.1
   maker_sleep: 0.1
 
