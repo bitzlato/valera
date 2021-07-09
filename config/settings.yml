@@ -22,9 +22,6 @@ defaults: &defaults
       quote: MCR
       binance_symbol: USDTRUB
       enable_buyout: true
-    - base: BBB
-      quote: UUU
-      binance_symbol: BTCUSDT
   polling_sleep: 0.1
   maker_sleep: 0.1
 
