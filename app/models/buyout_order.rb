@@ -11,7 +11,7 @@ class BuyoutOrder < ApplicationRecord
 
   belongs_to :original_trade, class_name: 'Trade'
 
-  delegate :base, :quote, to: :market
+  delegate :base, :quote, to: :market, allow_nil: true
 
   def market
     @market ||= Market.find market_id

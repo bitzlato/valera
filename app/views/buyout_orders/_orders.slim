@@ -12,9 +12,9 @@ table.table.table-small.table-narrow.table-stripped.table-condensed.m-0
         = link_to trade_path(buyout_order.original_trade), title: buyout_order.original_trade.id do
           = t '.original_trade'
       td.text-small= buyout_order.original_trade.side
-      td.text-small= format_money buyout_order.original_trade.amount, buyout_order.original_trade.base
-      td.text-small= format_money buyout_order.original_trade.price, buyout_order.original_trade.quote
-      td.text-small= format_money buyout_order.original_trade.total, buyout_order.original_trade.quote
+      td.text-small= format_money buyout_order.original_trade.amount, buyout_order.original_trade.base || '???'
+      td.text-small= format_money buyout_order.original_trade.price, buyout_order.original_trade.quote || '???'
+      td.text-small= format_money buyout_order.original_trade.total, buyout_order.original_trade.quote || '???'
     tr style="background-color: #{side_bg_color(buyout_order.side)}"
       th.text-small= t '.created_order'
       td.text-small= buyout_order.side
