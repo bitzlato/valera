@@ -71,6 +71,10 @@ class DeepStonerStrategy < Strategy
   end
   # rubocop:enable Metrics/ParameterLists
 
+  def buyout_currencies
+    [market.binance_quote || market.quote, market.base]
+  end
+
   def trade_created(trade)
     unless trade.account == account
       logger.debug("Skip trade #{trade.id} because of other account used")

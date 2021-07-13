@@ -7,7 +7,7 @@ table.table.table-sm
   tbody
     - account.balances.each_pair do |currency, data|
       - next if currencies.present? && !currencies.include?(currency.upcase)
-      - unless data['available'].to_d.zero? && data['locked'].to_d.zero?
+      - if currency.present? || (!data['available'].to_d.zero? || !data['locked'].to_d.zero?)
         tr
           th.text-right.text-small.text-nowrap= format_currency currency
           td.text-right.text-small= format_money data['available'], currency
