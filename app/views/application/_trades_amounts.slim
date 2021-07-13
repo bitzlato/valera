@@ -6,4 +6,7 @@ table.table.table-sm
         td.text-small= market.to_s
         td.text-small.text-nowrap
           = link_to trades_path(q: { account_id_eq: account.id, traded_at_gteq: time_ago, market_id_eq: market_id }) do
-            = format_money amount, market.base
+            - if market.present?
+              = format_money amount, market.base
+            - else
+              div unknown market #{market_id}
