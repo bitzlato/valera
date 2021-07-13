@@ -6,18 +6,19 @@ class Market
   extend ActiveModel::Naming
   extend Finders
   include ActiveModel::Conversion
-  attr_reader :quote, :base, :peatio_symbol, :binance_symbol, :enable_buyout
+  attr_reader :quote, :base, :peatio_symbol, :binance_symbol, :binance_quote, :enable_buyout
 
   def self.build_by_id(symbol)
     base, quote = *symbol.split('_')
     new(base: base, quote: quote)
   end
 
-  def initialize(base:, quote:, peatio_symbol: nil, binance_symbol: nil, enable_buyout: false)
+  def initialize(base:, quote:, peatio_symbol: nil, binance_quote: nil, binance_symbol: nil, enable_buyout: false)
     @base = base
     @quote = quote
     @peatio_symbol = peatio_symbol || (base + quote).downcase
     @binance_symbol = binance_symbol || (base + quote).upcase
+    @binance_quote = binance_quote || quote
     @enable_buyout = enable_buyout
   end
 

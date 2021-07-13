@@ -68,7 +68,7 @@ class God
 
       hash[key] = Account.new(id: key, upstream: upstream, client: client)
     rescue ArgumentError => e
-      raise "#{e} with #{upstream.client_class}"
+      raise "#{e} with #{key}=>#{pair} #{upstream.try :client_class}"
     end
   end
 
