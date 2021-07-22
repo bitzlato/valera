@@ -38,6 +38,10 @@ class Order
     comparer.call other
   end
 
+  def human_side
+    side?(:ask) ? 'sell' : 'buy'
+  end
+
   def inspect
     to_s
   end
