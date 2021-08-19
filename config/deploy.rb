@@ -80,6 +80,12 @@ set :puma_init_active_record, true
 set :puma_workers, 0
 set :puma_bind, %w[tcp://0.0.0.0:9293]
 set :puma_start_task, 'systemd:puma:start'
+set :puma_extra_settings, %{
+  lowlevel_error_handler do |e|
+    Bugsnag.notify(e) if defined? Bugsnag
+    [500, {}, ["An error has occurred"]]
+  end
+ }
 
 set :init_system, :systemd
 
@@ -88,13 +94,15 @@ set :app_version, SemVer.find.to_s
 after 'deploy:check', 'master_key:check'
 after 'deploy:publishing', 'systemd:puma:reload-or-restart'
 after 'deploy:publishing', 'systemd:daemon:reload-or-restart'
-before 'deploy:starting', 'sentry:validate_config'
-after 'deploy:published', 'sentry:notice_deployment'
 
 set :systemd_daemon_role, :app
 set :systemd_daemon_instances, -> { %w[maker poller websocket_collectors] }
 
 # Rake::Task["deploy:assets:backup_manifest"].clear_actions
-#
-set :sentry_organization, ENV['SENTRY_ORGANIZATION']
-set :sentry_release_version, -> { [fetch(:app_version), fetch(:current_version)].compact.join('-') }
+
+if Gem.loaded_specs.key?('capistrano-sentry')
+  set :sentry_organization, ENV['SENTRY_ORGANIZATION']
+  set :sentry_release_version, -> { [fetch(:app_version), fetch(:current_version)].compact.join('-') }
+  before 'deploy:starting', 'sentry:validate_config'
+  after 'deploy:published', 'sentry:notice_deployment'
+end
