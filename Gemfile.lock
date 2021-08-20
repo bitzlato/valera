@@ -130,6 +130,9 @@ GEM
     bindex (0.8.1)
     bootsnap (1.7.5)
       msgpack (~> 1.0)
+    bugsnag (6.22.1)
+      concurrent-ruby (~> 1.0)
+    bugsnag-capistrano (2.1.0)
     builder (3.2.4)
     byebug (11.1.3)
     capistrano (3.16.0)
@@ -158,8 +161,6 @@ GEM
     capistrano-rbenv (2.2.0)
       capistrano (~> 3.1)
       sshkit (~> 1.3)
-    capistrano-sentry (0.4.2)
-      capistrano (~> 3.1)
     capistrano-shell (0.2.0)
       capistrano (~> 3.1)
     capistrano-yarn (2.0.2)
@@ -414,16 +415,6 @@ GEM
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
     semver2 (3.4.2)
-    sentry-rails (4.5.0)
-      railties (>= 5.0)
-      sentry-ruby-core (~> 4.5.0)
-    sentry-ruby (4.5.0)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
-      faraday (>= 1.0)
-      sentry-ruby-core (= 4.5.0)
-    sentry-ruby-core (4.5.0)
-      concurrent-ruby
-      faraday
     settingslogic (2.0.9)
     shellany (0.0.1)
     slim (4.1.0)
@@ -498,6 +489,8 @@ DEPENDENCIES
   best_in_place!
   binance (~> 1.2)!
   bootsnap (>= 1.4.4)
+  bugsnag
+  bugsnag-capistrano
   byebug
   capistrano
   capistrano-bundler
@@ -510,7 +503,6 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rails-console
   capistrano-rbenv
-  capistrano-sentry
   capistrano-shell
   capistrano-systemd-multiservice!
   capistrano-yarn
@@ -557,8 +549,6 @@ DEPENDENCIES
   sd_notify
   selenium-webdriver
   semver2
-  sentry-rails
-  sentry-ruby
   settingslogic
   slim-rails
   spring

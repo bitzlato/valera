@@ -23,7 +23,7 @@ class WebsocketDrainer < Drainer
     # Possible event.message:
     # Errno::ECONNRESET
 
-    Sentry.capture_message event.message
+    report_exception(event.message)
     logger.error "Error (#{event.type}) with message #{event.message}"
 
     return unless event.message == Errno::ECONNRESET

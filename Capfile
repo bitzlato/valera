@@ -26,7 +26,8 @@ require 'capistrano/yarn'
 require 'capistrano/bundler'
 require 'capistrano-db-tasks'
 require 'capistrano/shell'
-require 'capistrano/sentry'
+require 'bugsnag-capistrano' if Gem.loaded_specs.key?('bugsnag-capistrano')
+require 'capistrano/sentry' if Gem.loaded_specs.key?('capistrano-sentry')
 require 'capistrano/rails/assets'
 require 'capistrano/rails/console'
 # require 'capistrano/faster_assets'
