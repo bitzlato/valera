@@ -13,7 +13,9 @@ class Market
     new(base: base, quote: quote)
   end
 
+  # rubocop:disable Metrics/ParameterLists
   def initialize(base:, quote:, peatio_symbol: nil, binance_quote: nil, binance_symbol: nil, enable_buyout: false)
+    # rubocop:enable Metrics/ParameterLists
     @base = base
     @quote = quote
     @peatio_symbol = peatio_symbol || (base + quote).downcase
