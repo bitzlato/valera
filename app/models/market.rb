@@ -61,7 +61,7 @@ class Market
   end
 
   def id
-    [base, quote].join('_')
+    [base, quote].join('_').gsub('-','__')
   end
 
   def to_s
