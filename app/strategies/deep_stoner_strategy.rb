@@ -93,6 +93,7 @@ class DeepStonerStrategy < Strategy
       if settings.enabled?
         logger.info("Make buyout for trade #{trade}")
         BuyoutOrderCreator
+          .new
           .call(trade: trade,
                 buyout_account: buyout_account,
                 ask_percentage: settings.buyout_ask_percentage,

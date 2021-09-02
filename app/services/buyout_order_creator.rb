@@ -9,8 +9,6 @@ class BuyoutOrderCreator
   BID_PERCENTAGE = 0.1
   OUTDATE_PRICE = 2.seconds
 
-  self.class.delegate :call, to: :new
-
   def call(trade:, buyout_account:, ask_percentage: ASK_PERCENTAGE, bid_percentage: BID_PERCENTAGE)
     buyout_order = nil
     logger.warn "Call with trade #{trade.id}"
