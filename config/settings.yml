@@ -1,30 +1,29 @@
 defaults: &defaults
-  root_prefix: /valera
   markets: 
     - base: BTC
-      quote: USDT
-      enable_buyout: true
+      quote: USDT-ERC20
+      enable_buyout: false
     - base: BTC
-      quote: MCR
+      quote: MCR-ERC20
       binance_symbol: BTCRUB
       binance_quote: RUB
-      enable_buyout: true
+      enable_buyout: false
     - base: ETH
       quote: BTC
-      enable_buyout: true
+      enable_buyout: false
     - base: ETH
-      quote: USDT
-      enable_buyout: true
+      quote: USDT-ERC20
+      enable_buyout: false
     - base: ETH
-      quote: MCR
+      quote: MCR-ERC20
       binance_symbol: ETHRUB
       binance_quote: RUB
-      enable_buyout: true
-    - base: USDT
-      quote: MCR
+      enable_buyout: false
+    - base: USDT-ERC20
+      quote: MCR-ERC20
       binance_symbol: USDTRUB
       binance_quote: RUB
-      enable_buyout: true
+      enable_buyout: false
   polling_sleep: 0.1
   maker_sleep: 0.1
 
@@ -105,7 +104,6 @@ production:
   <<: *defaults
 test:
   <<: *defaults
-  root_prefix: /valera
   markets: ["BTC_USDT"]
   drainers:
     binance_websocket:
