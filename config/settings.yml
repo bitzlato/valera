@@ -4,14 +4,15 @@ defaults: &defaults
       quote: USDT-ERC20
       enable_buyout: false
       peatio_symbol: btcusdt-erc20
+      binance_symbol: BTCUSDT
+    - base: ETH
+      quote: BTC
+      enable_buyout: false
   markets_disabled:
     - base: BTC
       quote: MCR-ERC20
       binance_symbol: BTCRUB
       binance_quote: RUB
-      enable_buyout: false
-    - base: ETH
-      quote: BTC
       enable_buyout: false
     - base: ETH
       quote: USDT-ERC20
