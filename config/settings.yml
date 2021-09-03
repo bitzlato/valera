@@ -3,6 +3,7 @@ defaults: &defaults
     - base: BTC
       quote: USDT-ERC20
       enable_buyout: false
+      peatio_symbol: btcusdt-erc20
   markets_disabled:
     - base: BTC
       quote: MCR-ERC20

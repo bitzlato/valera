@@ -12,7 +12,7 @@ module ApplicationHelper
   end
 
   def account_link(account)
-    link_to "@#{account}", account_path(account)
+    link_to "@#{account}", account_path(account.id)
   end
 
   def sorted_orders_by_side(orders, side)

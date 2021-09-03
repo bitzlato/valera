@@ -64,11 +64,16 @@ class Market
     [base, quote].join('_')
   end
 
+  # humanized name
+  def name
+    [base, quote].join('/')
+  end
+
   def variable_name
     id.gsub('-','__')
   end
 
   def to_s
-    id.to_s
+    name.to_s
   end
 end
