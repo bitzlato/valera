@@ -61,7 +61,11 @@ class Market
   end
 
   def id
-    [base, quote].join('_').gsub('-','__')
+    [base, quote].join('_')
+  end
+
+  def variable_name
+    id.gsub('-','__')
   end
 
   def to_s

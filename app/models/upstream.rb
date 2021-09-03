@@ -9,8 +9,9 @@ class Upstream
   attr_reader :client_class
 
   Market.all.each do |market|
-    attribute "bid_orders_volume_#{market.id}", BigDecimal
-    attribute "ask_orders_volume_#{market.id}", BigDecimal
+    # А где они используютcя?
+    attribute "bid_orders_volume_#{market.variable_name}", BigDecimal
+    attribute "ask_orders_volume_#{market.variable_name}", BigDecimal
   end
 
   def initialize(id:, client_class:)
