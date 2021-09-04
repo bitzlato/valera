@@ -16,7 +16,7 @@ class Market
   def initialize(base:, quote:, peatio_symbol: nil, binance_quote: nil, binance_symbol: nil, enable_buyout: false)
     @base = base
     @quote = quote
-    @peatio_symbol = peatio_symbol || (base + quote).downcase
+    @peatio_symbol = peatio_symbol || [base, quote].join('_').remove('-').downcase
     @binance_symbol = binance_symbol || (base + quote).upcase
     @binance_quote = binance_quote || quote
     @enable_buyout = enable_buyout
