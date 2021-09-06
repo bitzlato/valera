@@ -7,7 +7,6 @@ defaults: &defaults
     - base: ETH
       quote: BTC
       enable_buyout: false
-  markets_disabled:
     - base: BTC
       quote: MCR-ERC20
       binance_symbol: BTCRUB
