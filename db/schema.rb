@@ -10,12 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_22_121752) do
+ActiveRecord::Schema.define(version: 2021_09_06_150612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "account_balances", force: :cascade do |t|
+    t.string "account_id", null: false
+    t.jsonb "balances", default: {}, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "buyout_orders", force: :cascade do |t|
     t.string "trade_account_id", null: false
