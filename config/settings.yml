@@ -15,6 +15,7 @@ defaults: &defaults
     - base: ETH
       quote: USDT-ERC20
       enable_buyout: false
+      binance_symbol: ETHUSDT
     - base: ETH
       quote: MCR-ERC20
       binance_symbol: ETHRUB
