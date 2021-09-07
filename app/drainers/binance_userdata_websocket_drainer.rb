@@ -45,7 +45,7 @@ class BinanceUserdataWebsocketDrainer < WebsocketDrainer
     logger.debug(data)
 
     balances = data['B'].each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |r, a|
-      a[r.fetch('a')] = { available: r['f'], locked: r['l'] }
+      a[r.fetch('a').downcase] = { available: r['f'], locked: r['l'] }
     end
 
     # TODO: sync update
