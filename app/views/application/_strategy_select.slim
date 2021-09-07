@@ -1,0 +1,6 @@
+ul.nav.nav-pills.mb-3
+  li.nav-item
+    = link_to t('.all'), url_for(request.query_parameters.merge(strategy_class: nil)), class: active_class('nav-link', selected_strategy.nil?)
+  - Strategy.all.map(&:class).uniq.map(&:to_s).each do |strategy_class_name|
+    li.nav-item
+      = link_to strategy_class_name.to_s, url_for(request.query_parameters.merge(strategy_class: strategy_class_name)), class: active_class('nav-link', strategy_class_name == selected_strategy)
