@@ -1,7 +1,7 @@
 table.table.table-condensed.table-narrow.table-bordered.table-stripped
   thead.thead-dark
     tr
-      th Market
+      th Peatio Market
       th Strategy
       th Ожидаемый статус
       th Текущий статус
@@ -13,7 +13,8 @@ table.table.table-condensed.table-narrow.table-bordered.table-stripped
   tbody
     - strategies.each do |strategy|
       tr
-        td= link_to strategy.market, market_path(strategy.market.id)
+        td.text-nowrap
+          = link_to strategy.market, market_path(strategy.market.id)
         td
           = link_to strategy.name, strategy_path(strategy)
           .text-small.text-muted= present_time strategy.state.updated_at
@@ -25,12 +26,7 @@ table.table.table-condensed.table-narrow.table-bordered.table-stripped
           .mt-2.mb-2= strategy_error strategy.state.last_error_message
         td
           = process_status strategy.state.maker_pid
-        td.text-right
-          = strategy.account.balances.slice(*strategy.currencies)
-          hr
-          = strategy.account.balances
-          hr
-          = strategy.currencies
+        td.text-right.text-small
           = render 'short_balances', balances: strategy.account.balances.slice(*strategy.currencies)
         td.text-right.text-small style='padding: 0'
           .p-1 style="background-color: #{side_bg_color(:ask)}"

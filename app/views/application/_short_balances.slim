@@ -1,2 +1,2 @@
-- balances.each do |currency, amounts|
+- balances.each_pair do |currency, amounts|
   div= format_money amounts['avaialble'].to_d + amounts['locked'].to_d, currency
