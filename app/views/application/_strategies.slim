@@ -25,9 +25,9 @@ table.table.table-condensed.table-narrow.table-bordered.table-stripped
 
         td
           = process_status strategy.state.maker_pid
-        td.text-small style='padding: 0'
-          div.p-1 style="background-color: #{side_bg_color(:ask)}"
+        td.text-right.text-small style='padding: 0'
+          .p-1 style="background-color: #{side_bg_color(:ask)}"
             = format_money strategy.state.best_ask_price, strategy.market.quote
-          div.p-1 style="background-color: #{side_bg_color(:bid)}"
+          .p-1 style="background-color: #{side_bg_color(:bid)}"
             = format_money strategy.state.best_bid_price, strategy.market.quote
           .text-small.text-muted.p-1= present_time strategy.state.acted_at
