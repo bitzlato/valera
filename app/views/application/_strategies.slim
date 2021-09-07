@@ -7,32 +7,27 @@ table.table.table-condensed.table-narrow.table-bordered.table-stripped
       th Текущий статус
       th Сообщение
       th Maker
-      th.text-right Сторона
       th.text-right Лучшая цена биржи-источника
 
   tbody
     - strategies.each do |strategy|
       tr
-        td rowspan=2
-          = link_to strategy.market, market_path(strategy.market.id)
-
-        th rowspan=2
+        td= link_to strategy.market, market_path(strategy.market.id)
+        td
           = link_to strategy.name, strategy_path(strategy)
-          .text-small.text-muted
-            = present_time strategy.state.updated_at
-        td rowspan=2
+          .text-small.text-muted= present_time strategy.state.updated_at
+        td
           = render 'strategy_enabler', strategy: strategy
-        td rowspan=2
+        td
           = strategy_status strategy
-        td rowspan=2
+        td
           .mt-2.mb-2= strategy_error strategy.state.last_error_message
 
-        td rowspan=2
+        td
           = process_status strategy.state.maker_pid
-        td.text-right  style="background-color: #{side_bg_color(:ask)}" ASK
-        td.text-right  style="background-color: #{side_bg_color(:ask)}"
-          = format_money strategy.state.best_ask_price, strategy.market.quote
-      tr
-        td.text-right style="background-color: #{side_bg_color(:bid)}" BID
-        td.text-right style="background-color: #{side_bg_color(:bid)}"
-          = format_money strategy.state.best_bid_price, strategy.market.quote
+        td.text-small style='padding: 0'
+          div style="background-color: #{side_bg_color(:ask)}"
+            = format_money strategy.state.best_ask_price, strategy.market.quote
+          div style="background-color: #{side_bg_color(:bid)}"
+            = format_money strategy.state.best_bid_price, strategy.market.quote
+          = present_time strategy.state.acted_at
