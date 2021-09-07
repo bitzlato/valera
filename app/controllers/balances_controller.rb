@@ -4,8 +4,10 @@
 
 class BalancesController < ApplicationController
   def index
+    currencies = (Market.all.map(&:currencies).flatten +
+                  Account.all.map { |a| a.balances.transform_values { |v| v if v['available'].to_d + v['locked'].to_d > 0 }.compact.keys }.flatten).uniq
     render locals: {
-      currencies: Market.all.map(&:currencies).flatten.uniq,
+      currencies: currencies,
       accounts: Account.all
     }
   end

@@ -12,10 +12,10 @@
         tr is='dapi-tr' data-href=url_for(account)
           td= account
           - currencies.each do |currency|
-            - balance = account.balances[currency.downcase]
+            - balance = account.balances[currency]
             td
               - if balance.present?
-                = format_money balance['available'] + balance['locked'], currency
+                = format_money balance['available'].to_d + balance['locked'].to_d, currency
               - else
                 = middot
 
