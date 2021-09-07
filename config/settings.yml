@@ -30,10 +30,10 @@ defaults: &defaults
       binance_symbol: USDTRUB
       binance_quote: RUB
       enable_buyout: false
+  legacy_markets:
     - base: BNB-BEP20
       quote: USDC-BEP20
       binance_symbol: BNBUSDC
-  legacy_markets:
     - base: BNB-BEP20
       quote: USDT-BEP20
       binance_symbol: BNBUSDT
