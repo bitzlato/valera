@@ -26,7 +26,7 @@ table.table.table-condensed.table-narrow.table-bordered.table-stripped
         td
           = process_status strategy.state.maker_pid
         td.text-right
-          = render 'balances', account: strategy.account, currencies: strategy.currencies
+          = render 'short_balances', balances: strategy.account.balances.slice(*strategy.currencies)
         td.text-right.text-small style='padding: 0'
           .p-1 style="background-color: #{side_bg_color(:ask)}"
             = format_money strategy.state.best_ask_price, strategy.market.quote
