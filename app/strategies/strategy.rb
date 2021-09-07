@@ -162,7 +162,8 @@ class Strategy
     state.update_attributes!(
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),
-      created_orders: updater.update!(build_orders).to_a
+      created_orders: updater.update!(build_orders).to_a,
+      acted_at: Time.now
     )
   end
 
