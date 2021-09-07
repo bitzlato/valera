@@ -1,9 +1,6 @@
 default: &default
   async: true
   time_precision: ms
-  # udp:
-  #  host: <%= ENV.fetch("INFLUXDB_HOST", "127.0.0.1") %>
-  #  port: <%= ENV.fetch("INFLUXDB_UDP_PORT", 4444) %>
 development:
   <<: *default
   database: valera_development
@@ -17,4 +14,7 @@ staging:
   database: <%= ENV.fetch('INFLUXDB_DATABASE_NAME', "valera_staging") %>
 production:
   <<: *default
+  udp:
+    host: <%= ENV.fetch("INFLUXDB_HOST", "127.0.0.1") %>
+    port: <%= ENV.fetch("INFLUXDB_UDP_PORT", 8089) %>
   database: <%= ENV.fetch('INFLUXDB_DATABASE_NAME', "valera_production") %>
