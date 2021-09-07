@@ -71,10 +71,11 @@ module ApplicationHelper
   end
 
   def process_status(pid)
-    return 'no pid' if pid.nil?
+    return content_tag :span, 'Не запущен', class: 'badge badge-danger' if pid.nil?
     Process.getpgid pid
+    content_tag :span, 'Живой', class: 'badge badge-success', title: "pid: #{pid}"
   rescue => err
-    err.message
+    content_tag :span, err.message, class: 'badge badge-danger'
   end
 
   def format_percent(value)
