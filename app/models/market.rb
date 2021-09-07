@@ -13,6 +13,7 @@ class Market
     new(base: base, quote: quote)
   end
 
+  # rubocop:disable Metrics/ParameterLists
   def initialize(base:, quote:, peatio_symbol: nil, binance_quote: nil, binance_symbol: nil, enable_buyout: false)
     @base = base
     @quote = quote
@@ -21,6 +22,7 @@ class Market
     @binance_quote = binance_quote || quote
     @enable_buyout = enable_buyout
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def currencies
     [base, quote]
