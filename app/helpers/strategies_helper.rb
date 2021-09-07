@@ -59,7 +59,7 @@ module StrategiesHelper
     unless strategy.state.is_active
       buffer << content_tag(:div,
                             strategy.state.inactivation_reason.presence || 'No inactivation reason',
-                            class: 'mt-2 alert alert-warning')
+                            class: 'text-small text-warning')
     end
     buffer.html_safe
   end

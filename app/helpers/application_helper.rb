@@ -70,6 +70,13 @@ module ApplicationHelper
     format_money(order[key.to_s], currency)
   end
 
+  def process_status(pid)
+    return 'no pid' if pid.nil?
+    Process.getpgid pid
+  rescue => err
+    err.message
+  end
+
   def format_percent(value)
     return middot if value.nil?
 

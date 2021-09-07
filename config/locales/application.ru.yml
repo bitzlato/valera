@@ -1,0 +1,4 @@
+ru:
+  application:
+    strategy_enabler:
+      target_state: Сменить статус на
