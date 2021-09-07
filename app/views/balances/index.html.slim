@@ -1,19 +1,19 @@
 .container-fluid
   h2= t '.balances'
   hr
-  table.table.table-striped.table-hover.table-narrow.table-bordered
+  table.table.table-striped.table-hover.table-narrow.table-bordered.text-small.table-sm
     thead.thead-dark
       tr
         th
         - currencies.each do |currency|
-          th= currency
+          th.text-right.text-nowrap= currency
     tbody
       - accounts.each do |account|
         tr is='dapi-tr' data-href=url_for(account)
           td= account
           - currencies.each do |currency|
             - balance = account.balances.transform_keys(&:upcase)[currency]
-            td
+            td.text-right.text-nowrap
               - if balance.present?
                 = format_money balance['available'].to_d + balance['locked'].to_d, currency
               - else
