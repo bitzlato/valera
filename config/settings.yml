@@ -15,7 +15,7 @@ defaults: &defaults
     - base: ETH
       quote: USDC-ERC20
       enable_buyout: false
-      binance_symbol: ETHUSDT
+      binance_symbol: ETHUSDC
     - base: ETH
       quote: USDT-ERC20
       enable_buyout: false
@@ -30,13 +30,13 @@ defaults: &defaults
       binance_symbol: USDTRUB
       binance_quote: RUB
       enable_buyout: false
-  legacy_markets:
     - base: BNB-BEP20
       quote: USDC-BEP20
       binance_symbol: BNBUSDC
     - base: BNB-BEP20
       quote: USDT-BEP20
       binance_symbol: BNBUSDT
+  legacy_markets:
     - base: HT-HRC20
       quote: USDC-HRC20
       binance_symbol: HTUSDC
