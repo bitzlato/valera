@@ -13,6 +13,10 @@ defaults: &defaults
       binance_quote: RUB
       enable_buyout: false
     - base: ETH
+      quote: USDC-ERC20
+      enable_buyout: false
+      binance_symbol: ETHUSDT
+    - base: ETH
       quote: USDT-ERC20
       enable_buyout: false
       binance_symbol: ETHUSDT
@@ -26,6 +30,33 @@ defaults: &defaults
       binance_symbol: USDTRUB
       binance_quote: RUB
       enable_buyout: false
+    - base: BNB-BEP20
+      quote: USDC-BEP20
+      binance_symbol: BNBUSDC
+    - base: BNB-BEP20
+      quote: USDT-BEP20
+      binance_symbol: BNBUSDT
+    - base: HT-HRC20
+      quote: USDC-HRC20
+      binance_symbol: HTUSDC
+    - base: HT-HRC20
+      quote: USDT-HRC20
+      binance_symbol: HTUSDT
+    - base: MDT-ERC20
+      quote: MCR-ERC20
+      binance_symbol: MDTRUB
+    - base: MDT-ERC20
+      quote: USDT-ERC20
+      binance_symbol: MDTUSDT
+
+   # "usdcerc20_usdcbep20",
+   # "usdchrc20_usdcbep20",
+   # "usdchrc20_usdcerc20",
+   # "usdterc20_usdcerc20",
+   # "usdterc20_usdtbep20",
+   # "usdthrc20_usdtbep20",
+   # "usdthrc20_usdterc20"
+
   polling_sleep: 0.1
   maker_sleep: 0.1
 
