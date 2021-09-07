@@ -22,6 +22,7 @@ html
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
   body
     = render 'navbar' do
+      = active_link_to t('.balances'), balances_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
       = active_link_to t('.strategies'), strategies_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
       = active_link_to t('.markets'), markets_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'
       = active_link_to t('.upstreams'), upstreams_path, class: 'nav-link', wrap_tag: :li, wrap_class: 'nav-item'

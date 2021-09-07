@@ -1,0 +1,21 @@
+.container-fluid
+  h2= t '.balances'
+  hr
+  table.table.table-striped.table-hover.table-narrow.table-bordered
+    thead.thead-dark
+      tr
+        th
+        - currencies.each do |currency|
+          th= currency
+    tbody
+      - accounts.each do |account|
+        tr is='dapi-tr' data-href=url_for(account)
+          td= account
+          - currencies.each do |currency|
+            - balance = account.balances[currency.downcase]
+            td
+              - if balance.present?
+                = format_money balance['available'] + balance['locked'], currency
+              - else
+                = middot
+
