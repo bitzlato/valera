@@ -7,6 +7,7 @@ table.table.table-condensed.table-narrow.table-bordered.table-stripped
       th Текущий статус
       th Сообщение
       th Maker
+      th Баланс на peatio
       th.text-right Лучшая цена биржи-источника
 
   tbody
@@ -24,6 +25,9 @@ table.table.table-condensed.table-narrow.table-bordered.table-stripped
           .mt-2.mb-2= strategy_error strategy.state.last_error_message
         td
           = process_status strategy.state.maker_pid
+        td.text-right
+          = strategy.currencies.each do |c|
+            div= format_money strategy.account.balances[c], c
         td.text-right.text-small style='padding: 0'
           .p-1 style="background-color: #{side_bg_color(:ask)}"
             = format_money strategy.state.best_ask_price, strategy.market.quote
