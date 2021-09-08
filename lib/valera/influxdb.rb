@@ -5,9 +5,8 @@
 module Valera
   module InfluxDB
     class << self
-      def client(opts = {})
-        # Map InfluxDB clients with received opts.
-        clients[opts] ||= ::InfluxDB::Client.new(parse(config.merge(opts)))
+      def client
+        @client ||= ::InfluxDB::Client.new config
       end
 
       def config
@@ -15,19 +14,7 @@ module Valera
         return {} unless yaml.exist?
 
         erb = ::ERB.new(yaml.read)
-        ::SafeYAML.load(erb.result)[ENV.fetch('RAILS_ENV', 'development')].deep_symbolize_keys || {}
-      end
-
-      def clients
-        @clients ||= {}
-      end
-
-      def parse(configs)
-        hosts = configs[:host]
-        return configs if hosts.nil?
-
-        configs[:host] = hosts[Zlib.crc32(configs[:keyshard].to_s) % hosts.count]
-        configs
+        ::SafeYAML.load(erb.result).fetch(Rails.env, {}).deep_symbolize_keys
       end
     end
   end
