@@ -43,12 +43,13 @@ module ApplicationHelper
 
   def grafana_iframe_src(resource, panel_id = nil)
     panel_id ||= Rails.application.credentials.grafana[:panel_id]
+    grafana_url = Rails.application.credentials.grafana[:url] || '&refresh=5s'
     case resource
     when Strategy
-      Rails.application.credentials.grafana[:url] +
+      grafana_url +
         "&var-market=#{resource.market.id}&var-bot=#{resource.name}&panelId=#{panel_id}"
     when Market
-      Rails.application.credentials.grafana[:url] +
+      grafana_url +
         "&var-market=#{resource.id}&var-bot=All&panelId=#{panel_id}"
     else
       raise "Inknown resource #{resource}"
