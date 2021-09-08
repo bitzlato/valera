@@ -1,5 +1,6 @@
 .container-fluid
   h2= t '.trades'
+  = render 'form', q: @q
   hr
   = render 'ransack_conditions', conditions: @q.conditions
   - if all_trades.any?

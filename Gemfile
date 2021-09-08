@@ -38,6 +38,7 @@ gem 'draper'
 gem 'env-tweaks', '~> 1.0.0'
 
 gem 'ransack'
+gem 'simple_form'
 
 # Alternative: https://github.com/soveran/ohm
 gem 'redis-objects'

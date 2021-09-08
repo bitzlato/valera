@@ -417,6 +417,9 @@ GEM
     semver2 (3.4.2)
     settingslogic (2.0.9)
     shellany (0.0.1)
+    simple_form (5.1.0)
+      actionpack (>= 5.2)
+      activemodel (>= 5.2)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -550,6 +553,7 @@ DEPENDENCIES
   selenium-webdriver
   semver2
   settingslogic
+  simple_form
   slim-rails
   spring
   sqlite3

@@ -3,7 +3,7 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
-
+ENV['RANSACK_FORM_BUILDER'] = '::SimpleForm::FormBuilder'
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -25,6 +25,7 @@ module Exbot
     config.autoload_paths += Dir[
       "#{Rails.root}/app/services",
       "#{Rails.root}/app/drainers",
+      "#{Rails.root}/app/inputs",
       "#{Rails.root}/app/strategies",
     ]
 

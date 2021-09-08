@@ -1,0 +1,20 @@
+= search_form_for q do |f|
+  .row
+    .col-md-3
+      = f.input :traded_at_gteq, input_html: { class: 'datetimepicker' }
+    .col-md-3
+      = f.input :traded_at_lt, input_html: { class: 'datetimepicker' }
+    .col-md-3
+      = f.input :market_id_eq, collection: Market.all.map(&:id), include_blank: 'Any'
+    .col-md-3
+      = f.input :side_eq, collection: Trade::SIDES_TYPES, include_blank: 'Any'
+  .row
+    .col-md-3
+      = f.input :account_id_eq, collection: Account.all.map(&:id), include_blank: 'Any'
+    .col-md-3
+      = f.input :taker_type, collection: Trade::TAKER_TYPES, include_blank: 'Any'
+  .row
+    .col-md-3= f.input :amount_gteq
+    .col-md-3= f.input :price_gteq
+    .col-md-3= f.input :total_gteq
+  = f.button :submit, class: 'btn btn-primary'
