@@ -18,3 +18,5 @@
     .col-md-3= f.input :price_gteq
     .col-md-3= f.input :total_gteq
   = f.button :submit, class: 'btn btn-primary'
+  - if q.conditions.any?
+    = link_to 'reset', url_for, class: 'btn btn-secondary ml-2'
