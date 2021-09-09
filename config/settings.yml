@@ -132,6 +132,25 @@ development:
   <<: *defaults
   polling_sleep: 1
   maker_sleep: 1
+
+  accounts:
+    bargainer_bot:
+      upstream: peatio
+      credentials: 
+        access_key: test
+        secret_key: test
+    deep_stoner_bot:
+      upstream: peatio
+      credentials: 
+        access_key: test
+        secret_key: test
+    binance:
+      upstream: binance
+      credentials: 
+        name: binance
+        api_key: test
+        secret_key: test
+
 staging:
   <<: *defaults
 production:
