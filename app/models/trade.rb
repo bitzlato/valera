@@ -5,8 +5,8 @@
 class Trade < ApplicationRecord
   include SideInquirer
 
-  TAKER_TYPES = %w[sell buy]
-  SIDES_TYPES = %w[bid ask]
+  TAKER_TYPES = %w[sell buy].freeze
+  SIDES_TYPES = %w[bid ask].freeze
 
   delegate :upstream, to: :account
   delegate :base, :quote, to: :market, allow_nil: true

@@ -9,9 +9,9 @@ class StrategiesController < ApplicationController
   def index
     strategies = god.strategies
     strategies.each(&:reload)
-    strategies = strategies.sort_by { |s| s.id }
+    strategies = strategies.sort_by(&:id)
     strategies = strategies.filter { |s| s.market == selected_market } if selected_market.present?
-    strategies = strategies.filter { |s| s.class.name == selected_strategy } if selected_strategy.present?
+    strategies = strategies.filter { |s| s.instance_of?(selected_strategy) } if selected_strategy.present?
     render locals: { strategies: strategies }
   end
 

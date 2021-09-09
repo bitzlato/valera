@@ -13,12 +13,13 @@ AllCops:
     - db/schema.rb
     - Guardfile
 
+Layout/LineLength:
+  Exclude:
+    - 'config/initializers/simple_form*'
+    - 'app/strategies/*'
+
 Style/ExponentialNotation:
   Enabled: false
-
-Layout/LineLength:
-  Exclude: 
-    - 'app/strategies/*'
 
 # Offense count: 2
 # Configuration parameters: DebuggerReceivers, DebuggerMethods.
@@ -35,6 +36,8 @@ Metrics/AbcSize:
 # Configuration parameters: CountComments, CountAsOne, ExcludedMethods, IgnoredMethods.
 # IgnoredMethods: refine
 Metrics/BlockLength:
+  Exclude:
+    - 'config/initializers/simple_form*'
   Max: 27
 
 # Offense count: 2
