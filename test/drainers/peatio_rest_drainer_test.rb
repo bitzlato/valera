@@ -2,6 +2,8 @@
 
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class PeatioRestDrainerTest < ActiveSupport::TestCase
   setup do
     account = Account.all.first
@@ -9,7 +11,6 @@ class PeatioRestDrainerTest < ActiveSupport::TestCase
   end
 
   test 'fetch_market_depth' do
-    assert_equal @drainer.send(:fetch_market_depth), { 'asksVolume' => 0.299e0, 'bidsVolume' => 0.3e0 }
-    # { 'asksVolume' => 0.1300904919156e5, 'bidsVolume' => 0.111089629579e5 }
+    assert_equal @drainer.send(:fetch_market_depth), { 'asksVolume' => 0.13e-2, 'bidsVolume' => 0.0 }
   end
 end

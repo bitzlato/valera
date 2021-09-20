@@ -138,7 +138,11 @@ production:
   <<: *defaults
 test:
   <<: *defaults
-  markets: ["BTC_USDT"]
+  markets: 
+    - base: BTC
+      quote: USDT-ERC20
+      enable_buyout: false
+      binance_symbol: BTCUSDT
   drainers:
     binance_websocket:
       class: BinanceWebsocketDrainer

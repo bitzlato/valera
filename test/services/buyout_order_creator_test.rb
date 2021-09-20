@@ -6,9 +6,9 @@ require 'test_helper'
 
 class BuyoutOrderCreatorTest < ActiveSupport::TestCase
   setup do
-    @buyout_account = Account.find(:binance)
-    @market = Market.find('BTC_USDT')
-    @upstream_market = UpstreamMarket.find_by(account: @buyout_account, market: @market)
+    @buyout_account = Account.find :binance
+    @market = Market.find 'BTC_USDT-ERC20'
+    @upstream_market = UpstreamMarket.find_by account: @buyout_account, market: @market
     @upstream_market.updated_at = Time.now
   end
 
@@ -18,7 +18,7 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     @upstream_market.bidPrice = market_price
     trade = trades(:ask)
     trade.update! price: market_price * 1.1
-    buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
+    buyout_order = BuyoutOrderCreator.new.call trade: trade, buyout_account: @buyout_account
     assert buyout_order.side?(:bid)
     assert buyout_order.price > market_price
     assert buyout_order.price < trade.price
@@ -32,7 +32,7 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     @upstream_market.updated_at = Time.now - 1.hour
     trade = trades(:bid)
     trade.update! price: market_price * 0.9
-    buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
+    buyout_order = BuyoutOrderCreator.new.call trade: trade, buyout_account: @buyout_account
     assert buyout_order.side?(:ask)
     assert buyout_order.price < market_price
     assert buyout_order.price > trade.price
@@ -45,7 +45,7 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     @upstream_market.askPrice = market_price
     trade = trades(:bid)
     trade.update! price: market_price * 0.9
-    buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
+    buyout_order = BuyoutOrderCreator.new.call trade: trade, buyout_account: @buyout_account
     assert buyout_order.side?(:ask)
     assert buyout_order.price < market_price
     assert buyout_order.price > trade.price
@@ -57,7 +57,7 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     @upstream_market.askPrice = market_price
     trade = trades(:bid)
     trade.update! price: market_price * 1.2
-    buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
+    buyout_order = BuyoutOrderCreator.new.call trade: trade, buyout_account: @buyout_account
     assert buyout_order.side?(:ask)
     assert buyout_order.ignored?
   end
@@ -67,7 +67,7 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     @upstream_market.bidPrice = market_price
     trade = trades(:ask)
     trade.update! price: market_price * 0.9
-    buyout_order = BuyoutOrderCreator.call trade: trade, buyout_account: @buyout_account
+    buyout_order = BuyoutOrderCreator.new.call trade: trade, buyout_account: @buyout_account
     assert buyout_order.side?(:bid)
     assert buyout_order.ignored?
   end
