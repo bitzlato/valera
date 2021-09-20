@@ -16,6 +16,7 @@ on:
 jobs:
   tests:
     env:
+      DISABLE_JWT: true
       PEATIO_ENDPOINT: https://market-sandbox.bitzlato.com
       PEATIO_WEBSOCKET_URL: wss://market-sandbox.bitzlato.com/api/v2/ranger
       PEATIO_API_ACCESS_KEY: key

@@ -18,11 +18,13 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     @upstream_market.bidPrice = market_price
     trade = trades(:ask)
     trade.update! price: market_price * 1.1
-    buyout_order = BuyoutOrderCreator.new.call trade: trade, buyout_account: @buyout_account
-    assert buyout_order.side?(:bid)
-    assert buyout_order.price > market_price
-    assert buyout_order.price < trade.price
-    assert buyout_order.initial?
+    @buyout_account.client.stub :create_order, PersistedOrder.new(id: 1, state: 'POSTED') do
+      buyout_order = BuyoutOrderCreator.new.call trade: trade, buyout_account: @buyout_account
+      assert buyout_order.side?(:bid)
+      assert buyout_order.price > market_price
+      assert buyout_order.price < trade.price
+      assert buyout_order.posted?
+    end
   end
 
   # Cancel buyout as price is outdated
@@ -45,11 +47,13 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     @upstream_market.askPrice = market_price
     trade = trades(:bid)
     trade.update! price: market_price * 0.9
-    buyout_order = BuyoutOrderCreator.new.call trade: trade, buyout_account: @buyout_account
-    assert buyout_order.side?(:ask)
-    assert buyout_order.price < market_price
-    assert buyout_order.price > trade.price
-    assert buyout_order.initial?
+    @buyout_account.client.stub :create_order, PersistedOrder.new(id: 1, state: 'POSTED') do
+      buyout_order = BuyoutOrderCreator.new.call trade: trade, buyout_account: @buyout_account
+      assert buyout_order.side?(:ask)
+      assert buyout_order.price < market_price
+      assert buyout_order.price > trade.price
+      assert buyout_order.posted?
+    end
   end
 
   test 'ignore buyout of market price is higher than we bought' do
