@@ -23,6 +23,7 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     assert buyout_order.price > market_price
     assert buyout_order.price < trade.price
     puts buyout_order.status
+    puts buyout_order.ignore_message
     assert buyout_order.initial?
   end
 
@@ -51,6 +52,7 @@ class BuyoutOrderCreatorTest < ActiveSupport::TestCase
     assert buyout_order.price < market_price
     assert buyout_order.price > trade.price
     puts buyout_order.status
+    puts buyout_order.ignore_message
     assert buyout_order.initial?
   end
 
