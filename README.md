@@ -35,9 +35,27 @@ docker run -d -p 7000:3000 --restart=always -v /var/lib/grafana:/var/lib/grafana
 
 # Development
 
-Run first bot only
+Run first bot only:
 
 > rails runner God.instance.universes.first.perform_loop
+
+Run bot in development mode:
+
+Set credentials:
+> EDITOR='vim' rails credentials: edit --environment development
+
+in the form:
+``` 
+http_basic_auth:
+   name: "admin"
+   password: "password"
+```
+
+Run ```bin/rails server```, with environment variables:
+
+DISABLE_BUYOUT=true
+DISABLE_JWT=true
+FORCED_USER_ID=1
 
 # Other
 
