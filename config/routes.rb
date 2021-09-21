@@ -7,7 +7,11 @@ Rails.application.routes.draw do
   resources :strategies, only: %i[index show]
   resources :markets, only: %i[index show]
   resources :balances, only: %i[index]
-  resources :strategy_settings
+  resources :strategy_settings, only: %i[update] do
+    member do
+      post :start
+    end
+  end
   resources :upstream_markets, only: %i[index show]
   resources :upstreams, only: %i[index show]
   resources :accounts, only: %i[index show]

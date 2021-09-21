@@ -2,6 +2,12 @@
 
 # frozen_string_literal: true
 
+# Собственно биржа.
+#
+# Например binance, peatio. Может быть даже псевдо-биржа, например, monolithos как источник данных0
+#
+# На бирже может быть несколько аккаунтов и несколько рынков (upstream_markets)
+#
 class Upstream
   extend Finders
   include RedisModel

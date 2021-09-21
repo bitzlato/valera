@@ -16,7 +16,7 @@ class Strategy
   attr_reader :account, :market, :name, :state, :comment, :logger, :updater, :upstream_markets, :source_account
 
   delegate :description, :settings_class, :state_class, to: :class
-  delegate :is_active, to: :settings
+  delegate :is_active?, to: :state
   delegate :currencies, to: :market
 
   def self.description

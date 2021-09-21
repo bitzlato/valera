@@ -18,6 +18,9 @@ Layout/LineLength:
     - 'config/initializers/simple_form*'
     - 'app/strategies/*'
 
+Style/AsciiComments:
+  Enabled: false
+
 Style/ExponentialNotation:
   Enabled: false
 
@@ -98,13 +101,6 @@ Security/Open:
   Exclude:
     - 'app/models/kassa_rates.rb'
     - 'app/models/source_rates.rb'
-
-Style/AsciiComments:
-  Exclude:
-    - 'app/models/kassa_rates.rb'
-    - 'app/models/source_rates.rb'
-    - 'app/strategies/bargainer_strategy.rb'
-    - 'app/strategies/order_book_strategy.rb'
 
 # Offense count: 34
 # Configuration parameters: AllowedConstants.

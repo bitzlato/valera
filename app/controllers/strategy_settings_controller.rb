@@ -15,4 +15,11 @@ class StrategySettingsController < ApplicationController
       format.json { respond_with_bip(strategy.settings) }
     end
   end
+
+  def start
+    strategy = Strategy.find params[:id]
+    strategy.start!
+
+    redirect_back fallback_location: strategy_path(strategy)
+  end
 end

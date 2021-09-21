@@ -2,6 +2,10 @@
 
 # frozen_string_literal: true
 
+# Конкретный рынок (market) на конкретной бирже (upstream)
+#
+# Хранятся последние данные по этому рынку
+#
 class UpstreamMarket
   include RedisModel
 
