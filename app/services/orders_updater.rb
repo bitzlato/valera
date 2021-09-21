@@ -83,7 +83,7 @@ class OrdersUpdater
     orders.each do |order|
       client.cancel_order order.id
     rescue Valera::BaseClient::Error => e
-      @errors << e
+      @errors << "Error canceling order #{order} -> #{e}"
     end
   end
 
@@ -95,7 +95,7 @@ class OrdersUpdater
       create_order! order
     rescue Valera::BaseClient::Error, StandardError => e
       logger.warn "#{e} for order #{order}"
-      @errors << e
+      @errors << "Error creating order #{order} -> #{e}"
       nil
     end.compact.tap do |created_orders|
       logger.debug "Created orders #{created_orders}"
