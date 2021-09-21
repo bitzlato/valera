@@ -12,6 +12,6 @@ module SelectedStrategy
   private
 
   def selected_strategy
-    params[:strategy_class]
+    params[:strategy_name]
   end
 end
