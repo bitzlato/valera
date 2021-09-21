@@ -6,6 +6,7 @@ defaults: &defaults
       binance_symbol: BTCUSDT
     - base: ETH
       quote: BTC
+      binance_symbol: ETHBTC
       enable_buyout: false
     - base: BTC
       quote: MCR-ERC20
@@ -74,7 +75,6 @@ defaults: &defaults
         - BTC_MCR-ERC20
         - ETH_USDC-ERC20
         - ETH_USDT-ERC20
-        - ETH_MCR-ERC20
         - USDT-ERC20_MCR-ERC20
         - BNB-BEP20_USDC-BEP20
         - BNB-BEP20_USDT-BEP20
@@ -157,7 +157,7 @@ development:
   polling_sleep: 1
   maker_sleep: 1
 
-  accounts:
+  fake_accounts:
     bargainer_bot:
       upstream: peatio
       credentials: 
