@@ -74,7 +74,7 @@ class AccountDrainer < Drainer
     end
     account.update_trades_amounts!
   rescue Valera::BaseClient::Error => e
-    report_exception e
+    report_exception e, true, markets: account.markets.map(&:id), id: id, account_id: account.id
     logger.error e
   end
 end
