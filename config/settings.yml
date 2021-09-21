@@ -73,6 +73,9 @@ defaults: &defaults
 
     monolithos:
       client: Valera::MonolithosClient
+      markets:
+        - MDT-ERC20_MCR-ERC20
+        - MDT-ERC20_USDT-ERC20
 
   accounts:
     bargainer_bot:

@@ -100,7 +100,7 @@ class God
     Settings.upstreams.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       id, options = pair
       client_class = options.key?('client') ? options['client'].constantize : nil
-      hash[id] = Upstream.new id: id, client_class: client_class
+      hash[id] = Upstream.new id: id, client_class: client_class, markets: options['markets']
     end
   end
 

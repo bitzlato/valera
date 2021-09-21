@@ -6,11 +6,13 @@ class Upstream
   extend Finders
   include RedisModel
 
-  attr_reader :client_class
+  attr_reader :client_class, :markets
 
-  def initialize(id:, client_class:)
+  def initialize(id:, client_class:, markets: nil)
     @client_class = client_class
     super id: id
+
+    @markets = markets.nil? ? Market.all : markets.map { |market_id| Market.find! market_id }
   end
 
   def drainers
@@ -29,12 +31,6 @@ class Upstream
     active_orders
       .filter { |o| o.market == market && o.side?(side) }
       .sum(&:remaining_volume)
-  end
-
-  # TODO: List only using makets
-  #
-  def markets
-    @markets ||= Market.all
   end
 
   def upstream_markets
