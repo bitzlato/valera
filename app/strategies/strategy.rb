@@ -101,8 +101,8 @@ class Strategy
       logger.debug("Skip bumping because of base_latency (#{Time.now - state.updated_at}<#{settings.base_latency})")
     end
   rescue StandardError => e
-    report_exception e, true, { strategy: self, market: @market.id, account: @account, state: state }
-    state.stop! e.message if e.is_a? UpstreamMarkets::NotFound
+    report_exception e, true, strategy: self, market: @market.id, account: @account, state: state
+    stop! e.message if e.is_a? UpstreamMarkets::NotFound
   end
 
   # Change state
@@ -172,7 +172,10 @@ class Strategy
       acted_at: Time.now
     )
 
-    state.stop! last_error_message if last_error_message.present?
+    stop! last_error_message if last_error_message.present?
+  rescue StandardError => e
+    report_exception e, true, strategy: id, settings: settings, state: state
+    stop! e
   end
 
   def build_orders
