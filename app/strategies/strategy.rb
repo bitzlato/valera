@@ -100,6 +100,8 @@ class Strategy
     else
       logger.debug("Skip bumping because of base_latency (#{Time.now - state.updated_at}<#{settings.base_latency})")
     end
+  rescue => e
+    report_exception e, true, { name: @name, market: @market.id, account: @account, state: state }
   end
 
   # Change state
