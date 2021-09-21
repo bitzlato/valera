@@ -88,7 +88,7 @@ class God
 
       if drainer_class.respond_to?(:use_market?)
         markets = attrs[:account].present? ? attrs[:account].markets : Market.all
-        markets.all.map do |market|
+        markets.map do |market|
           drainer_class.new(**attrs.merge(market: market))
         end
       else
