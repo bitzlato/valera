@@ -149,7 +149,7 @@ class OrdersUpdater
       price: order.price,
       volume: order.volume,
       side: order.side
-    )
+    ) || raise("No order created for #{order}")
     write_to_influx(created_order, level: order.level)
     created_order
   rescue Valera::BaseClient::InsufficientBalance => e
