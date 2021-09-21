@@ -29,7 +29,7 @@ class MonolithosDrainer < Drainer
 
       raise "zero price for #{row}" if price.zero?
 
-      data = { tradePrice: price }
+      data = { tradePrice: price, askPrice: price, bidPrice: price }
       upstream_market = market.upstream_markets.find_by_upstream! upstream
       upstream_market.update_attributes! data
       touch!
