@@ -24,7 +24,7 @@ class Maker
         logger.debug "Sleep for #{Settings.maker_sleep}"
         sleep Settings.maker_sleep
       rescue StandardError => e
-        report_exception e
+        report_exception e, true, strategy: strategy
         logger.error e
       end
     rescue Interrupt => e
