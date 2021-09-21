@@ -100,8 +100,10 @@ class Strategy
     else
       logger.debug("Skip bumping because of base_latency (#{Time.now - state.updated_at}<#{settings.base_latency})")
     end
+    report_exception e, true, strategy: self
   rescue StandardError => e
-    report_exception e, true, { name: @name, market: @market.id, account: @account, state: state }
+    state.stop! e.message if e.is_a? UpstreamMarkets::NotFound
+    report_exception e, true, { strategy: self, market: @market.id, account: @account, state: state }
   end
 
   # Change state
@@ -209,9 +211,6 @@ class Strategy
     source_account
       .upstream_markets
       .find_by_market!(market)
-  rescue StandardError => e
-    report_exception e, true, market: market, strategy: self
-    raise e
   end
 end
 # rubocop:enable Metrics/ClassLength
