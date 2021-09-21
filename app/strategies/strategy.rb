@@ -162,12 +162,17 @@ class Strategy
   private
 
   def update_orders!
+    created_orders = updater.update!(build_orders).to_a
+    last_error_message = updater.errors.uniq.join('; ').presence
     state.update_attributes!(
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),
-      created_orders: updater.update!(build_orders).to_a,
+      created_orders: created_orders,
+      last_error_message: last_error_message,
       acted_at: Time.now
     )
+
+    state.stop! last_error_message if last_error_message.present?
   end
 
   def build_orders

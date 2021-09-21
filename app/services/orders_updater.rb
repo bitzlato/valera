@@ -93,7 +93,7 @@ class OrdersUpdater
     logger.info "Create orders #{po orders}"
     Parallel.map orders.map, in_threads: THREADS do |order|
       create_order! order
-    rescue Valera::BaseClient::Error => e
+    rescue Valera::BaseClient::Error, StandardError => e
       logger.warn "#{e} for order #{order}"
       @errors << e
       nil
@@ -152,12 +152,9 @@ class OrdersUpdater
     ) || raise("No order created for #{order}")
     write_to_influx(created_order, level: order.level)
     created_order
-  rescue Valera::BaseClient::InsufficientBalance => e
-    logger.error "Error #{e} creating order #{order}"
+  rescue Valera::BaseClient::InsufficientBalance, StandardError => e
+    report_exception e, true, order: order
     raise e
-  rescue StandardError => e
-    logger.error "Error #{e} creating order #{order}"
-    report_exception e
   end
 
   def write_to_influx(order, level: 0)
