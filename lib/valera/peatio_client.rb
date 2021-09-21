@@ -69,6 +69,7 @@ module Valera
       )
     rescue Valera::BaseClient::Failure => e
       report_exception e, true, order: order
+      raise e
     end
     # rubocop:enable Metrics/ParameterLists
     # rubocop:enable Lint/UnusedMethodArgument
