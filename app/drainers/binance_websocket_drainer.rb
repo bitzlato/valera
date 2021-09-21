@@ -41,7 +41,7 @@ class BinanceWebsocketDrainer < WebsocketDrainer
   private
 
   def streams
-    STREAMS.map { |s| s.merge symbol: market.binance_symbol || raise("No binance_symbol for #{market}")}
+    STREAMS.map { |s| s.merge symbol: market.binance_symbol || raise("No binance_symbol for #{market}") }
   end
 
   def map(data)
