@@ -67,6 +67,8 @@ module Valera
         post('/market/orders', order),
         skip_unknown_market: false
       )
+    rescue Valera::BaseClient::Failure => e
+      report_exception e, true, order: order
     end
     # rubocop:enable Metrics/ParameterLists
     # rubocop:enable Lint/UnusedMethodArgument
