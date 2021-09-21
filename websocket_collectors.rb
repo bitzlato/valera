@@ -21,6 +21,8 @@ class WebSocketCollectors
       God.websocket_collectors.each do |drainer|
         logger.debug "Attach #{drainer}"
         drainer.attach
+      rescue => e
+        report_exception e, true, drainer: drainer.as_json
       end
     rescue StandardError => e
       if SAFE_ERRORS.include? e
