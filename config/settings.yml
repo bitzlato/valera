@@ -36,6 +36,12 @@ defaults: &defaults
     - base: BNB-BEP20
       quote: USDT-BEP20
       binance_symbol: BNBUSDT
+    - base: MDT-ERC20
+      quote: MCR-ERC20
+      monolithos_symbol: MDT_MCR
+    - base: MDT-ERC20
+      quote: USDT-ERC20
+      monolithos_symbol: MDT_USD
   legacy_markets:
     - base: HT-HRC20
       quote: USDC-HRC20
@@ -43,12 +49,6 @@ defaults: &defaults
     - base: HT-HRC20
       quote: USDT-HRC20
       binance_symbol: HTUSDT
-    - base: MDT-ERC20
-      quote: MCR-ERC20
-      binance_symbol: MDTRUB
-    - base: MDT-ERC20
-      quote: USDT-ERC20
-      binance_symbol: MDTUSDT
 
    # "usdcerc20_usdcbep20",
    # "usdchrc20_usdcbep20",
@@ -71,6 +71,9 @@ defaults: &defaults
     peatio:
       client: Valera::PeatioClient
 
+    monolithos:
+      client: Valera::MonolithosClient
+
   accounts:
     bargainer_bot:
       upstream: peatio
@@ -81,8 +84,17 @@ defaults: &defaults
     binance:
       upstream: binance
       credentials: binance
+    monolithos:
+      upstream: monolithos
 
   drainers:
+    monolithos:
+      class: MonolithosDrainer
+      account: monolithos
+      markets:
+        - MDT-ERC20_MCR-ERC20
+        - MDT-ERC20_USDT-ERC20
+
     binance_websocket:
       class: BinanceWebsocketDrainer
       account: binance
@@ -150,6 +162,8 @@ development:
         name: binance
         api_key: test
         secret_key: test
+    monolithos:
+      upstream: monolithos
 
 staging:
   <<: *defaults

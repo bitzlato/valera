@@ -6,7 +6,7 @@ class Market
   extend ActiveModel::Naming
   extend Finders
   include ActiveModel::Conversion
-  attr_reader :quote, :base, :peatio_symbol, :binance_symbol, :binance_quote, :enable_buyout
+  attr_reader :quote, :base, :peatio_symbol, :binance_symbol, :binance_quote, :enable_buyout, :monolithos_symbol
 
   def self.build_by_id(symbol)
     base, quote = *symbol.split('_')
@@ -14,12 +14,19 @@ class Market
   end
 
   # rubocop:disable Metrics/ParameterLists
-  def initialize(base:, quote:, peatio_symbol: nil, binance_quote: nil, binance_symbol: nil, enable_buyout: false)
+  def initialize(base:,
+                 quote:,
+                 peatio_symbol: nil,
+                 binance_quote: nil,
+                 binance_symbol: nil,
+                 enable_buyout: false,
+                 monolithos_symbol: nil)
     @base = base
     @quote = quote
     @peatio_symbol = peatio_symbol || [base, quote].join('_').remove('-').downcase
-    @binance_symbol = binance_symbol || (base + quote).upcase
-    @binance_quote = binance_quote || quote
+    @binance_symbol = binance_symbol
+    @binance_quote = binance_quote || quote if @binance_symbol.present?
+    @monolithos_symbol = monolithos_symbol
     @enable_buyout = enable_buyout
   end
   # rubocop:enable Metrics/ParameterLists

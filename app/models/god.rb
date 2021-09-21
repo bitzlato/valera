@@ -62,9 +62,13 @@ class God
       upstream = upstreams.fetch(config['upstream'].presence || raise("No upstream key in account section (#{key})"))
       raise "No upstream client_class for #{upstream}" if upstream.client_class.nil?
 
-      credentials = config.fetch('credentials')
-      credentials = credentials.is_a?(Hash) ? credentials.reverse_merge(name: key) : fetch_credentials(credentials)
-      client = upstream.client_class.new(**credentials.symbolize_keys)
+      credentials = config.fetch('credentials', nil)
+      if credentials.present?
+        credentials = credentials.is_a?(Hash) ? credentials.reverse_merge(name: key) : fetch_credentials(credentials)
+        client = upstream.client_class.new(**credentials.symbolize_keys)
+      else
+        client = upstream.client_class.new
+      end
 
       hash[key] = Account.new(id: key, upstream: upstream, client: client)
     rescue ArgumentError => e
