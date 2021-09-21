@@ -64,13 +64,14 @@ defaults: &defaults
       client: Valera::BinanceClient
       markets:
         - BTC_USDT-ERC20
-        - ETH_BTC
         - BTC_MCR-ERC20
+        - BNB-BEP20_USDC-BEP20
+        - BNB-BEP20_USDT-BEP20
+        - ETH_BTC
+        - ETH_MCR-ERC20
         - ETH_USDC-ERC20
         - ETH_USDT-ERC20
         - USDT-ERC20_MCR-ERC20
-        - BNB-BEP20_USDC-BEP20
-        - BNB-BEP20_USDT-BEP20
     peatio:
       client: Valera::PeatioClient
     monolithos:
