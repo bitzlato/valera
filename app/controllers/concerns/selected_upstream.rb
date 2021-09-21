@@ -2,16 +2,16 @@
 
 # frozen_string_literal: true
 
-module SelectedStrategy
+module SelectedUpstream
   extend ActiveSupport::Concern
 
   included do
-    helper_method :selected_strategy
+    helper_method :selected_upstream
   end
 
   private
 
-  def selected_strategy
-    params[:strategy_name]
+  def selected_upstream
+    Upstream.find params[:upstream_id] if params[:upstream_id]
   end
 end

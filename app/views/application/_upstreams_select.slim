@@ -1,0 +1,7 @@
+ul.nav.nav-pills.mb-3
+  li.nav-item
+    = link_to t('.all'), url_for(request.query_parameters.merge(upstream_id: nil)), class: active_class('nav-link', selected_upstream.nil?)
+  - Upstream.all.each do |upstream|
+    li.nav-item
+      = link_to upstream.to_s, 
+        url_for(request.query_parameters.merge(upstream_id: upstream.id)), class: active_class('nav-link', upstream == selected_upstream)

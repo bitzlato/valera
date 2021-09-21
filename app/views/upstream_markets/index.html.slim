@@ -1,4 +1,6 @@
 .container-fluid
   h2= t '.upstream_markets'
   hr
+  = render 'markets_select', selected_market: selected_market
+  = render 'upstreams_select', selected_upstream: selected_upstream
   = render 'table', scope: upstream_markets, decorator: UpstreamMarketDecorator

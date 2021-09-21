@@ -123,7 +123,8 @@ class God
   def build_strategies
     strategies = Set.new
     Settings.strategies.each_pair do |key, options|
-      Market.all.map do |market|
+      options['markets'].map do |market_id|
+        market = Market.find! market_id
         strategy_class = options['class'].constantize
         settings = options.fetch('settings', {})
         settings = settings.fetch('global', {}).merge settings.dig('markets', market.id) || {}

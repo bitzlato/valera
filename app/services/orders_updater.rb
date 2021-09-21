@@ -141,6 +141,8 @@ class OrdersUpdater
 
   # @param order <Order>
   def create_order!(order)
+    raise "WTF! Order has zero price #{order}" if order.price.zero?
+
     created_order = client.create_order(
       market: market,
       ord_type: :limit,

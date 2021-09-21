@@ -2,35 +2,28 @@ defaults: &defaults
   markets: 
     - base: BTC
       quote: USDT-ERC20
-      enable_buyout: false
       binance_symbol: BTCUSDT
     - base: ETH
       quote: BTC
       binance_symbol: ETHBTC
-      enable_buyout: false
     - base: BTC
       quote: MCR-ERC20
       binance_symbol: BTCRUB
       binance_quote: RUB
-      enable_buyout: false
     - base: ETH
       quote: USDC-ERC20
-      enable_buyout: false
       binance_symbol: ETHUSDC
     - base: ETH
       quote: USDT-ERC20
-      enable_buyout: false
       binance_symbol: ETHUSDT
     - base: ETH
       quote: MCR-ERC20
       binance_symbol: ETHRUB
       binance_quote: RUB
-      enable_buyout: false
     - base: USDT-ERC20
       quote: MCR-ERC20
       binance_symbol: USDTRUB
       binance_quote: RUB
-      enable_buyout: false
     - base: BNB-BEP20
       quote: USDC-BEP20
       binance_symbol: BNBUSDC
@@ -139,18 +132,44 @@ defaults: &defaults
       account: binance
 
   strategies:
-    deep_stoner:
+    monolithos_bargainer:
+      class: BargainerStrategy
+      account: bargainer_bot
+      source_account: monolithos
+      markets: 
+        - MDT-ERC20_MCR-ERC20
+        - MDT-ERC20_USDT-ERC20
+
+    binance_deep_stoner:
       class: DeepStonerStrategy
-      comment: Арбитражник - глубокий наполнятель стакана
       account: deep_stoner_bot
       buyout_account: binance
       source_account: binance
+      markets:
+        - BTC_USDT-ERC20
+        - ETH_BTC
+        - BTC_MCR-ERC20
+        - ETH_USDC-ERC20
+        - ETH_USDT-ERC20
+        - ETH_MCR-ERC20
+        - USDT-ERC20_MCR-ERC20
+        - BNB-BEP20_USDC-BEP20
+        - BNB-BEP20_USDT-BEP20
 
-    bargainer:
+    binance_bargainer:
       class: BargainerStrategy
-      comment: Проторговщик, торгует на малые объёмы, иногда так получается что сделки закрываются на самого себя
       account: bargainer_bot
       source_account: binance
+      markets: 
+        - BTC_USDT-ERC20
+        - ETH_BTC
+        - BTC_MCR-ERC20
+        - ETH_USDC-ERC20
+        - ETH_USDT-ERC20
+        - ETH_MCR-ERC20
+        - USDT-ERC20_MCR-ERC20
+        - BNB-BEP20_USDC-BEP20
+        - BNB-BEP20_USDT-BEP20
 
 development:
   <<: *defaults
@@ -186,7 +205,6 @@ test:
   markets: 
     - base: BTC
       quote: USDT-ERC20
-      enable_buyout: false
       binance_symbol: BTCUSDT
   drainers:
     binance_websocket:
@@ -239,8 +257,10 @@ test:
       comment: Арбитражник - глубокий наполнятель стакана
       account: peatio1
       buyout_account: binance
+      markets: []
 
     bargainer:
       class: BargainerStrategy
       comment: Проторговщик, торгует на малые объёмы, иногда так получается что сделки закрываются на самого себя
       account: peatio2
+      markets: []
