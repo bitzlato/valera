@@ -100,10 +100,9 @@ class Strategy
     else
       logger.debug("Skip bumping because of base_latency (#{Time.now - state.updated_at}<#{settings.base_latency})")
     end
-    report_exception e, true, strategy: self
   rescue StandardError => e
-    state.stop! e.message if e.is_a? UpstreamMarkets::NotFound
     report_exception e, true, { strategy: self, market: @market.id, account: @account, state: state }
+    state.stop! e.message if e.is_a? UpstreamMarkets::NotFound
   end
 
   # Change state
