@@ -32,7 +32,6 @@ class EqualDrainer < Drainer
     end
     touch!
   rescue Valera::BaseClient::Error => e
-    binding.pry
     report_exception e, true, strategy: self
     logger.error e
   end

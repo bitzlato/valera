@@ -88,9 +88,19 @@ class God
       attrs[:account] = Account.find!(config['account']) if attrs.key? :account
 
       if drainer_class.respond_to?(:use_market?)
-        markets = attrs[:account].present? ? attrs[:account].markets : (
-          attrs[:markets].present? ? attrs[:markets].map { |market_id| Market.find! market_id } : Market.all
-        )
+        markets = if attrs[:account].present?
+                    attrs[:account].markets
+                  else
+                    (
+                            if attrs[:markets].present?
+                              attrs[:markets].map do |market_id|
+                                Market.find! market_id
+                              end
+                            else
+                              Market.all
+                            end
+                          )
+                  end
         markets.map do |market|
           drainer_class.new(**attrs.merge(market: market))
         end
