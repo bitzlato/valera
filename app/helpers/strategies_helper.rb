@@ -56,10 +56,13 @@ module StrategiesHelper
     end
     buffer = content_tag :span, title, class: "badge #{STATUS_LABELS[state]}"
 
-    unless strategy.state.is_active
+    unless strategy.is_active?
       buffer << content_tag(:div,
                             strategy.state.inactivation_reason.presence || 'No inactivation reason',
                             class: 'text-small text-warning')
+      buffer << content_tag(:div, class: 'mt-2') do
+        link_to 'start', start_strategy_setting_path(strategy), class: 'btn btn-sm btn-outline-primary', method: :post
+      end
     end
     buffer.html_safe
   end
