@@ -37,7 +37,10 @@ class Market
 
   def upstream_markets
     @upstream_markets ||= UpstreamMarkets.new(
-      Upstream.all.map { |u| UpstreamMarket.build upstream: u, market: self }
+      Upstream
+      .all
+      .filter { |u| u.markets.include?(self) }
+      .map { |u| UpstreamMarket.build upstream: u, market: self }
     )
   end
 
