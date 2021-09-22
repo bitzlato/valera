@@ -2,14 +2,15 @@
 
 # Copyright (c) 2019 Danil Pismenny <danil@brandymint.ru>
 
-class MonolithosDrainer < Drainer
-  KEYS = %i[tradePrice].freeze
+class EqualDrainer < Drainer
+  KEYS = %i[tradePrice askPrice bidPrice].freeze
 
-  attr_reader :markets
+  attr_reader :markets, :upstream
 
-  def initialize(id:, account:, markets: nil)
-    super(id: id, account: account)
-    @markets = account.markets || markets.map { |market_id| Market.find! market_id }
+  def initialize(id:, markets:, upstream:)
+    super(id: id, account: nil)
+    @markets = markets.map { |market_id| Market.find! market_id }
+    @upstream = Upstream.find! upstream
   end
 
   def self.type
@@ -18,21 +19,11 @@ class MonolithosDrainer < Drainer
 
   def update!
     logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
-    client.fetch.each do |row|
-      # MDT_MCR
-      symbol = [row['first_currency'], row['second_currency']].join('_')
-
-      market = markets.find { |m| m.monolithos_symbol == symbol }
-      next if market.nil?
-
-      price = row.fetch('price').to_d
-
-      raise "zero price for #{row}" if price.zero?
-
+    markets.each do |market|
+      price = 1.0
       data = { tradePrice: price, askPrice: price, bidPrice: price }
       upstream_market = market.upstream_markets.find_by_upstream! upstream
       upstream_market.update_attributes! data
-      touch!
 
       Valera::InfluxDB.client
                       .write_point(Settings.influx.collectors,
@@ -41,7 +32,7 @@ class MonolithosDrainer < Drainer
     end
     touch!
   rescue Valera::BaseClient::Error => e
-    report_exception e
+    report_exception e, true, strategy: self
     logger.error e
   end
 end

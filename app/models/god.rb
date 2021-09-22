@@ -60,17 +60,18 @@ class God
     Settings.accounts.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       key, config = pair
       upstream = upstreams.fetch(config['upstream'].presence || raise("No upstream key in account section (#{key})"))
-      raise "No upstream client_class for #{upstream}" if upstream.client_class.nil?
-
-      credentials = config.fetch('credentials', nil)
-      if credentials.present?
-        credentials = credentials.is_a?(Hash) ? credentials.reverse_merge(name: key) : fetch_credentials(credentials)
-        client = upstream.client_class.new(**credentials.symbolize_keys)
+      if upstream.client_class.nil?
+        hash[key] = Account.new(id: key, upstream: upstream)
       else
-        client = upstream.client_class.new
+        credentials = config.fetch('credentials', nil)
+        if credentials.present?
+          credentials = credentials.is_a?(Hash) ? credentials.reverse_merge(name: key) : fetch_credentials(credentials)
+          client = upstream.client_class.new(**credentials.symbolize_keys)
+        else
+          client = upstream.client_class.new
+        end
+        hash[key] = Account.new(id: key, upstream: upstream, client: client)
       end
-
-      hash[key] = Account.new(id: key, upstream: upstream, client: client)
     rescue ArgumentError => e
       raise "#{e} with #{key}=>#{pair} #{upstream.try :client_class}"
     end
@@ -87,7 +88,19 @@ class God
       attrs[:account] = Account.find!(config['account']) if attrs.key? :account
 
       if drainer_class.respond_to?(:use_market?)
-        markets = attrs[:account].present? ? attrs[:account].markets : Market.all
+        markets = if attrs[:account].present?
+                    attrs[:account].markets
+                  else
+                    (
+                            if attrs[:markets].present?
+                              attrs[:markets].map do |market_id|
+                                Market.find! market_id
+                              end
+                            else
+                              Market.all
+                            end
+                          )
+                  end
         markets.map do |market|
           drainer_class.new(**attrs.merge(market: market))
         end
@@ -123,7 +136,8 @@ class God
   def build_strategies
     strategies = Set.new
     Settings.strategies.each_pair do |key, options|
-      options['markets'].map do |market_id|
+      markets = options['markets'] || raise("No markets option for #{key} strategy")
+      markets.map do |market_id|
         market = Market.find! market_id
         strategy_class = options['class'].constantize
         settings = options.fetch('settings', {})

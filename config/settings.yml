@@ -36,6 +36,13 @@ defaults: &defaults
     - base: MDT-ERC20
       quote: USDT-ERC20
       monolithos_symbol: MDT_USD
+    - USDT-ERC20_USDT-BEP20
+    - USDT-ERC20_USDC-ERC20
+    - USDC-ERC20_USDC-BEP20
+    - USDT-HRC20_USDT-BEP20
+    - USDT-HRC20_USDT-ERC20
+    - USDC-HRC20_USDC-ERC20
+    - USDC-HRC20_USDC-BEP20
   legacy_markets:
     - base: HT-HRC20
       quote: USDC-HRC20
@@ -43,14 +50,6 @@ defaults: &defaults
     - base: HT-HRC20
       quote: USDT-HRC20
       binance_symbol: HTUSDT
-
-   # "usdcerc20_usdcbep20",
-   # "usdchrc20_usdcbep20",
-   # "usdchrc20_usdcerc20",
-   # "usdterc20_usdcerc20",
-   # "usdterc20_usdtbep20",
-   # "usdthrc20_usdtbep20",
-   # "usdthrc20_usdterc20"
 
   polling_sleep: 0.1
   maker_sleep: 0.1
@@ -79,6 +78,15 @@ defaults: &defaults
       markets:
         - MDT-ERC20_MCR-ERC20
         - MDT-ERC20_USDT-ERC20
+    equal:
+      markets:
+        - USDT-ERC20_USDT-BEP20
+        - USDT-ERC20_USDC-ERC20
+        - USDC-ERC20_USDC-BEP20
+        - USDT-HRC20_USDT-BEP20
+        - USDT-HRC20_USDT-ERC20
+        - USDC-HRC20_USDC-ERC20
+        - USDC-HRC20_USDC-BEP20
 
   accounts:
     bargainer_bot:
@@ -92,14 +100,25 @@ defaults: &defaults
       credentials: binance
     monolithos:
       upstream: monolithos
+    equal:
+      upstream: equal
 
   drainers:
+    equal:
+      class: EqualDrainer
+      upstream: equal
+      markets:
+        - USDT-ERC20_USDT-BEP20
+        - USDT-ERC20_USDC-ERC20
+        - USDT-HRC20_USDT-BEP20
+        - USDT-HRC20_USDT-ERC20
+        - USDC-ERC20_USDC-BEP20
+        - USDC-HRC20_USDC-ERC20
+        - USDC-HRC20_USDC-BEP20
+
     monolithos:
       class: MonolithosDrainer
       account: monolithos
-      markets:
-        - MDT-ERC20_MCR-ERC20
-        - MDT-ERC20_USDT-ERC20
 
     binance_websocket:
       class: BinanceWebsocketDrainer
@@ -133,6 +152,19 @@ defaults: &defaults
       account: binance
 
   strategies:
+    equal_bargainer:
+      class: BargainerStrategy
+      account: bargainer_bot
+      source_account: equal
+      markets:
+        - USDT-ERC20_USDT-BEP20
+        - USDT-ERC20_USDC-ERC20
+        - USDT-HRC20_USDT-BEP20
+        - USDT-HRC20_USDT-ERC20
+        - USDC-ERC20_USDC-BEP20
+        - USDC-HRC20_USDC-ERC20
+        - USDC-HRC20_USDC-BEP20
+
     monolithos_bargainer:
       class: BargainerStrategy
       account: bargainer_bot

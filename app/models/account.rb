@@ -20,10 +20,10 @@ class Account
 
   delegate :upstream_markets, to: :upstream
 
-  def initialize(id:, upstream:, client:)
+  def initialize(id:, upstream:, client: nil)
     super id: id
     @upstream = upstream
-    @client = client || raise("No client for account #{id}")
+    @client = client
   end
 
   def markets
