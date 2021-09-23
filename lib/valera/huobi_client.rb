@@ -5,6 +5,6 @@
 require_relative 'base_client'
 
 module Valera
-  class HecoClient < BaseClient
+  class HuobiClient < BaseClient
   end
 end

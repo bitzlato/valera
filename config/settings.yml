@@ -177,10 +177,10 @@ defaults: &defaults
         - USDC-HRC20_USDC-ERC20
         - USDC-HRC20_USDC-BEP20
 
-    heco_bargainer:
+    huobi_bargainer:
       class: BargainerStrategy
       account: bargainer_bot
-      source_account: heco
+      source_account: huobi
       markets: 
         - HT-HRC20_USDT-HRC20
         - HT-HRC20_USDC-HRC20
@@ -286,7 +286,7 @@ test:
     peatio:
       client: Valera::PeatioClient
     huobi:
-      client: Valera::HecoClient
+      client: Valera::HuobiClient
 
   accounts:
     peatio1:
