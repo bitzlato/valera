@@ -125,7 +125,7 @@ class DeepStonerStrategy < Strategy
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),
       created_orders: orders_to_create.to_a,
-      last_error_message: updater.errors.map(&:message).uniq.compact.join('; '),
+      last_error_message: updater.errors.map(&:to_s).uniq.compact.join('; '),
       acted_at: Time.now
     )
   rescue StandardError => e
