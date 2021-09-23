@@ -43,7 +43,7 @@ class HuobiWebsocketDrainer < WebsocketDrainer
   def message(data)
     SdNotify.status('Drainer message')
     raise "Unknown data scheme #{data}" unless data.fetch(:ch) =~ /^market\.([a-z]+)\.ticker$/
-    mapped_data = simple_map data.fetch(:tick).slice(*KEYS), MAPPING
+    mapped_data = simple_map data.fetch(:tick).slice(*MAPPING.keys), MAPPING
 
     markets.select { |m| m.huobi_symbol == Regexp.last_match(1) }.each do |market|
       upstream_market = market.upstream_markets.find_by_upstream! upstream
