@@ -5,6 +5,8 @@
 # Connects to binance stream and store kline to internal influx
 #
 class BinanceUserdataWebsocketDrainer < WebsocketDrainer
+  KEYS = []
+
   def initialize(id:, account:)
     raise 'Account must be present' if account.nil?
 
