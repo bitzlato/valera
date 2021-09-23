@@ -45,7 +45,7 @@ defaults: &defaults
     - USDC-HRC20_USDC-BEP20
     - base: HT-HRC20
       quote: USDC-HRC20
-      huobi_symbol: htusdc
+      huobi_symbol: htusdt
     - base: HT-HRC20
       quote: USDT-HRC20
       huobi_symbol: htusdt
@@ -75,7 +75,7 @@ defaults: &defaults
     huobi:
       markets:
         - HT-HRC20_USDT-HRC20
-        # - HT-HRC20_USDC-HRC20
+        - HT-HRC20_USDC-HRC20
     monolithos:
       client: Valera::MonolithosClient
       markets:
@@ -114,7 +114,7 @@ defaults: &defaults
       account: huobi
       markets:
         - HT-HRC20_USDT-HRC20
-        #- HT-HRC20_USDC-HRC20
+        - HT-HRC20_USDC-HRC20
 
     equal:
       class: EqualDrainer

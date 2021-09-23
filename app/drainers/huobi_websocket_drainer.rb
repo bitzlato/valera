@@ -37,7 +37,7 @@ class HuobiWebsocketDrainer < WebsocketDrainer
   def streams
     markets.map do |market|
       "market.#{market.huobi_symbol}.ticker"
-    end
+    end.uniq
   end
 
   def message(data)
