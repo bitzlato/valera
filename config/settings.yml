@@ -43,13 +43,12 @@ defaults: &defaults
     - USDT-HRC20_USDT-ERC20
     - USDC-HRC20_USDC-ERC20
     - USDC-HRC20_USDC-BEP20
-  legacy_markets:
     - base: HT-HRC20
       quote: USDC-HRC20
-      binance_symbol: HTUSDC
+      huobi_symbol: htusdc
     - base: HT-HRC20
       quote: USDT-HRC20
-      binance_symbol: HTUSDT
+      huobi_symbol: htusdt
 
   polling_sleep: 0.1
   maker_sleep: 0.1
@@ -73,6 +72,10 @@ defaults: &defaults
         - USDT-ERC20_MCR-ERC20
     peatio:
       client: Valera::PeatioClient
+    huobi:
+      markets:
+        - HT-HRC20_USDT-HRC20
+        # - HT-HRC20_USDC-HRC20
     monolithos:
       client: Valera::MonolithosClient
       markets:
@@ -102,8 +105,17 @@ defaults: &defaults
       upstream: monolithos
     equal:
       upstream: equal
+    huobi:
+      upstream: huobi
 
   drainers:
+    huobi_websocket:
+      class: HuobiWebsocketDrainer
+      account: huobi
+      markets:
+        - HT-HRC20_USDT-HRC20
+        #- HT-HRC20_USDC-HRC20
+
     equal:
       class: EqualDrainer
       upstream: equal
@@ -265,6 +277,8 @@ test:
       client: Valera::BinanceClient
     peatio:
       client: Valera::PeatioClient
+    huobi:
+      client: Valera::HecoClient
 
   accounts:
     peatio1:

@@ -91,18 +91,10 @@ class God
         markets = if attrs[:account].present?
                     attrs[:account].markets
                   else
-                    (
-                            if attrs[:markets].present?
-                              attrs[:markets].map do |market_id|
-                                Market.find! market_id
-                              end
-                            else
-                              Market.all
-                            end
-                          )
+                    attrs[:markets].present? ? attrs[:markets].map { |market_id| Market.find! market_id } : Market.all
                   end
         markets.map do |market|
-          drainer_class.new(**attrs.merge(market: market))
+          drainer_class.new(**attrs.except(:markets).merge(market: market))
         end
       else
         drainer_class.new(**attrs)

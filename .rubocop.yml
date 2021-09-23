@@ -137,7 +137,7 @@ Style/OptionalBooleanParameter:
     - 'config/initializers/exception_reporting.rb'
 Style/Copyright:
   Notice: 'Copyright (\(c\) )?2[0-9]{3} .+'
-  AutocorrectNotice: "# Copyright (c) 2019 Danil Pismenny <danil@brandymint.ru>\n"
+  AutocorrectNotice: "# Copyright (c) 2021 Danil Pismenny <danil@brandymint.ru>\n"
   Description: 'Include a copyright notice in each file before any code.'
   Enabled: true
   VersionAdded: '0.0.2'

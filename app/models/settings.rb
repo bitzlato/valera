@@ -26,6 +26,6 @@ class Settings
   end
 
   def upstream_keys
-    drainer_classes.select { |d| d.respond_to?(:use_market?) }.map(&:keys).flatten.uniq
+    drainer_classes.select { |d| d.respond_to?(:keys) }.map(&:keys).flatten.uniq
   end
 end
