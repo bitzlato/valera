@@ -11,6 +11,6 @@ class PeatioRestDrainerTest < ActiveSupport::TestCase
   end
 
   test 'fetch_market_depth' do
-    assert_equal @drainer.send(:fetch_market_depth), { 'asksVolume' => 0.13e-2, 'bidsVolume' => 0.0 }
+    assert_equal @drainer.send(:fetch_market_depth), { asksVolume: 0.13e-2, bidsVolume: 0.0 }
   end
 end

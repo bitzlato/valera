@@ -60,9 +60,10 @@ class God
     Settings.accounts.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       key, config = pair
       upstream = upstreams.fetch(config['upstream'].presence || raise("No upstream key in account section (#{key})"))
-      if upstream.client_class.nil?
-        hash[key] = Account.new(id: key, upstream: upstream)
-      else
+
+      arguments = { id: key, upstream: upstream }
+      arguments.merge! peatio_member_id: config['peatio_member_id'] if config.key? 'peatio_member_id'
+      if upstream.client_class.present?
         credentials = config.fetch('credentials', nil)
         if credentials.present?
           credentials = credentials.is_a?(Hash) ? credentials.reverse_merge(name: key) : fetch_credentials(credentials)
@@ -70,8 +71,9 @@ class God
         else
           client = upstream.client_class.new
         end
-        hash[key] = Account.new(id: key, upstream: upstream, client: client)
+        arguments.merge! client: client
       end
+      hash[key] = Account.new(**arguments)
     rescue ArgumentError => e
       raise "#{e} with #{key}=>#{pair} #{upstream.try :client_class}"
     end

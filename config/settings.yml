@@ -95,6 +95,7 @@ defaults: &defaults
     bargainer_bot:
       upstream: peatio
       credentials: bargainer_bot
+      peatio_member_id: 6
     deep_stoner_bot:
       upstream: peatio
       credentials: deep_stoner_bot
@@ -142,7 +143,7 @@ defaults: &defaults
 
     peatio_rest:
       class: PeatioRestDrainer
-      account: deep_stoner_bot
+      account: bargainer_bot
 
     peatio_balance_deep_stoner:
       class: AccountDrainer

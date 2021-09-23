@@ -43,6 +43,7 @@ class HuobiWebsocketDrainer < WebsocketDrainer
   def message(data)
     SdNotify.status('Drainer message')
     raise "Unknown data scheme #{data}" unless data.fetch(:ch) =~ /^market\.([a-z]+)\.ticker$/
+
     mapped_data = simple_map data.fetch(:tick).slice(*MAPPING.keys), MAPPING
 
     markets.select { |m| m.huobi_symbol == Regexp.last_match(1) }.each do |market|
@@ -50,8 +51,8 @@ class HuobiWebsocketDrainer < WebsocketDrainer
       upstream_market.update_attributes! mapped_data
       touch!
       Valera::InfluxDB.client
-        .write_point(Settings.influx.collectors,
-                     values: mapped_data, tags: { market: market.id, upstream: upstream.id })
+                      .write_point(Settings.influx.collectors,
+                                   values: mapped_data, tags: { market: market.id, upstream: upstream.id })
     end
   end
 

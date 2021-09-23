@@ -8,7 +8,7 @@ class Account
   include RedisModel
   extend Finders
 
-  attr_reader :upstream, :client
+  attr_reader :upstream, :client, :peatio_member_id
 
   attribute :balances, Hash
   attribute :balances_updated_at, Time
@@ -20,10 +20,11 @@ class Account
 
   delegate :upstream_markets, to: :upstream
 
-  def initialize(id:, upstream:, client: nil)
+  def initialize(id:, upstream:, client: nil, peatio_member_id: nil)
     super id: id
     @upstream = upstream
     @client = client
+    @peatio_member_id = peatio_member_id
   end
 
   def markets
