@@ -19,6 +19,9 @@ class Maker
 
     loop do
       God.strategies.each do |strategy|
+        if ENV.key? 'DEBUG_STRATEGY'
+          next unless strategy.id == ENV['DEBUG_STRATEGY']
+        end
         logger.debug "Perform strategy #{strategy}"
         strategy.perform
         logger.debug "Sleep for #{Settings.maker_sleep}"
