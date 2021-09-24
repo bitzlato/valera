@@ -21,7 +21,8 @@ class OrdersUpdater
     @market = market || raise('No market')
     @account = account || raise('No account')
     @logger = ActiveSupport::TaggedLogging.new(logger || _build_auto_logger)
-      .tagged([self.class.name, market, client.try(:name), client.try(:endpoint)].compact.join(' '))
+                                          .tagged([self.class.name, market, client.try(:name),
+                                                   client.try(:endpoint)].compact.join(' '))
     @name = name
     @errors = []
     @changed = false
@@ -98,7 +99,6 @@ class OrdersUpdater
       nil
     end.compact.tap do |created_orders|
       logger.debug "Created orders #{created_orders}"
-      nil
     end
   end
   # rubocop:enable Style/MultilineBlockChain

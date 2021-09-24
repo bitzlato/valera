@@ -82,7 +82,7 @@ class Strategy
   def stop!(reason = 'No reason')
     logger.info "Stop with #{reason}"
     state.stop! reason
-    logger.info "Cancel all orders"
+    logger.info 'Cancel all orders'
     updater.cancel!
     state.update_attributes! created_orders: []
   end

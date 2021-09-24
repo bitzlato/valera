@@ -21,9 +21,8 @@ class Maker
       God.strategies.each do |strategy|
         # For example 'binance_bargainer-BTC_USDT-ERC20'
         #
-        if ENV.key? 'DEBUG_STRATEGY'
-          next unless strategy.id == ENV['DEBUG_STRATEGY']
-        end
+        next if ENV.key?('DEBUG_STRATEGY') && strategy.id != ENV['DEBUG_STRATEGY']
+
         logger.debug "Perform strategy #{strategy}"
         strategy.perform
         logger.debug "Sleep for #{Settings.maker_sleep}"
