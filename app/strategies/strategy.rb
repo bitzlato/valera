@@ -110,10 +110,10 @@ class Strategy
   # @param changes [Hash]
   def bump!(changes = {})
     logger.debug "Bump with #{changes}"
+    logger.debug "settings.target_state=#{settings.target_state} state.is_active?=#{state.is_active?}"
 
     case settings.target_state
     when 'enable'
-      logger.debug 'enabled'
       if state.is_active?
         logger.debug 'run update_orders!'
         update_orders!
@@ -165,6 +165,7 @@ class Strategy
   def update_orders!
     created_orders = updater.update!(build_orders).to_a
     last_error_message = updater.errors.uniq.join('; ').presence
+    logger.debug("Created orders #{created_orders}, last_error_message #{last_error_message}")
     state.update_attributes!(
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),

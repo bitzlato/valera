@@ -79,6 +79,12 @@ bundle exec cap production puma:config systemd:puma:setup systemd:daemon:setup m
 bundle exec cap production config:set RAILS_ENV=production RAILS_SERVE_STATIC_FILES=true BUGSNAG_API_KEY=$BUGSNAG_API_KEY VALERA_REDIS_URL=redis://localhost:6379/4
 ```
 
+## Debug maker
+
+```
+> DEBUG_STRATEGY=binance_bargainer-BTC_USDT-ERC20 AUTO_LOGGER_LEVEL=debug COLLAPSE_AUTO_LOGGER=STDOUT ./maker.rb  
+```
+
 ## Regular deploy
 
 ```
