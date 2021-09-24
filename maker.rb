@@ -19,6 +19,8 @@ class Maker
 
     loop do
       God.strategies.each do |strategy|
+        # For example 'binance_bargainer-BTC_USDT-ERC20'
+        #
         if ENV.key? 'DEBUG_STRATEGY'
           next unless strategy.id == ENV['DEBUG_STRATEGY']
         end
