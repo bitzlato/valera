@@ -53,8 +53,9 @@ class OrdersUpdater
 
   # Cancel all orders when bot stops
   def cancel!
-    logger.info 'Cancel all orders'
-    canceled_orders = client.cancel_orders
+    logger.info "Cancel all orders for market #{market}"
+    # TODO: Тут может быть не только peatio_symbol, нужно определять символ по клиенту
+    canceled_orders = client.cancel_orders market_id: market.peatio_symbol
     logger.info "Orders canceled #{canceled_orders.count}"
   end
 
