@@ -20,9 +20,9 @@ class OrdersUpdater
   def initialize(account:, market:, name:, logger: nil)
     @market = market || raise('No market')
     @account = account || raise('No account')
-    @logger = ActiveSupport::TaggedLogging.new(logger || _build_auto_logger)
-                                          .tagged([self.class.name, market, client.try(:name),
-                                                   client.try(:endpoint)].compact.join(' '))
+    @logger = logger || ActiveSupport::TaggedLogging
+              .new(_build_auto_logger)
+              .tagged([self.class.name, market, client.try(:name), client.try(:endpoint)].compact.join(' '))
     @name = name
     @errors = []
     @changed = false

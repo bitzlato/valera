@@ -50,8 +50,12 @@ class Strategy
     @account = account
     @state = state_class.build id: id
     @comment = comment
-    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged([self.class, id].join(' '))
-    @updater = OrdersUpdater.new(market: market, account: account, name: name, logger: logger)
+
+    tag = [self.class, id].join('#')
+    @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged(tag)
+    updater_logger = ActiveSupport::TaggedLogging.new(@logger).tagged(tag, 'OrdersUpdater')
+
+    @updater = OrdersUpdater.new market: market, account: account, name: name, logger: updater_logger
     # TODO: customize used upstreams
     @upstreams = Upstream.all
     @upstream_markets = market.upstream_markets
