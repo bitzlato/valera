@@ -55,7 +55,7 @@ class OrdersUpdater
   def cancel!
     logger.info "Cancel all orders for market #{market}"
     # TODO: Тут может быть не только peatio_symbol, нужно определять символ по клиенту
-    canceled_orders = client.cancel_orders market_id: market.peatio_symbol
+    canceled_orders = client.cancel_orders market: market.peatio_symbol
     logger.info "Orders canceled #{canceled_orders.count}"
   end
 
