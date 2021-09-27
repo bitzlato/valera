@@ -68,7 +68,7 @@ module Valera
         skip_unknown_market: false
       )
     rescue Valera::BaseClient::Failure => e
-      report_exception e, true, order: order
+      report_exception e, true, order: order unless e.is_a? InsufficientBalance
       raise e
     end
     # rubocop:enable Metrics/ParameterLists
