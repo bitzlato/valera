@@ -154,7 +154,7 @@ class OrdersUpdater
     write_to_influx(created_order, level: order.level)
     created_order
   rescue Valera::BaseClient::InsufficientBalance, StandardError => e
-    report_exception e, true, order: order
+    report_exception e, true, order: order unless e.is_a? Valera::BaseClient::InsufficientBalance
     raise e
   end
 
