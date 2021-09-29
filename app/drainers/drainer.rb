@@ -10,14 +10,18 @@ class Drainer
   include RedisModel
   extend Finders
 
-  attr_reader :logger, :account, :id
+  attr_reader :logger, :id
 
   delegate :client, :upstream, to: :account
 
-  def initialize(id:, account:)
+  def initialize(id:, account: nil)
     @id = id
     @account = account
     @logger = ActiveSupport::TaggedLogging.new(_build_auto_logger).tagged("#{self}@#{account.try(:brief)}" || '-')
+  end
+
+  def account
+    @account || raise("There are no account for drainer #{self.class}#{id}")
   end
 
   def self.type

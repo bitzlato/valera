@@ -13,7 +13,7 @@ module MarketDrainer
     end
   end
 
-  def initialize(id:, market:, account:)
+  def initialize(id:, market:, account: nil)
     super(id: id, account: account)
     @market = market || raise('Market must be present')
     @upstream_market = market.upstream_markets.find_by_upstream! upstream
