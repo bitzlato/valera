@@ -1,4 +1,34 @@
-strategies:
+disabled_strategies:
+  binance_bargainer:
+    class: BargainerStrategy
+    account: bargainer_bot
+    source_account: binance
+    markets: 
+      - BTC_USDT-ERC20
+      - ETH_BTC
+      - BTC_MCR-ERC20
+      - ETH_USDC-ERC20
+      - ETH_USDT-ERC20
+      - ETH_MCR-ERC20
+      - USDT-ERC20_MCR-ERC20
+      - BNB-BEP20_USDC-BEP20
+      - BNB-BEP20_USDT-BEP20
+  monolithos_bargainer:
+    class: BargainerStrategy
+    account: bargainer_bot
+    source_account: monolithos
+    markets: 
+      - MDT-ERC20_MCR-ERC20
+      - MDT-ERC20_USDT-ERC20
+
+  huobi_bargainer:
+    class: BargainerStrategy
+    account: bargainer_bot
+    source_account: huobi
+    markets: 
+      - HT-HRC20_USDT-HRC20
+      - HT-HRC20_USDC-HRC20
+
   equal_bargainer:
     class: BargainerStrategy
     account: bargainer_bot
@@ -12,22 +42,7 @@ strategies:
       - USDC-HRC20_USDC-ERC20
       - USDC-HRC20_USDC-BEP20
 
-  huobi_bargainer:
-    class: BargainerStrategy
-    account: bargainer_bot
-    source_account: huobi
-    markets: 
-      - HT-HRC20_USDT-HRC20
-      - HT-HRC20_USDC-HRC20
-
-  monolithos_bargainer:
-    class: BargainerStrategy
-    account: bargainer_bot
-    source_account: monolithos
-    markets: 
-      - MDT-ERC20_MCR-ERC20
-      - MDT-ERC20_USDT-ERC20
-
+strategies:
   marketer:
     class: DeepStonerStrategy
     account: market_bot
@@ -50,21 +65,6 @@ strategies:
     buyout_account: binance
     source_account: binance
     markets:
-      - BTC_USDT-ERC20
-      - ETH_BTC
-      - BTC_MCR-ERC20
-      - ETH_USDC-ERC20
-      - ETH_USDT-ERC20
-      - ETH_MCR-ERC20
-      - USDT-ERC20_MCR-ERC20
-      - BNB-BEP20_USDC-BEP20
-      - BNB-BEP20_USDT-BEP20
-
-  binance_bargainer:
-    class: BargainerStrategy
-    account: bargainer_bot
-    source_account: binance
-    markets: 
       - BTC_USDT-ERC20
       - ETH_BTC
       - BTC_MCR-ERC20
