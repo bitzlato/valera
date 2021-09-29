@@ -21,7 +21,7 @@ class Drainer
   end
 
   def account
-    @account || raise("There are no account for drainer #{self.class}#{id}")
+    @account || raise("There are no account for drainer #{self.class}##{id}")
   end
 
   def self.type
