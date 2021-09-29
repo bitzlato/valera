@@ -1,0 +1,17 @@
+accounts:
+  peatio1:
+    upstream: peatio
+    credentials: 
+      access_key: test
+      secret_key: text
+  peatio2:
+    upstream: peatio
+    credentials: 
+      access_key: test
+      secret_key: text
+  binance:
+    upstream: binance
+    credentials: 
+      name: :binance
+      api_key: test
+      secret_key: test

@@ -1,0 +1,14 @@
+strategies:
+  deep_stoner:
+    class: DeepStonerStrategy
+    comment: Арбитражник - глубокий наполнятель стакана
+    account: peatio1
+    buyout_account: binance
+    markets: []
+
+  bargainer:
+    class: BargainerStrategy
+    comment: Проторговщик, торгует на малые объёмы, иногда так получается что сделки закрываются на самого себя
+    account: peatio2
+    markets: []
+

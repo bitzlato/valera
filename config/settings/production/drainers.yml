@@ -1,0 +1,63 @@
+drainers:
+  huobi_websocket:
+    class: HuobiWebsocketDrainer
+    account: huobi
+    markets:
+      - HT-HRC20_USDT-HRC20
+      - HT-HRC20_USDC-HRC20
+
+  equal:
+    class: EqualDrainer
+    upstream: equal
+    markets:
+      - USDT-ERC20_USDT-BEP20
+      - USDT-ERC20_USDC-ERC20
+      - USDT-HRC20_USDT-BEP20
+      - USDT-HRC20_USDT-ERC20
+      - USDC-ERC20_USDC-BEP20
+      - USDC-HRC20_USDC-ERC20
+      - USDC-HRC20_USDC-BEP20
+
+  monolithos:
+    class: MonolithosDrainer
+    account: monolithos
+
+  binance_websocket:
+    class: BinanceWebsocketDrainer
+    account: binance
+
+  peatio_market_websocket:
+    class: PeatioWebsocketDrainer
+    account: market_bot
+
+  peatio_market_balance_deep_stoner:
+    class: AccountDrainer
+    account: market_bot
+    interval: 1
+
+  peatio_websocket:
+    class: PeatioWebsocketDrainer
+    account: deep_stoner_bot
+
+  peatio_balance_deep_stoner:
+    class: AccountDrainer
+    account: deep_stoner_bot
+    interval: 1
+
+  peatio_rest:
+    class: PeatioRestDrainer
+    account: bargainer_bot
+
+  peatio_balance_bargainer:
+    class: AccountDrainer
+    account: bargainer_bot
+    interval: 1
+
+  binance_account:
+    class: AccountDrainer
+    account: binance
+    interval: 30
+
+  binance_userdata_websocket:
+    class: BinanceUserdataWebsocketDrainer
+    account: binance

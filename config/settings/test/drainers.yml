@@ -1,0 +1,20 @@
+drainers:
+  binance_websocket:
+    class: BinanceWebsocketDrainer
+    account: binance
+
+  peatio_websocket:
+    class: PeatioWebsocketDrainer
+    account: peatio1
+
+  peatio_rest:
+    class: PeatioRestDrainer
+    account: peatio1
+
+  peatio_balance_deep_stoner:
+    class: AccountDrainer
+    account: peatio1
+
+  peatio_balance_bargainer:
+    class: AccountDrainer
+    account: binance

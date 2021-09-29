@@ -1,0 +1,33 @@
+upstreams: 
+  binance: 
+    client: Valera::BinanceClient
+    markets:
+      - BTC_USDT-ERC20
+      - BTC_MCR-ERC20
+      - BNB-BEP20_USDC-BEP20
+      - BNB-BEP20_USDT-BEP20
+      - ETH_BTC
+      - ETH_MCR-ERC20
+      - ETH_USDC-ERC20
+      - ETH_USDT-ERC20
+      - USDT-ERC20_MCR-ERC20
+  peatio:
+    client: Valera::PeatioClient
+  huobi:
+    markets:
+      - HT-HRC20_USDT-HRC20
+      - HT-HRC20_USDC-HRC20
+  monolithos:
+    client: Valera::MonolithosClient
+    markets:
+      - MDT-ERC20_MCR-ERC20
+      - MDT-ERC20_USDT-ERC20
+  equal:
+    markets:
+      - USDT-ERC20_USDT-BEP20
+      - USDT-ERC20_USDC-ERC20
+      - USDC-ERC20_USDC-BEP20
+      - USDT-HRC20_USDT-BEP20
+      - USDT-HRC20_USDT-ERC20
+      - USDC-HRC20_USDC-ERC20
+      - USDC-HRC20_USDC-BEP20

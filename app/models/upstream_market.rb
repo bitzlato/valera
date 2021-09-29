@@ -16,7 +16,7 @@ class UpstreamMarket
 
   # TODO: Remove existen attributes
   #
-  Settings.upstream_keys.each do |key|
+  Settings::Drainers.upstream_keys.each do |key|
     attribute key, BigDecimal
   end
 

@@ -1,0 +1,7 @@
+upstreams: 
+  binance:
+    client: Valera::BinanceClient
+  peatio:
+    client: Valera::PeatioClient
+  huobi:
+    client: Valera::HuobiClient

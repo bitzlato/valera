@@ -3,29 +3,47 @@
 # frozen_string_literal: true
 
 require 'settingslogic'
-if defined? Rails
-  class Settings < Settingslogic
-    source Rails.root.join('config', 'settings.yml')
-    source Rails.root.join('config', 'settings.local.yml')
-    namespace Rails.env
+class Settings < Settingslogic
+  DIR = Rails.root.join('config', 'settings', Rails.env)
+
+  source Rails.root.join('config', 'settings.yml')
+  namespace Rails.env
+  suppress_errors Rails.env.production?
+
+  class Drainers < Settingslogic
+    source DIR.join('drainers.yml')
+    suppress_errors Rails.env.production?
+
+    def upstream_keys
+      drainer_classes.select { |d| d.respond_to?(:keys) }.map(&:keys).flatten.uniq
+    end
+
+    private
+
+    def drainer_classes
+      self.class.drainers.values.map do |v|
+        v['class'].constantize
+      end.uniq
+    end
+  end
+
+  class Upstreams < Settingslogic
+    source DIR.join('upstreams.yml')
     suppress_errors Rails.env.production?
   end
-else
-  class Settings < Settingslogic
-    source './config/settings.yml'
-    source './config/settings.local.yml'
-    namespace 'development'
-  end
-end
 
-class Settings
-  def drainer_classes
-    Settings.drainers.values.map do |v|
-      v['class'].constantize
-    end.uniq
+  class Markets < Settingslogic
+    source DIR.join('markets.yml')
+    suppress_errors Rails.env.production?
   end
 
-  def upstream_keys
-    drainer_classes.select { |d| d.respond_to?(:keys) }.map(&:keys).flatten.uniq
+  class Accounts < Settingslogic
+    source DIR.join('accounts.yml')
+    suppress_errors Rails.env.production?
+  end
+
+  class Strategies < Settingslogic
+    source DIR.join('strategies.yml')
+    suppress_errors Rails.env.production?
   end
 end

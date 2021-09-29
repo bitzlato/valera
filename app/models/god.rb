@@ -57,7 +57,7 @@ class God
   private
 
   def build_accounts
-    Settings.accounts.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
+    Settings::Accounts.accounts.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       key, config = pair
       upstream = upstreams.fetch(config['upstream'].presence || raise("No upstream key in account section (#{key})"))
 
@@ -81,10 +81,12 @@ class God
 
   def fetch_credentials(credentials)
     Rails.application.credentials.accounts.fetch(credentials.to_sym).merge(name: credentials.to_sym)
+  rescue KeyError => e
+    raise "(#{e}) No credentials key #{credentials}"
   end
 
   def build_drainers
-    Settings.drainers.map do |key, config|
+    Settings::Drainers.drainers.map do |key, config|
       drainer_class = config['class'].constantize
       attrs = config.except('class').symbolize_keys.merge(id: key)
       attrs[:account] = Account.find!(config['account']) if attrs.key? :account
@@ -105,7 +107,7 @@ class God
   end
 
   def build_upstreams
-    Settings.upstreams.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
+    Settings::Upstreams.upstreams.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |pair, hash|
       id, options = pair
       client_class = options.key?('client') ? options['client'].constantize : nil
       hash[id] = Upstream.new id: id, client_class: client_class, markets: options['markets']
@@ -113,8 +115,8 @@ class God
   end
 
   def build_markets
-    Settings.markets
-            .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |name, a|
+    Settings::Markets.markets
+                     .each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |name, a|
       market = case name
                when String
                  Market.build_by_id(name)
@@ -129,7 +131,7 @@ class God
 
   def build_strategies
     strategies = Set.new
-    Settings.strategies.each_pair do |key, options|
+    Settings::Strategies.strategies.each_pair do |key, options|
       markets = options['markets'] || raise("No markets option for #{key} strategy")
       markets.map do |market_id|
         market = Market.find! market_id
