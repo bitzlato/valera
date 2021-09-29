@@ -28,10 +28,15 @@ drainers:
 
   peatio_websocket:
     class: PeatioWebsocketDrainer
+    # for client only
+    # TODO use client instead of account
+    account: deep_stoner_bot
 
   peatio_rest:
     class: PeatioRestDrainer
     exclude_member_id: 6 # bargainer
+    # TODO use client instead of account
+    account: deep_stoner_bot
 
   # AccountDariner
   # собирает данные по аккаунтам
