@@ -17,6 +17,10 @@ class EqualDrainer < Drainer
     POLLING_TYPE
   end
 
+  def account
+    nil
+  end
+
   def update!
     logger.debug 'update!' if ENV.true? 'DEBUG_DRAINER_UPDATE'
     markets.each do |market|
