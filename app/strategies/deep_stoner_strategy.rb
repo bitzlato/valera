@@ -121,11 +121,15 @@ class DeepStonerStrategy < Strategy
     updater.cancel_orders! orders_to_cancel if orders_to_cancel.any?
     updater.create_orders! orders_to_create if orders_to_create.any?
 
+    updater.errors.each do |error_info|
+      # do something
+    end
+
     state.update_attributes!(
       best_ask_price: best_price_for(:ask),
       best_bid_price: best_price_for(:bid),
       created_orders: orders_to_create.to_a,
-      last_error_message: updater.errors.map(&:to_s).uniq.compact.join('; '),
+      last_error_message: updater.errors.map(&:message).uniq.compact.join('; '),
       acted_at: Time.now
     )
   rescue StandardError => e
