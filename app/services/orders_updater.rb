@@ -8,7 +8,20 @@
 class OrdersUpdater
   include AutoLogger
 
-  ErrorInfo = Struct.new(:order, :message, :error)
+  class ErrorInfo < StandardError
+    def initialize(order, cause)
+      @order  = order
+      @cause  = cause
+      super(message)
+    end
+
+    def message
+      "<#{self.class}> #{@order} -> #{@cause}"
+    end
+  end
+
+  ErrorCreatingOrder = Class.new ErrorInfo
+  ErrorCancelingOrder = Class.new ErrorInfo
 
   THREADS = 8
 
@@ -86,7 +99,7 @@ class OrdersUpdater
     orders.each do |order|
       client.cancel_order order.id
     rescue Valera::BaseClient::Error => e
-      @errors << ErrorInfo.new(order, "Error canceling order #{order} -> #{e}", e)
+      @errors << ErrorCancelingOrder.new(order, e)
     end
   end
 
@@ -98,7 +111,7 @@ class OrdersUpdater
       create_order! order
     rescue Valera::BaseClient::Error, StandardError => e
       logger.warn "#{e} for order #{order}"
-      @errors << ErrorInfo.new(order, "Error creating order #{order} -> #{e}", e)
+      @errors << ErrorCreatingOrder.new(order, e)
       nil
     end.compact.tap do |created_orders|
       logger.debug "Created orders #{created_orders}"
