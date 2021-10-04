@@ -6,7 +6,18 @@ module StrategiesHelper
   PERCENTAGE_SUFFIXES = %w[_threshold _deviation _part _percentage].freeze
 
   def strategy_error(error_message)
-    content_tag :div, error_message, class: 'text-danger' if error_message.present?
+    messages = error_message.split('; ')
+    messages = messages.map do |message|
+      if message.include? 'Valera::BaseClient::InsufficientBalance'
+        side = '???'
+        side = 'продажи' if message.include? 'ask:'
+        side = 'покупки' if message.include? 'bid:'
+        "Нехватает баланса для #{side}"
+      else
+        message
+      end
+    end.uniq
+    content_tag :div, messages.join('; '), class: 'text-danger' if error_message.present?
   end
 
   def show_last_created?
