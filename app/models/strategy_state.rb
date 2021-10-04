@@ -16,5 +16,5 @@ class StrategyState
   attribute :last_error_message, String
 
   attribute :acted_at, Time
-  attribute :last_errors, Array[StandardError]
+  attribute :last_errors, Array[String]
 end

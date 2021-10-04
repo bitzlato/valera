@@ -130,7 +130,7 @@ class DeepStonerStrategy < Strategy
       best_bid_price: best_price_for(:bid),
       created_orders: orders_to_create.to_a,
       last_error_message: updater.errors.map(&:message).uniq.compact.join('; '),
-      last_errors: updater.errors,
+      last_errors: [],
       acted_at: Time.now
     )
   rescue StandardError => e
@@ -141,7 +141,7 @@ class DeepStonerStrategy < Strategy
       best_bid_price: best_price_for(:bid),
       created_orders: [],
       last_error_message: e.message,
-      last_errors: [e],
+      last_errors: [],
       acted_at: Time.now
     )
   end
