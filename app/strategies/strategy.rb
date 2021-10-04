@@ -175,6 +175,7 @@ class Strategy
       best_bid_price: best_price_for(:bid),
       created_orders: created_orders,
       last_error_message: last_error_message,
+      last_errors: updater.errors,
       acted_at: Time.now
     )
 
