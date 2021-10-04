@@ -59,6 +59,32 @@ strategies:
       - BNB-BEP20_USDC-BEP20
       - BNB-BEP20_USDT-BEP20
 
+  huobi_deep_stoner:
+    class: DeepStonerStrategy
+    account: market_bot
+    buyout_account: huobi
+    source_account: huobi
+    markets:
+      - USDT-HRC20_USDT-BEP20
+      - USDT-HRC20_USDT-ERC20
+      - USDC-HRC20_USDC-ERC20
+      - USDC-HRC20_USDC-BEP20
+      - HT-HRC20_USDC-HRC20
+      - HT-HRC20_USDT-HRC20
+
+  huobi_marketer:
+    class: DeepStonerStrategy
+    account: market_bot
+    buyout_account: huobi
+    source_account: huobi
+    markets:
+      - USDT-HRC20_USDT-BEP20
+      - USDT-HRC20_USDT-ERC20
+      - USDC-HRC20_USDC-ERC20
+      - USDC-HRC20_USDC-BEP20
+      - HT-HRC20_USDC-HRC20
+      - HT-HRC20_USDT-HRC20
+
   binance_deep_stoner:
     class: DeepStonerStrategy
     account: deep_stoner_bot
