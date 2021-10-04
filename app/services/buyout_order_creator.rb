@@ -85,7 +85,7 @@ class BuyoutOrderCreator
 
   def post_buyout_order(buyout_order)
     logger.info "Post buyout_order #{buyout_order.as_json}"
-    if ENV.true? 'DISABLE_BUYOUT'
+    unless ENV.true? 'ENABLE_BUYOUT'
       logger.info 'Skip buyout posting as it disabled'
       return
     end
