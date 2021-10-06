@@ -9,6 +9,7 @@ module Valera
     Failure = Class.new Error
     InsufficientBalance = Class.new Error
     OrderCreationError = Class.new Error
+    InvaildVolumeOrPrice = Class.new Error
 
     attr_reader :name, :endpoint
 

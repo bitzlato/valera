@@ -175,6 +175,10 @@ module Valera
         raise InsufficientBalance
       end
 
+      if response.status.to_i == 422 && data['errors'].include?('order.invalid_volume_or_price"')
+        raise InvaildVolumeOrPrice
+      end
+
       raise Failure,
             "Failed response status (#{response.status}) with body '#{response.body}' for #{name}"
 
