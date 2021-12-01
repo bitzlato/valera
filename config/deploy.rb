@@ -95,7 +95,10 @@ after 'deploy:publishing', 'systemd:puma:reload-or-restart'
 after 'deploy:publishing', 'systemd:daemon:reload-or-restart'
 
 set :systemd_daemon_role, :app
-set :systemd_daemon_instances, -> { %w[maker poller websocket_collectors] }
+
+# майкера отключили
+# set :systemd_daemon_instances, -> { %w[maker poller websocket_collectors] }
+set :systemd_daemon_instances, -> { %w[poller websocket_collectors] }
 
 # Rake::Task["deploy:assets:backup_manifest"].clear_actions
 
