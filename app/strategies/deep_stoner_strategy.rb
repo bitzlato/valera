@@ -118,6 +118,9 @@ class DeepStonerStrategy < Strategy
     end
 
     updater.start!
+
+    # Отменять заявки на старших уровнях, если в младших их нет.
+    #
     updater.cancel_orders! orders_to_cancel if orders_to_cancel.any?
     updater.create_orders! orders_to_create if orders_to_create.any?
 
